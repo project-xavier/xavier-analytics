@@ -1,0 +1,5 @@
+package com.myspace.sample_analytics.rules;
+
+query "get reports"()
+    report : com.myspace.sample_analytics.pojo.output.ReportDataModel()
+end

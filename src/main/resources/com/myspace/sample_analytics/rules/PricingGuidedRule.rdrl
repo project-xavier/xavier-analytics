@@ -1,0 +1,23 @@
+package com.myspace.sample_analytics.rules;
+
+import java.lang.Number;
+import com.myspace.sample_analytics.pojo.input.InputDataModel;
+import com.myspace.sample_analytics.pojo.output.ReportDataModel;
+import java.util.Date;
+
+rule "PricingGuidedRule"
+	dialect "mvel"
+	when
+		input : InputDataModel( customerId != null )
+	then
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MMM-yyyy");
+		ReportDataModel report = new ReportDataModel();
+		report.setCustomerId( input.getCustomerId() );
+		report.setNumberOfHosts( input.getNumberOfHosts() );
+		report.setTotalPrice( input.getNumberOfHosts() * 42 );
+		report.setFileName( input.getFileName() );
+		report.setTotalDiskSpace( input.getTotalDiskSpace() );
+		report.setCreationDate( new Date() );
+		insert( report );
+		System.out.println("********** HelloRules DRL Report: " + report.getTotalPrice() + " **********");
+end
