@@ -1,0 +1,86 @@
+<scenario>
+  <name>PricingTest.scenario</name>
+  <maxRuleFirings>100000</maxRuleFirings>
+  <globals/>
+  <fixtures>
+    <fact-data>
+      <type>PricingDataModel</type>
+      <fieldData>
+        <field-data>
+          <name>sourceListValue</name>
+          <value>10000</value>
+          <nature>4</nature>
+        </field-data>
+      </fieldData>
+      <name>pricing</name>
+      <isModify>false</isModify>
+    </fact-data>
+    <execution-trace>
+      <executionTimeResult>39</executionTimeResult>
+      <numberOfRulesFired>4</numberOfRulesFired>
+    </execution-trace>
+    <expect-fact>
+      <fieldValues>
+        <expect-field>
+          <fieldName>sourceDiscountPercentage</fieldName>
+          <expected>0.5</expected>
+          <successResult>true</successResult>
+          <explanation>[pricing] field [sourceDiscountPercentage] was [0.5].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>sourceMaintenancePercentage</fieldName>
+          <expected>0.2</expected>
+          <successResult>true</successResult>
+          <explanation>[pricing] field [sourceMaintenancePercentage] was [0.2].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>sourceRenewHighFactor</fieldName>
+          <expected>2.5</expected>
+          <successResult>true</successResult>
+          <explanation>[pricing] field [sourceRenewHighFactor] was [2.5].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>sourceRenewLikelyFactor</fieldName>
+          <expected>2.0</expected>
+          <successResult>true</successResult>
+          <explanation>[pricing] field [sourceRenewLikelyFactor] was [2.0].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>sourceRenewLowFactor</fieldName>
+          <expected>1.5</expected>
+          <successResult>true</successResult>
+          <explanation>[pricing] field [sourceRenewLowFactor] was [1.5].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+      </fieldValues>
+      <name>pricing</name>
+      <anonymous>false</anonymous>
+    </expect-fact>
+  </fixtures>
+  <lastRunResult>2019-06-19 13:48:06.49 UTC</lastRunResult>
+  <rules/>
+  <inclusive>false</inclusive>
+  <packageName>org.jboss.xavier.analytics.test</packageName>
+  <imports>
+    <imports>
+      <org.kie.soup.project.datamodel.imports.Import>
+        <type>org.jboss.xavier.analytics.pojo.support.PricingDataModel</type>
+      </org.kie.soup.project.datamodel.imports.Import>
+      <org.kie.soup.project.datamodel.imports.Import>
+        <type>org.jboss.xavier.analytics.pojo.input.UploadFormInputDataModel</type>
+      </org.kie.soup.project.datamodel.imports.Import>
+    </imports>
+  </imports>
+  <ksessions>
+    <string>testStatefullSession</string>
+  </ksessions>
+</scenario>

@@ -1,0 +1,40 @@
+package org.jboss.xavier.analytics.rules;
+
+import org.jboss.xavier.analytics.pojo.input.UploadFormInputDataModel;
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel;
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel;
+import java.util.Date
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.round;
+
+dialect "java"
+agenda-group "Environment"
+auto-focus true
+
+rule "Copy input fields and agenda controller"
+    salience 65001
+    when
+        uploadedPayload : UploadFormInputDataModel(customerId != null)
+    then
+        InitialSavingsEstimationReportModel initialSavingsEstimationReport = new InitialSavingsEstimationReportModel();
+        initialSavingsEstimationReport.setCustomerId(uploadedPayload.getCustomerId());
+        initialSavingsEstimationReport.setFileName(uploadedPayload.getFileName());
+        initialSavingsEstimationReport.setCreationDate(new Date());
+        EnvironmentModel environmentModel = new EnvironmentModel();
+        environmentModel.setHypervisors(uploadedPayload.getHypervisor());
+        environmentModel.setSourceProductIndicator(1);
+        environmentModel.setYear1Hypervisor(round(uploadedPayload.getYear1HypervisorPercentage() * uploadedPayload.getHypervisor()));
+        environmentModel.setYear2Hypervisor(round(uploadedPayload.getYear2HypervisorPercentage() * uploadedPayload.getHypervisor()));
+        environmentModel.setYear3Hypervisor(round(uploadedPayload.getYear3HypervisorPercentage() * uploadedPayload.getHypervisor()));
+        environmentModel.setGrowthRatePercentage(uploadedPayload.getGrowthRatePercentage());
+        initialSavingsEstimationReport.setEnvironmentModel(environmentModel);
+        insert(initialSavingsEstimationReport);
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("Pricing").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("SourceCosts").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("SourceRampDownCosts").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("RHVRampUpCosts").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("RHVYearByYearCosts").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("RHVSavings").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("RHVAdditionalContainerCapacity").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("RHVOrderForm").setFocus();
+end

@@ -1,0 +1,5 @@
+package org.jboss.xavier.analytics.rules;
+
+query "get InitialSavingsEstimationReports"()
+    report : org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel()
+end

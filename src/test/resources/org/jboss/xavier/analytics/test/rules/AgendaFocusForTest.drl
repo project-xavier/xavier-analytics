@@ -1,0 +1,12 @@
+package org.jboss.xavier.analytics.test.rules;
+import java.lang.String;
+dialect "java"
+
+rule "AgendaFocusForTest"
+    when
+        agendaGroup : String()
+    then
+        System.out.printf("Focusing the '%s' agenda group\n", agendaGroup);
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup(agendaGroup).setFocus();
+        System.out.printf("Focused the '%s' agenda group\n", agendaGroup);
+end

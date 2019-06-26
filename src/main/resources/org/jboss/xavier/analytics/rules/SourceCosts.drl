@@ -1,0 +1,25 @@
+package org.jboss.xavier.analytics.rules;
+
+import java.lang.Number;
+import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel
+import org.jboss.xavier.analytics.pojo.output.SourceCostsModel;
+
+dialect "java"
+agenda-group "SourceCosts"
+lock-on-active true
+
+rule "SourceCostsRules"
+    when
+        pricing : PricingDataModel( sourceListValue != null , sourceDiscountPercentage != null , sourceMaintenancePercentage != null )
+        report : InitialSavingsEstimationReportModel(environmentModel != null)
+    then
+        SourceCostsModel sourceCostsModel = new SourceCostsModel();
+        sourceCostsModel.setSourceLicenseValue(pricing.getSourceListValue() * (1 - pricing.getSourceDiscountPercentage()));
+        sourceCostsModel.setSourceMaintenanceValue(sourceCostsModel.getSourceLicenseValue() * pricing.getSourceMaintenancePercentage());
+        modify(report)
+        {
+            setSourceCostsModel(sourceCostsModel)
+        }
+end
