@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/project-xavier/xavier-analytics.svg?branch=master)](https://travis-ci.org/project-xavier/xavier-analytics)
+[![codecov](https://codecov.io/gh/project-xavier/xavier-analytics/branch/master/graph/badge.svg)](https://codecov.io/gh/project-xavier/xavier-analytics)
+
 # xavier-analytics
 
 ## How to create a new rule set for an agenda group with test
