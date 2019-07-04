@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/project-xavier/xavier-analytics.svg?branch=master)](https://travis-ci.org/project-xavier/xavier-analytics)
 [![codecov](https://codecov.io/gh/project-xavier/xavier-analytics/branch/master/graph/badge.svg)](https://codecov.io/gh/project-xavier/xavier-analytics)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=project-xavier_xavier-analytics&metric=alert_status)](https://sonarcloud.io/dashboard?id=project-xavier_xavier-analytics)
 
 # xavier-analytics
 
