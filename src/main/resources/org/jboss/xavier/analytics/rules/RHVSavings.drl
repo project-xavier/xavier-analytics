@@ -1,0 +1,48 @@
+package org.jboss.xavier.analytics.rules;
+
+import java.lang.Number;
+import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel
+import org.jboss.xavier.analytics.pojo.output.SourceCostsModel
+import org.jboss.xavier.analytics.pojo.output.RHVSavingsModel
+import org.jboss.xavier.analytics.pojo.output.RHVYearByYearCostsModel;
+
+dialect "java"
+agenda-group "RHVSavings"
+lock-on-active true
+
+rule "RHVSavingsRules"
+    when
+        report : InitialSavingsEstimationReportModel(
+                rhvYearByYearCostsModel != null,
+            rhvYearByYearCostsModel.year1RhvBudgetFreedLowValue != null,
+            rhvYearByYearCostsModel.year1RhvBudgetFreedLikelyValue != null,
+            rhvYearByYearCostsModel.year1RhvBudgetFreedHighValue != null,
+            rhvYearByYearCostsModel.year2RhvBudgetFreedLowValue != null,
+            rhvYearByYearCostsModel.year2RhvBudgetFreedLikelyValue != null,
+            rhvYearByYearCostsModel.year2RhvBudgetFreedHighValue != null,
+            rhvYearByYearCostsModel.year3RhvBudgetFreedLowValue != null,
+            rhvYearByYearCostsModel.year3RhvBudgetFreedLikelyValue != null,
+            rhvYearByYearCostsModel.year3RhvBudgetFreedHighValue != null
+        )
+    then
+        RHVYearByYearCostsModel yearByYearCosts = report.getRhvYearByYearCostsModel();
+        RHVSavingsModel rhvSavingsModel = new RHVSavingsModel();
+        rhvSavingsModel.setRhvSaveHighValue(yearByYearCosts.getYear1RhvBudgetFreedHighValue() +
+                                            yearByYearCosts.getYear2RhvBudgetFreedHighValue() +
+                                            yearByYearCosts.getYear3RhvBudgetFreedHighValue());
+
+        rhvSavingsModel.setRhvSaveLikelyValue(yearByYearCosts.getYear1RhvBudgetFreedLikelyValue() +
+                                              yearByYearCosts.getYear2RhvBudgetFreedLikelyValue() +
+                                              yearByYearCosts.getYear3RhvBudgetFreedLikelyValue());
+
+        rhvSavingsModel.setRhvSaveLowValue(yearByYearCosts.getYear1RhvBudgetFreedLowValue() +
+                                           yearByYearCosts.getYear2RhvBudgetFreedLowValue() +
+                                           yearByYearCosts.getYear3RhvBudgetFreedLowValue());
+
+        modify(report)
+        {
+            setRhvSavingsModel(rhvSavingsModel)
+        }
+end
