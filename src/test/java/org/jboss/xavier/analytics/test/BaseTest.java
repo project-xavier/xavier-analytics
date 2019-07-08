@@ -18,6 +18,7 @@ import org.kie.internal.io.ResourceFactory;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -50,7 +51,9 @@ public abstract class BaseTest {
         kieFileSystem = kieServices.newKieFileSystem();
 
         KieBuilder kieBuilder = createAndBuildKieBuilder(resource);
-        assertEquals(0, kieBuilder.getResults().getMessages(Message.Level.ERROR).size());
+        List<Message> errorMessages = kieBuilder.getResults().getMessages(Message.Level.ERROR);
+        errorMessages.forEach(System.err::println);
+        assertEquals(0, errorMessages.size());
 
         KieRepository kieRepository = kieServices.getRepository();
         KieContainer kContainer = kieServices.newKieContainer(kieRepository.getDefaultReleaseId());

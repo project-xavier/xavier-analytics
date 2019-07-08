@@ -12,6 +12,8 @@ public class EnvironmentModel
     private Integer year2Hypervisor;
     private Integer year3Hypervisor;
     private Double growthRatePercentage;
+    private Integer dealIndicator;
+    private Boolean openStackIndicator;
 
     public EnvironmentModel() {}
 
@@ -61,5 +63,21 @@ public class EnvironmentModel
 
     public void setGrowthRatePercentage(Double growthRatePercentage) {
         this.growthRatePercentage = growthRatePercentage;
+    }
+
+    public Integer getDealIndicator() {
+        return dealIndicator;
+    }
+
+    public void setDealIndicator(Integer dealIndicator) {
+        this.dealIndicator = dealIndicator;
+    }
+
+    public Boolean getOpenStackIndicator() {
+        return openStackIndicator;
+    }
+
+    public void setOpenStackIndicator(Boolean openStackIndicator) {
+        this.openStackIndicator = openStackIndicator;
     }
 }

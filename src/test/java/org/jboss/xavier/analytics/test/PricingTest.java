@@ -58,10 +58,11 @@ public class PricingTest extends BaseTest
     @Test
     public void test()
     {
-        checkLoadedRulesNumber(4);
+        checkLoadedRulesNumber(15);
 
         EnvironmentModel environmentModel = new EnvironmentModel();
         environmentModel.setSourceProductIndicator(DEFAULT_SOURCE_PRODUCT_INDICATOR);
+        environmentModel.setDealIndicator(1);
         InitialSavingsEstimationReportModel reportModel = new InitialSavingsEstimationReportModel();
         reportModel.setEnvironmentModel(environmentModel);
 
@@ -76,7 +77,7 @@ public class PricingTest extends BaseTest
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(4, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(14, results.get(NUMBER_OF_FIRED_RULE_KEY));
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
 
@@ -102,5 +103,23 @@ public class PricingTest extends BaseTest
         Assert.assertEquals(3.5, pricingDataModel.getSourceRenewHighFactor(), 0);
         Assert.assertEquals(2.75, pricingDataModel.getSourceRenewLikelyFactor(), 0);
         Assert.assertEquals(2.0, pricingDataModel.getSourceRenewLowFactor(), 0);
+        Assert.assertEquals(0.15, pricingDataModel.getSourceMaintenanceGrowthPercentage(), 0);
+        Assert.assertEquals(100000, pricingDataModel.getRhvConsultValue(), 0);
+        Assert.assertEquals(30000, pricingDataModel.getRhvTAndEValue(), 0);
+        Assert.assertEquals(30000, pricingDataModel.getRhLearningSubsValue(), 0);
+        Assert.assertEquals(1500, pricingDataModel.getRhvListValue(), 0);
+        Assert.assertEquals(0.85, pricingDataModel.getRhvDiscountPercentage(), 0);
+        Assert.assertEquals(2400, pricingDataModel.getRhCFListValue(), 0);
+        Assert.assertEquals(0.6, pricingDataModel.getRhCFDiscountPercentage(), 0);
+        Assert.assertEquals(15000, pricingDataModel.getRhOSListValue(), 0);
+        Assert.assertEquals(0.0, pricingDataModel.getRhOSDiscountPercentage(), 0);
+        Assert.assertEquals(2800, pricingDataModel.getRhVirtListValue(), 0);
+        Assert.assertEquals(0.5, pricingDataModel.getRhVirtDiscountPercentage(), 0);
+        Assert.assertEquals(true, pricingDataModel.getFreeSubsYear1Indicator());
+        Assert.assertEquals(false, pricingDataModel.getFreeSubsYear2And3Indicator());
+        Assert.assertEquals(0.75, pricingDataModel.getRhvValue(), 0);
+        Assert.assertEquals(0.4, pricingDataModel.getRhCFValue(), 0.01);
+        Assert.assertEquals(-0.3, pricingDataModel.getRhOSValue(), 0);
+        Assert.assertEquals(pricingDataModel.getRhVirtDiscountPercentage(), pricingDataModel.getRhVirtValue(), 0);
     }
 }

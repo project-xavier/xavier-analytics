@@ -27,6 +27,8 @@ rule "Copy input fields and agenda controller"
         environmentModel.setYear2Hypervisor(round(uploadedPayload.getYear2HypervisorPercentage() * uploadedPayload.getHypervisor()));
         environmentModel.setYear3Hypervisor(round(uploadedPayload.getYear3HypervisorPercentage() * uploadedPayload.getHypervisor()));
         environmentModel.setGrowthRatePercentage(uploadedPayload.getGrowthRatePercentage());
+        environmentModel.setDealIndicator(1);
+        environmentModel.setOpenStackIndicator(true);
         initialSavingsEstimationReport.setEnvironmentModel(environmentModel);
         insert(initialSavingsEstimationReport);
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Pricing").setFocus();

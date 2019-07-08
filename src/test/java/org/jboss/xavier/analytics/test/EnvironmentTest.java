@@ -72,5 +72,7 @@ public class EnvironmentTest extends BaseTest {
         Assert.assertEquals(30, environmentModel.getYear2Hypervisor().intValue());
         Assert.assertEquals(Integer.valueOf(10), environmentModel.getYear3Hypervisor());
         Assert.assertEquals(Integer.valueOf(DEFAULT_SOURCE_PRODUCT_INDICATOR), environmentModel.getSourceProductIndicator());
+        Assert.assertEquals(1, environmentModel.getDealIndicator().intValue());
+        Assert.assertEquals(true, environmentModel.getOpenStackIndicator());
     }
 }

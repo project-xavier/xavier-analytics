@@ -48,7 +48,10 @@ public class PricingDataModel implements java.io.Serializable {
     private Double rhvListValue;
 
     @Label("Red Hat Virtualization, Premium Discount")
-    private Double rhvDiscountperc;
+    private Double rhvDiscountPercentage;
+
+    @Label("Red Hat Virtualization, Premium Effective")
+    private Double rhvValue;
 
     @Label("Red Hat CloudForms, Premium")
     private Double rhCFListValue;
@@ -56,11 +59,17 @@ public class PricingDataModel implements java.io.Serializable {
     @Label("Red Hat CloudForms, Premium Discount")
     private Double rhCFDiscountPercentage;
 
+    @Label("Red Hat CloudForms, Premium Effective")
+    private Double rhCFValue;
+
     @Label("Red Hat OpenShift, Premium")
     private Double rhOSListValue;
 
     @Label("Red Hat OpenShift, Premium Discount")
     private Double rhOSDiscountPercentage;
+
+    @Label("Red Hat OpenShift, Premium Effective")
+    private Double rhOSValue;
 
     @Label("Red Hat Virtualization Suite, Premium")
     private Double rhVirtListValue;
@@ -68,11 +77,14 @@ public class PricingDataModel implements java.io.Serializable {
     @Label("Red Hat Virtualization Suite, Premium Discount")
     private Double rhVirtDiscountPercentage;
 
-    @Label("Red Hat Generosity")
-    private Double freeSubsYear1Indicator;
+    @Label("Red Hat Virtualization Suite, Premium Effective")
+    private Double rhVirtValue;
 
     @Label("Red Hat Generosity")
-    private Double freeSubsYear2And3Indicator;
+    private Boolean freeSubsYear1Indicator;
+
+    @Label("Red Hat Generosity")
+    private Boolean freeSubsYear2And3Indicator;
 
     public PricingDataModel() {}
 
@@ -164,12 +176,12 @@ public class PricingDataModel implements java.io.Serializable {
         this.rhvListValue = rhvListValue;
     }
 
-    public Double getRhvDiscountperc() {
-        return rhvDiscountperc;
+    public Double getRhvDiscountPercentage() {
+        return rhvDiscountPercentage;
     }
 
-    public void setRhvDiscountperc(Double rhvDiscountperc) {
-        this.rhvDiscountperc = rhvDiscountperc;
+    public void setRhvDiscountPercentage(Double rhvDiscountPercentage) {
+        this.rhvDiscountPercentage = rhvDiscountPercentage;
     }
 
     public Double getRhCFListValue() {
@@ -220,19 +232,51 @@ public class PricingDataModel implements java.io.Serializable {
         this.rhVirtDiscountPercentage = rhVirtDiscountPercentage;
     }
 
-    public Double getFreeSubsYear1Indicator() {
+    public Boolean getFreeSubsYear1Indicator() {
         return freeSubsYear1Indicator;
     }
 
-    public void setFreeSubsYear1Indicator(Double freeSubsYear1Indicator) {
+    public void setFreeSubsYear1Indicator(Boolean freeSubsYear1Indicator) {
         this.freeSubsYear1Indicator = freeSubsYear1Indicator;
     }
 
-    public Double getFreeSubsYear2And3Indicator() {
+    public Boolean getFreeSubsYear2And3Indicator() {
         return freeSubsYear2And3Indicator;
     }
 
-    public void setFreeSubsYear2And3Indicator(Double freeSubsYear2And3Indicator) {
+    public void setFreeSubsYear2And3Indicator(Boolean freeSubsYear2And3Indicator) {
         this.freeSubsYear2And3Indicator = freeSubsYear2And3Indicator;
+    }
+
+    public Double getRhvValue() {
+        return rhvValue;
+    }
+
+    public void setRhvValue(Double rhvValue) {
+        this.rhvValue = rhvValue;
+    }
+
+    public Double getRhCFValue() {
+        return rhCFValue;
+    }
+
+    public void setRhCFValue(Double rhCFValue) {
+        this.rhCFValue = rhCFValue;
+    }
+
+    public Double getRhOSValue() {
+        return rhOSValue;
+    }
+
+    public void setRhOSValue(Double rhOSValue) {
+        this.rhOSValue = rhOSValue;
+    }
+
+    public Double getRhVirtValue() {
+        return rhVirtValue;
+    }
+
+    public void setRhVirtValue(Double rhVirtValue) {
+        this.rhVirtValue = rhVirtValue;
     }
 }
