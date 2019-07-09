@@ -9,6 +9,7 @@ import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.KieRepository;
 import org.kie.api.builder.Message;
 import org.kie.api.definition.KiePackage;
+import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.DebugAgendaEventListener;
 import org.kie.api.event.rule.DebugRuleRuntimeEventListener;
 import org.kie.api.io.ResourceType;
@@ -21,6 +22,7 @@ import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public abstract class BaseTest {
     protected static final String GET_OBJECTS_KEY = "_getObjects";
@@ -33,10 +35,14 @@ public abstract class BaseTest {
     protected KieFileSystem kieFileSystem;
     protected KieServices kieServices;
 
+    protected AgendaEventListener agendaEventListener;
+
     public BaseTest(String rulePath, ResourceType resourceType)
     {
         this.rulePath = rulePath;
         this.ruleResourceType = resourceType;
+        // AgendaEventListeners allow one to monitor and check rules that activate, fire, etc
+        agendaEventListener = mock( AgendaEventListener.class );
     }
 
     @Before
@@ -60,6 +66,7 @@ public abstract class BaseTest {
         kieSession = kContainer.newStatelessKieSession();
         kieSession.addEventListener(new DebugRuleRuntimeEventListener());
         kieSession.addEventListener(new DebugAgendaEventListener());
+        kieSession.addEventListener(agendaEventListener);
     }
 
     public void checkLoadedRulesNumber(int expectedLoadedRules)

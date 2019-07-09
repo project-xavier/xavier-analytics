@@ -50,6 +50,7 @@ public class EnvironmentTest extends BaseTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "Copy input fields and agenda controller");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<InitialSavingsEstimationReportModel> reports = objects.stream()

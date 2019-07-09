@@ -17,7 +17,7 @@ public class SourceCostsModel
     private Double totSourceValue;
     private Double totSourceMaintenanceValue;
     private Double totalSourceValue;
-    private Double sourceNewELAIndicator;
+    private Integer sourceNewELAIndicator;
     private Double sourceNewHighValue;
     private Double sourceNewLikelyValue;
     private Double sourceNewLowValue;
@@ -139,11 +139,11 @@ public class SourceCostsModel
         this.totalSourceValue = totalSourceValue;
     }
 
-    public Double getSourceNewELAIndicator() {
+    public Integer getSourceNewELAIndicator() {
         return sourceNewELAIndicator;
     }
 
-    public void setSourceNewELAIndicator(Double sourceNewELAIndicator) {
+    public void setSourceNewELAIndicator(Integer sourceNewELAIndicator) {
         this.sourceNewELAIndicator = sourceNewELAIndicator;
     }
 

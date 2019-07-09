@@ -3,16 +3,27 @@ package org.jboss.xavier.analytics.test;
 import org.drools.core.command.runtime.rule.FireAllRulesCommand;
 import org.drools.core.reteoo.RuleTerminalNodeLeftTuple;
 import org.drools.core.spi.AgendaGroup;
+import org.junit.Assert;
 import org.kie.api.command.Command;
+import org.kie.api.event.rule.AfterMatchFiredEvent;
+import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.runtime.CommandExecutor;
 import org.kie.api.runtime.ExecutionResults;
 import org.kie.internal.command.CommandFactory;
+import org.mockito.ArgumentCaptor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class Utils
 {
@@ -57,4 +68,19 @@ public class Utils
         return tList;
     }
 
+    public static void verifyRulesFiredNames(AgendaEventListener agendaEventListener, String ... rulesNames)
+    {
+        int numberOfRules = rulesNames.length;
+        // create an argument captor for AfterActivationFiredEvent
+        ArgumentCaptor<AfterMatchFiredEvent> argumentCaptor = ArgumentCaptor.forClass(AfterMatchFiredEvent.class);
+        // check that the method was called for #numberOfRules times and capture the arguments
+        verify( agendaEventListener, times(numberOfRules) ).afterMatchFired(argumentCaptor.capture());
+        List<AfterMatchFiredEvent> events = argumentCaptor.getAllValues();
+
+        IntStream.range(0, numberOfRules).forEach(i -> {
+            // check the rule name for the i-th rule to fire
+            AfterMatchFiredEvent first = events.get(i);
+            Assert.assertThat( first.getMatch().getRule().getName(), is(rulesNames[i]));
+        });
+    }
 }

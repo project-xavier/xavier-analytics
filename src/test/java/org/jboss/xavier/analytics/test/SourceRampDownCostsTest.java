@@ -77,6 +77,7 @@ public class SourceRampDownCostsTest extends BaseTest
 
         // check that the number of rules fired is what you expect
         Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "SourceRampDownCostsRules");
 
         // retrieve the List of Objects that were available in the working memory from the results
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));

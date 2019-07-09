@@ -2,24 +2,118 @@ package org.jboss.xavier.analytics.rules;
 
 import java.lang.Number;
 import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
-import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel
-import org.jboss.xavier.analytics.pojo.output.EnvironmentModel
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel;
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel;
 import org.jboss.xavier.analytics.pojo.output.SourceCostsModel;
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.round;
 
 dialect "java"
 agenda-group "SourceCosts"
-lock-on-active true
+no-loop true
 
-rule "SourceCostsRules"
+rule "SourceCostsRules_0"
     when
-        pricing : PricingDataModel( sourceListValue != null , sourceDiscountPercentage != null , sourceMaintenancePercentage != null )
-        report : InitialSavingsEstimationReportModel(environmentModel != null)
+        pricing : PricingDataModel(
+            sourceListValue != null,
+            sourceDiscountPercentage != null,
+            sourceMaintenancePercentage != null,
+            sourceRenewHighFactor != null
+        )
+        report : InitialSavingsEstimationReportModel(
+            environmentModel != null,
+            environmentModel.growthRatePercentage != null,
+            environmentModel.hypervisors != null
+        )
     then
         SourceCostsModel sourceCostsModel = new SourceCostsModel();
         sourceCostsModel.setSourceLicenseValue(pricing.getSourceListValue() * (1 - pricing.getSourceDiscountPercentage()));
         sourceCostsModel.setSourceMaintenanceValue(sourceCostsModel.getSourceLicenseValue() * pricing.getSourceMaintenancePercentage());
+        EnvironmentModel environmentModel = report.getEnvironmentModel();
+
+        sourceCostsModel.setYear1Server(round((1 + environmentModel.getGrowthRatePercentage()) * environmentModel.getHypervisors()));
+        sourceCostsModel.setYear2Server(round((1 + environmentModel.getGrowthRatePercentage()) * sourceCostsModel.getYear1Server()));
+        sourceCostsModel.setYear3Server(round((1 + environmentModel.getGrowthRatePercentage()) * sourceCostsModel.getYear2Server()));
+
+        sourceCostsModel.setYear1SourceValue((double)round(2 * pricing.getSourceListValue() * (1 - pricing.getSourceDiscountPercentage()) * (sourceCostsModel.getYear1Server() - environmentModel.getHypervisors())));
+        sourceCostsModel.setYear2SourceValue((double)round(2 * pricing.getSourceListValue() * (1 - pricing.getSourceDiscountPercentage()) * (sourceCostsModel.getYear2Server() - sourceCostsModel.getYear1Server())));
+        sourceCostsModel.setYear3SourceValue((double)round(2 * pricing.getSourceListValue() * (1 - pricing.getSourceDiscountPercentage()) * (sourceCostsModel.getYear3Server() - sourceCostsModel.getYear2Server())));
+        sourceCostsModel.setTotSourceValue(sourceCostsModel.getYear1SourceValue() + sourceCostsModel.getYear2SourceValue() + sourceCostsModel.getYear3SourceValue());
+
+        sourceCostsModel.setYear1SourceMaintenanceValue((double)round(pricing.getSourceMaintenancePercentage() * pricing.getSourceListValue() * sourceCostsModel.getYear1Server()));
+        sourceCostsModel.setYear2SourceMaintenanceValue((double)round(pricing.getSourceMaintenancePercentage() * pricing.getSourceListValue() * sourceCostsModel.getYear2Server()));
+        sourceCostsModel.setYear3SourceMaintenanceValue((double)round(pricing.getSourceMaintenancePercentage() * pricing.getSourceListValue() * sourceCostsModel.getYear3Server()));
+        sourceCostsModel.setTotSourceMaintenanceValue(sourceCostsModel.getYear1SourceMaintenanceValue() + sourceCostsModel.getYear2SourceMaintenanceValue() + sourceCostsModel.getYear3SourceMaintenanceValue());
+
+        sourceCostsModel.setTotalSourceValue(sourceCostsModel.getTotSourceValue() + sourceCostsModel.getTotSourceMaintenanceValue());
+
+        sourceCostsModel.setSourceNewHighValue((double)round((1 + pricing.getSourceRenewHighFactor()) * 3 * 2 *  sourceCostsModel.getSourceMaintenanceValue() * environmentModel.getHypervisors()));
+        sourceCostsModel.setSourceNewLikelyValue((double)round((1 + pricing.getSourceRenewLikelyFactor()) * 3 * 2 *  sourceCostsModel.getSourceMaintenanceValue() * environmentModel.getHypervisors()));
+        sourceCostsModel.setSourceNewLowValue((double)round((1 + pricing.getSourceRenewLowFactor()) * 3 * 2 *  sourceCostsModel.getSourceMaintenanceValue() * environmentModel.getHypervisors()));
         modify(report)
         {
-            setSourceCostsModel(sourceCostsModel)
+            setSourceCostsModel(sourceCostsModel);
+        }
+end
+
+rule "SourceCostsRules_sourceNewELAIndicator_2"
+    when
+        report : InitialSavingsEstimationReportModel(
+            sourceCostsModel != null,
+            sourceCostsModel.totalSourceValue != null,
+            sourceCostsModel.sourceNewHighValue != null,
+            sourceCostsModel.sourceNewLikelyValue != null,
+            sourceCostsModel.sourceNewLowValue != null,
+            sourceCostsModel.totalSourceValue > sourceCostsModel.sourceNewHighValue
+        )
+    then
+        modify(report)
+        {
+            getSourceCostsModel().setSourceNewELAIndicator(2),
+            getSourceCostsModel().setSourceRenewHighValue(report.getSourceCostsModel().getTotalSourceValue()),
+            getSourceCostsModel().setSourceRenewLikelyValue(report.getSourceCostsModel().getTotalSourceValue()),
+            getSourceCostsModel().setSourceRenewLowValue(report.getSourceCostsModel().getTotalSourceValue());
+        }
+end
+
+rule "SourceCostsRules_sourceNewELAIndicator_1"
+    when
+        report : InitialSavingsEstimationReportModel(
+            sourceCostsModel != null,
+            sourceCostsModel.totalSourceValue != null,
+            sourceCostsModel.sourceNewHighValue != null,
+            sourceCostsModel.sourceNewLikelyValue != null,
+            sourceCostsModel.sourceNewLowValue != null,
+            sourceCostsModel.totalSourceValue < sourceCostsModel.sourceNewHighValue,
+            sourceCostsModel.totalSourceValue > sourceCostsModel.sourceNewLowValue
+        )
+    then
+        modify(report)
+        {
+            getSourceCostsModel().setSourceNewELAIndicator(1),
+            getSourceCostsModel().setSourceRenewHighValue(report.getSourceCostsModel().getSourceNewHighValue()),
+            getSourceCostsModel().setSourceRenewLikelyValue(report.getSourceCostsModel().getTotalSourceValue()),
+            getSourceCostsModel().setSourceRenewLowValue(report.getSourceCostsModel().getSourceNewLowValue());
+        }
+end
+
+rule "SourceCostsRules_sourceNewELAIndicator_0"
+    when
+        report : InitialSavingsEstimationReportModel(
+            sourceCostsModel != null,
+            sourceCostsModel.totalSourceValue != null,
+            sourceCostsModel.sourceNewHighValue != null,
+            sourceCostsModel.sourceNewLikelyValue != null,
+            sourceCostsModel.sourceNewLowValue != null,
+            sourceCostsModel.totalSourceValue < sourceCostsModel.sourceNewLowValue
+        )
+    then
+        modify(report)
+        {
+            getSourceCostsModel().setSourceNewELAIndicator(0),
+            getSourceCostsModel().setSourceRenewHighValue(report.getSourceCostsModel().getSourceNewHighValue()),
+            getSourceCostsModel().setSourceRenewLikelyValue(report.getSourceCostsModel().getSourceNewLikelyValue()),
+            getSourceCostsModel().setSourceRenewLowValue(report.getSourceCostsModel().getSourceNewLowValue());
+
         }
 end
