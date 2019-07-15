@@ -1,0 +1,82 @@
+package org.jboss.xavier.analytics.rules;
+
+import java.lang.Number;
+import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel
+import org.jboss.xavier.analytics.pojo.output.SourceCostsModel
+import org.jboss.xavier.analytics.pojo.output.RHVYearByYearCostsModel
+import org.jboss.xavier.analytics.pojo.output.SourceRampDownCostsModel
+import org.jboss.xavier.analytics.pojo.output.RHVRampUpCostsModel
+import javax.xml.transform.Source;
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.round;
+
+dialect "java"
+agenda-group "RHVYearByYearCosts"
+lock-on-active true
+
+rule "RHVYearByYearCostsRules"
+    when
+        report : InitialSavingsEstimationReportModel(
+            sourceRampDownCostsModel != null,
+            sourceRampDownCostsModel.year1SourceMaintenanceTotalValue != null,
+            sourceRampDownCostsModel.year2SourceMaintenanceTotalValue != null,
+            sourceRampDownCostsModel.year3SourceMaintenanceTotalValue != null,
+            rhvRampUpCostsModel != null,
+            rhvRampUpCostsModel.year1RhvTotalValue != null,
+            rhvRampUpCostsModel.year1RhvTotalGrowthValue != null,
+            rhvRampUpCostsModel.year2RhvTotalValue != null,
+            rhvRampUpCostsModel.year2RhvTotalGrowthValue != null,
+            rhvRampUpCostsModel.year3RhvTotalValue != null,
+            rhvRampUpCostsModel.year3RhvTotalGrowthValue != null,
+            rhvRampUpCostsModel.rhvSwitchLearningSubsValue != null,
+            rhvRampUpCostsModel.rhvSwitchConsultValue != null,
+            rhvRampUpCostsModel.rhvSwitchTAndEValue != null,
+            sourceCostsModel != null,
+            sourceCostsModel.sourceRenewHighValue != null,
+            sourceCostsModel.sourceRenewLikelyValue != null,
+            sourceCostsModel.sourceRenewLowValue != null
+        )
+    then
+        SourceRampDownCostsModel sourceRampDownCosts = report.getSourceRampDownCostsModel();
+        RHVRampUpCostsModel rhvRampUpCosts = report.getRhvRampUpCostsModel();
+        SourceCostsModel sourceCosts = report.getSourceCostsModel();
+
+        RHVYearByYearCostsModel rhvYearByYearCosts = new RHVYearByYearCostsModel();
+        rhvYearByYearCosts.setYear1RhvGrandTotalValue(
+            sourceRampDownCosts.getYear1SourceMaintenanceTotalValue() +
+            rhvRampUpCosts.getYear1RhvTotalValue() +
+            rhvRampUpCosts.getYear1RhvTotalGrowthValue() +
+            rhvRampUpCosts.getRhvSwitchLearningSubsValue() +
+            rhvRampUpCosts.getRhvSwitchConsultValue() +
+            rhvRampUpCosts.getRhvSwitchTAndEValue()
+        );
+        rhvYearByYearCosts.setYear2RhvGrandTotalValue(
+            sourceRampDownCosts.getYear2SourceMaintenanceTotalValue() +
+            rhvRampUpCosts.getYear2RhvTotalValue() +
+            rhvRampUpCosts.getYear2RhvTotalGrowthValue()
+        );
+        rhvYearByYearCosts.setYear3RhvGrandTotalValue(
+            sourceRampDownCosts.getYear3SourceMaintenanceTotalValue() +
+            rhvRampUpCosts.getYear3RhvTotalValue() +
+            rhvRampUpCosts.getYear3RhvTotalGrowthValue()
+        );
+
+        rhvYearByYearCosts.setYear1RhvBudgetFreedHighValue((double)round(sourceCosts.getSourceRenewHighValue() / 3 - rhvYearByYearCosts.getYear1RhvGrandTotalValue()));
+        rhvYearByYearCosts.setYear1RhvBudgetFreedLikelyValue((double)round(sourceCosts.getSourceRenewLikelyValue() / 3 - rhvYearByYearCosts.getYear1RhvGrandTotalValue()));
+        rhvYearByYearCosts.setYear1RhvBudgetFreedLowValue((double)round(sourceCosts.getSourceRenewLowValue() / 3 - rhvYearByYearCosts.getYear1RhvGrandTotalValue()));
+
+        rhvYearByYearCosts.setYear2RhvBudgetFreedHighValue((double)round(sourceCosts.getSourceRenewHighValue() / 3 - rhvYearByYearCosts.getYear2RhvGrandTotalValue()));
+        rhvYearByYearCosts.setYear2RhvBudgetFreedLikelyValue((double)round(sourceCosts.getSourceRenewLikelyValue() / 3 - rhvYearByYearCosts.getYear2RhvGrandTotalValue()));
+        rhvYearByYearCosts.setYear2RhvBudgetFreedLowValue((double)round(sourceCosts.getSourceRenewLowValue() / 3 - rhvYearByYearCosts.getYear2RhvGrandTotalValue()));
+
+        rhvYearByYearCosts.setYear3RhvBudgetFreedHighValue((double)round(sourceCosts.getSourceRenewHighValue() / 3 - rhvYearByYearCosts.getYear3RhvGrandTotalValue()));
+        rhvYearByYearCosts.setYear3RhvBudgetFreedLikelyValue((double)round(sourceCosts.getSourceRenewLikelyValue() / 3 - rhvYearByYearCosts.getYear3RhvGrandTotalValue()));
+        rhvYearByYearCosts.setYear3RhvBudgetFreedLowValue((double)round(sourceCosts.getSourceRenewLowValue() / 3 - rhvYearByYearCosts.getYear3RhvGrandTotalValue()));
+
+        modify(report)
+        {
+            setRhvYearByYearCostsModel(rhvYearByYearCosts)
+        }
+end
