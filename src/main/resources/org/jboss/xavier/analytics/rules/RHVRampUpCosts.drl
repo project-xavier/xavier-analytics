@@ -1,0 +1,199 @@
+package org.jboss.xavier.analytics.rules;
+
+import java.lang.Number;
+import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel
+import org.jboss.xavier.analytics.pojo.output.RHVSavingsModel
+import org.jboss.xavier.analytics.pojo.output.RHVYearByYearCostsModel
+import org.jboss.xavier.analytics.pojo.output.RHVRampUpCostsModel;
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.round;
+
+dialect "java"
+agenda-group "RHVRampUpCosts"
+lock-on-active true
+
+rule "RHVRampUpCosts"
+    when
+        report : InitialSavingsEstimationReportModel(
+                environmentModel != null,
+                environmentModel.getYear1Hypervisor() != null,
+                environmentModel.getYear2Hypervisor() != null,
+                environmentModel.getYear3Hypervisor() != null,
+                environmentModel.getSourceProductIndicator() != null,
+                environmentModel.getGrowthRatePercentage() != null,
+                environmentModel.getHypervisors() != null,
+                sourceRampDownCostsModel != null,
+                sourceRampDownCostsModel.getYear1SourcePaidMaintenance() != null,
+                sourceRampDownCostsModel.getYear2SourcePaidMaintenance() != null
+        )
+        pricing : PricingDataModel(
+                    freeSubsYear1Indicator != null,
+                    freeSubsYear2And3Indicator != null,
+                    rhvConsultValue != null,
+                    rhLearningSubsValue != null,
+                    rhvTAndEValue != null,
+                    rhvValue != null,
+                    rhvListValue != null,
+                    rhVirtValue != null,
+                    rhVirtListValue != null
+        )
+    then
+        EnvironmentModel env = report.getEnvironmentModel();
+        RHVRampUpCostsModel rhvRampUpCostsModel = new RHVRampUpCostsModel();
+
+        rhvRampUpCostsModel.setRhvSwitchConsultValue(pricing.getRhvConsultValue());
+        rhvRampUpCostsModel.setRhvSwitchLearningSubsValue(pricing.getRhLearningSubsValue());
+        rhvRampUpCostsModel.setRhvSwitchTAndEValue(pricing.getRhvTAndEValue());
+
+        //Year1
+        rhvRampUpCostsModel.setYear1RhvServers(env.getYear1Hypervisor());
+        if (pricing.getFreeSubsYear1Indicator())
+        {
+            rhvRampUpCostsModel.setYear1RhvCompSubs(rhvRampUpCostsModel.getYear1RhvServers());
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear1RhvCompSubs(0);
+        }
+        rhvRampUpCostsModel.setYear1RhvPaidSubs(rhvRampUpCostsModel.getYear1RhvServers() - rhvRampUpCostsModel.getYear1RhvCompSubs());
+        if(pricing.getFreeSubsYear1Indicator())
+        {
+            rhvRampUpCostsModel.setYear1RhvPerServerValue(0.0);
+        }
+        else if(env.getSourceProductIndicator().equals(1))
+        {
+            rhvRampUpCostsModel.setYear1RhvPerServerValue((double)round((1 - pricing.getRhvValue()) * pricing.getRhvListValue()));
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear1RhvPerServerValue((double)round((1 - pricing.getRhVirtValue()) * pricing.getRhVirtListValue()));
+        }
+
+        rhvRampUpCostsModel.setYear1RhvTotalValue(rhvRampUpCostsModel.getYear1RhvPaidSubs() * rhvRampUpCostsModel.getYear1RhvPerServerValue());
+
+        rhvRampUpCostsModel.setYear1RhvServersGrowth(round(env.getGrowthRatePercentage() * env.getHypervisors()));
+        if (pricing.getFreeSubsYear1Indicator())
+        {
+            rhvRampUpCostsModel.setYear1RhvCompSubsGrowth(rhvRampUpCostsModel.getYear1RhvServersGrowth());
+            rhvRampUpCostsModel.setYear1RhvPaidSubsGrowth(0);
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear1RhvCompSubsGrowth(0);
+            rhvRampUpCostsModel.setYear1RhvPaidSubsGrowth(rhvRampUpCostsModel.getYear1RhvServersGrowth());
+        }
+        if(env.getSourceProductIndicator().equals(1))
+        {
+            rhvRampUpCostsModel.setYear1RhvPerServerGrowthValue((double)round((1 - pricing.getRhvValue()) * pricing.getRhvListValue()));
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear1RhvPerServerGrowthValue((double)round((1 - pricing.getRhVirtValue()) * pricing.getRhVirtListValue()));
+        }
+        rhvRampUpCostsModel.setYear1RhvTotalGrowthValue(rhvRampUpCostsModel.getYear1RhvPaidSubsGrowth() * rhvRampUpCostsModel.getYear1RhvPerServerGrowthValue());
+
+
+        rhvRampUpCostsModel.setYear1RhvGrandTotalGrowthValue(rhvRampUpCostsModel.getYear1RhvTotalValue() + rhvRampUpCostsModel.getYear1RhvTotalGrowthValue());
+
+
+        //Year2
+        rhvRampUpCostsModel.setYear2RhvServers(env.getYear1Hypervisor() + env.getYear2Hypervisor());
+        if (pricing.getFreeSubsYear2And3Indicator())
+        {
+            rhvRampUpCostsModel.setYear2RhvCompSubs(rhvRampUpCostsModel.getYear2RhvServers() - rhvRampUpCostsModel.getYear1RhvServers());
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear2RhvCompSubs(0);
+        }
+        rhvRampUpCostsModel.setYear2RhvPaidSubs(rhvRampUpCostsModel.getYear2RhvServers() - rhvRampUpCostsModel.getYear2RhvCompSubs());
+        if(env.getSourceProductIndicator().equals(1))
+        {
+            rhvRampUpCostsModel.setYear2RhvPerServerValue((double)round((1 - pricing.getRhvValue()) * pricing.getRhvListValue()));
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear2RhvPerServerValue((double)round((1 - pricing.getRhVirtValue()) * pricing.getRhVirtListValue()));
+        }
+        rhvRampUpCostsModel.setYear2RhvTotalValue(rhvRampUpCostsModel.getYear2RhvPaidSubs() * rhvRampUpCostsModel.getYear2RhvPerServerValue());
+
+        rhvRampUpCostsModel.setYear2RhvServersGrowth(
+                round((env.getGrowthRatePercentage() * (report.getSourceRampDownCostsModel().getYear1SourcePaidMaintenance() + rhvRampUpCostsModel.getYear1RhvServersGrowth()))
+                 + rhvRampUpCostsModel.getYear1RhvServersGrowth()));
+        if (pricing.getFreeSubsYear2And3Indicator())
+        {
+            rhvRampUpCostsModel.setYear2RhvCompSubsGrowth(rhvRampUpCostsModel.getYear2RhvServersGrowth() - rhvRampUpCostsModel.getYear1RhvServersGrowth());
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear2RhvCompSubsGrowth(0);
+        }
+        rhvRampUpCostsModel.setYear2RhvPaidSubsGrowth(
+                rhvRampUpCostsModel.getYear2RhvServersGrowth() - rhvRampUpCostsModel.getYear2RhvCompSubsGrowth());
+        if(env.getSourceProductIndicator().equals(1))
+        {
+            rhvRampUpCostsModel.setYear2RhvPerServerGrowthValue((double)round((1 - pricing.getRhvValue()) * pricing.getRhvListValue()));
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear2RhvPerServerGrowthValue((double)round((1 - pricing.getRhVirtValue()) * pricing.getRhVirtListValue()));
+        }
+        rhvRampUpCostsModel.setYear2RhvTotalGrowthValue(rhvRampUpCostsModel.getYear2RhvPaidSubsGrowth() * rhvRampUpCostsModel.getYear2RhvPerServerGrowthValue());
+
+
+        rhvRampUpCostsModel.setYear2RhvGrandTotalGrowthValue(rhvRampUpCostsModel.getYear2RhvTotalValue() + rhvRampUpCostsModel.getYear2RhvTotalGrowthValue());
+
+        //Year3
+        rhvRampUpCostsModel.setYear3RhvServers(env.getYear1Hypervisor() + env.getYear2Hypervisor() + env.getYear3Hypervisor());
+        if (pricing.getFreeSubsYear2And3Indicator())
+        {
+            rhvRampUpCostsModel.setYear3RhvCompSubs(rhvRampUpCostsModel.getYear3RhvServers() - rhvRampUpCostsModel.getYear2RhvServers());
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear3RhvCompSubs(0);
+        }
+        rhvRampUpCostsModel.setYear3RhvPaidSubs(rhvRampUpCostsModel.getYear3RhvServers() - rhvRampUpCostsModel.getYear3RhvCompSubs());
+        if(env.getSourceProductIndicator().equals(1))
+        {
+            rhvRampUpCostsModel.setYear3RhvPerServerValue((double)round((1 - pricing.getRhvValue()) * pricing.getRhvListValue()));
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear3RhvPerServerValue((double)round((1 - pricing.getRhVirtValue()) * pricing.getRhVirtListValue()));
+        }
+        rhvRampUpCostsModel.setYear3RhvTotalValue(rhvRampUpCostsModel.getYear3RhvPaidSubs() * rhvRampUpCostsModel.getYear3RhvPerServerValue());
+
+        rhvRampUpCostsModel.setYear3RhvServersGrowth(
+                round((env.getGrowthRatePercentage() * (report.getSourceRampDownCostsModel().getYear2SourcePaidMaintenance() + rhvRampUpCostsModel.getYear2RhvServersGrowth()))
+                                                                      + rhvRampUpCostsModel.getYear2RhvServersGrowth()));
+        if (pricing.getFreeSubsYear2And3Indicator())
+        {
+            rhvRampUpCostsModel.setYear3RhvCompSubsGrowth(rhvRampUpCostsModel.getYear3RhvServersGrowth() - rhvRampUpCostsModel.getYear2RhvServersGrowth());
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear3RhvCompSubsGrowth(0);
+        }
+        rhvRampUpCostsModel.setYear3RhvPaidSubsGrowth(rhvRampUpCostsModel.getYear3RhvServersGrowth() - rhvRampUpCostsModel.getYear3RhvCompSubsGrowth());
+        if(env.getSourceProductIndicator().equals(1))
+        {
+            rhvRampUpCostsModel.setYear3RhvPerServerGrowthValue((double)round((1 - pricing.getRhvValue()) * pricing.getRhvListValue()));
+        }
+        else
+        {
+            rhvRampUpCostsModel.setYear3RhvPerServerGrowthValue((double)round((1 - pricing.getRhVirtValue()) * pricing.getRhVirtListValue()));
+        }
+        rhvRampUpCostsModel.setYear3RhvTotalGrowthValue(rhvRampUpCostsModel.getYear3RhvPaidSubsGrowth() * rhvRampUpCostsModel.getYear3RhvPerServerGrowthValue());
+
+
+        rhvRampUpCostsModel.setYear3RhvGrandTotalGrowthValue(rhvRampUpCostsModel.getYear3RhvTotalValue() + rhvRampUpCostsModel.getYear3RhvTotalGrowthValue());
+
+
+        modify(report)
+        {
+            setRhvRampUpCostsModel(rhvRampUpCostsModel)
+        }
+end

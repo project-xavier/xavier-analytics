@@ -3,66 +3,66 @@ package org.jboss.xavier.analytics.pojo.output;
 public class RHVRampUpCostsModel
 {
     // RHVRampUpCosts
-    private Double year1RhvServers;
-    private Double year1RhvCompSubs;
-    private Double year1RhvPaidSubs;
+    private Integer year1RhvServers;
+    private Integer year1RhvCompSubs;
+    private Integer year1RhvPaidSubs;
     private Double year1RhvPerServerValue;
     private Double year1RhvTotalValue;
-    private Double year1RhvServersGrowth;
-    private Double year1RhvCompSubsGrowth;
-    private Double year1RhvPaidSubsGrowth;
+    private Integer year1RhvServersGrowth;
+    private Integer year1RhvCompSubsGrowth;
+    private Integer year1RhvPaidSubsGrowth;
     private Double year1RhvPerServerGrowthValue;
     private Double year1RhvTotalGrowthValue;
     private Double year1RhvGrandTotalGrowthValue;
     private Double rhvSwitchLearningSubsValue;
     private Double rhvSwitchConsultValue;
     private Double rhvSwitchTAndEValue;
-    private Double year2RhvServers;
-    private Double year2RhvCompSubs;
-    private Double year2RhvPaidSubs;
+    private Integer year2RhvServers;
+    private Integer year2RhvCompSubs;
+    private Integer year2RhvPaidSubs;
     private Double year2RhvPerServerValue;
     private Double year2RhvTotalValue;
-    private Double year2RhvServersGrowth;
-    private Double year2RhvCompSubsGrowth;
-    private Double year2RhvPaidSubsGrowth;
+    private Integer year2RhvServersGrowth;
+    private Integer year2RhvCompSubsGrowth;
+    private Integer year2RhvPaidSubsGrowth;
     private Double year2RhvPerServerGrowthValue;
     private Double year2RhvTotalGrowthValue;
     private Double year2RhvGrandTotalGrowthValue;
-    private Double year3RhvServers;
-    private Double year3RhvCompSubs;
-    private Double year3RhvPaidSubs;
+    private Integer year3RhvServers;
+    private Integer year3RhvCompSubs;
+    private Integer year3RhvPaidSubs;
     private Double year3RhvPerServerValue;
     private Double year3RhvTotalValue;
-    private Double year3RhvServersGrowth;
-    private Double year3RhvCompSubsGrowth;
-    private Double year3RhvPaidSubsGrowth;
+    private Integer year3RhvServersGrowth;
+    private Integer year3RhvCompSubsGrowth;
+    private Integer year3RhvPaidSubsGrowth;
     private Double year3RhvPerServerGrowthValue;
     private Double year3RhvTotalGrowthValue;
     private Double year3RhvGrandTotalGrowthValue;
 
     public RHVRampUpCostsModel() {}
 
-    public Double getYear1RhvServers() {
+    public Integer getYear1RhvServers() {
         return year1RhvServers;
     }
 
-    public void setYear1RhvServers(Double year1RhvServers) {
+    public void setYear1RhvServers(Integer year1RhvServers) {
         this.year1RhvServers = year1RhvServers;
     }
 
-    public Double getYear1RhvCompSubs() {
+    public Integer getYear1RhvCompSubs() {
         return year1RhvCompSubs;
     }
 
-    public void setYear1RhvCompSubs(Double year1RhvCompSubs) {
+    public void setYear1RhvCompSubs(Integer year1RhvCompSubs) {
         this.year1RhvCompSubs = year1RhvCompSubs;
     }
 
-    public Double getYear1RhvPaidSubs() {
+    public Integer getYear1RhvPaidSubs() {
         return year1RhvPaidSubs;
     }
 
-    public void setYear1RhvPaidSubs(Double year1RhvPaidSubs) {
+    public void setYear1RhvPaidSubs(Integer year1RhvPaidSubs) {
         this.year1RhvPaidSubs = year1RhvPaidSubs;
     }
 
@@ -82,27 +82,27 @@ public class RHVRampUpCostsModel
         this.year1RhvTotalValue = year1RhvTotalValue;
     }
 
-    public Double getYear1RhvServersGrowth() {
+    public Integer getYear1RhvServersGrowth() {
         return year1RhvServersGrowth;
     }
 
-    public void setYear1RhvServersGrowth(Double year1RhvServersGrowth) {
+    public void setYear1RhvServersGrowth(Integer year1RhvServersGrowth) {
         this.year1RhvServersGrowth = year1RhvServersGrowth;
     }
 
-    public Double getYear1RhvCompSubsGrowth() {
+    public Integer getYear1RhvCompSubsGrowth() {
         return year1RhvCompSubsGrowth;
     }
 
-    public void setYear1RhvCompSubsGrowth(Double year1RhvCompSubsGrowth) {
+    public void setYear1RhvCompSubsGrowth(Integer year1RhvCompSubsGrowth) {
         this.year1RhvCompSubsGrowth = year1RhvCompSubsGrowth;
     }
 
-    public Double getYear1RhvPaidSubsGrowth() {
+    public Integer getYear1RhvPaidSubsGrowth() {
         return year1RhvPaidSubsGrowth;
     }
 
-    public void setYear1RhvPaidSubsGrowth(Double year1RhvPaidSubsGrowth) {
+    public void setYear1RhvPaidSubsGrowth(Integer year1RhvPaidSubsGrowth) {
         this.year1RhvPaidSubsGrowth = year1RhvPaidSubsGrowth;
     }
 
@@ -154,27 +154,27 @@ public class RHVRampUpCostsModel
         this.rhvSwitchTAndEValue = rhvSwitchTAndEValue;
     }
 
-    public Double getYear2RhvServers() {
+    public Integer getYear2RhvServers() {
         return year2RhvServers;
     }
 
-    public void setYear2RhvServers(Double year2RhvServers) {
+    public void setYear2RhvServers(Integer year2RhvServers) {
         this.year2RhvServers = year2RhvServers;
     }
 
-    public Double getYear2RhvCompSubs() {
+    public Integer getYear2RhvCompSubs() {
         return year2RhvCompSubs;
     }
 
-    public void setYear2RhvCompSubs(Double year2RhvCompSubs) {
+    public void setYear2RhvCompSubs(Integer year2RhvCompSubs) {
         this.year2RhvCompSubs = year2RhvCompSubs;
     }
 
-    public Double getYear2RhvPaidSubs() {
+    public Integer getYear2RhvPaidSubs() {
         return year2RhvPaidSubs;
     }
 
-    public void setYear2RhvPaidSubs(Double year2RhvPaidSubs) {
+    public void setYear2RhvPaidSubs(Integer year2RhvPaidSubs) {
         this.year2RhvPaidSubs = year2RhvPaidSubs;
     }
 
@@ -194,27 +194,27 @@ public class RHVRampUpCostsModel
         this.year2RhvTotalValue = year2RhvTotalValue;
     }
 
-    public Double getYear2RhvServersGrowth() {
+    public Integer getYear2RhvServersGrowth() {
         return year2RhvServersGrowth;
     }
 
-    public void setYear2RhvServersGrowth(Double year2RhvServersGrowth) {
+    public void setYear2RhvServersGrowth(Integer year2RhvServersGrowth) {
         this.year2RhvServersGrowth = year2RhvServersGrowth;
     }
 
-    public Double getYear2RhvCompSubsGrowth() {
+    public Integer getYear2RhvCompSubsGrowth() {
         return year2RhvCompSubsGrowth;
     }
 
-    public void setYear2RhvCompSubsGrowth(Double year2RhvCompSubsGrowth) {
+    public void setYear2RhvCompSubsGrowth(Integer year2RhvCompSubsGrowth) {
         this.year2RhvCompSubsGrowth = year2RhvCompSubsGrowth;
     }
 
-    public Double getYear2RhvPaidSubsGrowth() {
+    public Integer getYear2RhvPaidSubsGrowth() {
         return year2RhvPaidSubsGrowth;
     }
 
-    public void setYear2RhvPaidSubsGrowth(Double year2RhvPaidSubsGrowth) {
+    public void setYear2RhvPaidSubsGrowth(Integer year2RhvPaidSubsGrowth) {
         this.year2RhvPaidSubsGrowth = year2RhvPaidSubsGrowth;
     }
 
@@ -242,27 +242,27 @@ public class RHVRampUpCostsModel
         this.year2RhvGrandTotalGrowthValue = year2RhvGrandTotalGrowthValue;
     }
 
-    public Double getYear3RhvServers() {
+    public Integer getYear3RhvServers() {
         return year3RhvServers;
     }
 
-    public void setYear3RhvServers(Double year3RhvServers) {
+    public void setYear3RhvServers(Integer year3RhvServers) {
         this.year3RhvServers = year3RhvServers;
     }
 
-    public Double getYear3RhvCompSubs() {
+    public Integer getYear3RhvCompSubs() {
         return year3RhvCompSubs;
     }
 
-    public void setYear3RhvCompSubs(Double year3RhvCompSubs) {
+    public void setYear3RhvCompSubs(Integer year3RhvCompSubs) {
         this.year3RhvCompSubs = year3RhvCompSubs;
     }
 
-    public Double getYear3RhvPaidSubs() {
+    public Integer getYear3RhvPaidSubs() {
         return year3RhvPaidSubs;
     }
 
-    public void setYear3RhvPaidSubs(Double year3RhvPaidSubs) {
+    public void setYear3RhvPaidSubs(Integer year3RhvPaidSubs) {
         this.year3RhvPaidSubs = year3RhvPaidSubs;
     }
 
@@ -282,27 +282,27 @@ public class RHVRampUpCostsModel
         this.year3RhvTotalValue = year3RhvTotalValue;
     }
 
-    public Double getYear3RhvServersGrowth() {
+    public Integer getYear3RhvServersGrowth() {
         return year3RhvServersGrowth;
     }
 
-    public void setYear3RhvServersGrowth(Double year3RhvServersGrowth) {
+    public void setYear3RhvServersGrowth(Integer year3RhvServersGrowth) {
         this.year3RhvServersGrowth = year3RhvServersGrowth;
     }
 
-    public Double getYear3RhvCompSubsGrowth() {
+    public Integer getYear3RhvCompSubsGrowth() {
         return year3RhvCompSubsGrowth;
     }
 
-    public void setYear3RhvCompSubsGrowth(Double year3RhvCompSubsGrowth) {
+    public void setYear3RhvCompSubsGrowth(Integer year3RhvCompSubsGrowth) {
         this.year3RhvCompSubsGrowth = year3RhvCompSubsGrowth;
     }
 
-    public Double getYear3RhvPaidSubsGrowth() {
+    public Integer getYear3RhvPaidSubsGrowth() {
         return year3RhvPaidSubsGrowth;
     }
 
-    public void setYear3RhvPaidSubsGrowth(Double year3RhvPaidSubsGrowth) {
+    public void setYear3RhvPaidSubsGrowth(Integer year3RhvPaidSubsGrowth) {
         this.year3RhvPaidSubsGrowth = year3RhvPaidSubsGrowth;
     }
 
