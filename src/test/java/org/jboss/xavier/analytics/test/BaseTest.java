@@ -1,14 +1,12 @@
 package org.jboss.xavier.analytics.test;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.KieRepository;
 import org.kie.api.builder.Message;
-import org.kie.api.definition.KiePackage;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.DebugAgendaEventListener;
 import org.kie.api.event.rule.DebugRuleRuntimeEventListener;
@@ -71,9 +69,7 @@ public abstract class BaseTest {
 
     public void checkLoadedRulesNumber(int expectedLoadedRules)
     {
-        KiePackage kiePackage = kieSession.getKieBase().getKiePackage("org.jboss.xavier.analytics.rules");
-        Assert.assertNotNull("No rules have been loaded from 'org.jboss.xavier.analytics.rules' package", kiePackage);
-        assertEquals("Wrong number of rules loaded", expectedLoadedRules, kiePackage.getRules().size());
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules", expectedLoadedRules);
     }
 
     protected KieBuilder createAndBuildKieBuilder(URL resource)

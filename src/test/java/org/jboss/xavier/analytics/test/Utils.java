@@ -5,23 +5,24 @@ import org.drools.core.reteoo.RuleTerminalNodeLeftTuple;
 import org.drools.core.spi.AgendaGroup;
 import org.junit.Assert;
 import org.kie.api.command.Command;
+import org.kie.api.definition.KiePackage;
 import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.runtime.CommandExecutor;
 import org.kie.api.runtime.ExecutionResults;
+import org.kie.api.runtime.StatelessKieSession;
 import org.kie.internal.command.CommandFactory;
 import org.mockito.ArgumentCaptor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -50,7 +51,12 @@ public class Utils
 
     public static Map<String, Object> executeCommandsAndGetResults(CommandExecutor kieSession, List<Command> commands)
     {
-        ExecutionResults executionResults = kieSession.execute(CommandFactory.newBatchExecution(commands));
+        ExecutionResults executionResults = null;
+        try {
+            executionResults = kieSession.execute(CommandFactory.newBatchExecution(commands));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Map<String, Object> results = new HashMap(executionResults.getIdentifiers().size());
         for (String identifier : executionResults.getIdentifiers()) {
             results.put(identifier, executionResults.getValue(identifier));
@@ -82,5 +88,12 @@ public class Utils
             AfterMatchFiredEvent first = events.get(i);
             Assert.assertThat( first.getMatch().getRule().getName(), is(rulesNames[i]));
         });
+    }
+
+    public static void checkLoadedRulesNumber(StatelessKieSession kieSession, String kiePackageName, int expectedLoadedRules)
+    {
+        KiePackage kiePackage = kieSession.getKieBase().getKiePackage(kiePackageName);
+        Assert.assertNotNull("No rules have been loaded from '" + kiePackageName + "' package", kiePackage);
+        assertEquals("Wrong number of rules loaded", expectedLoadedRules, kiePackage.getRules().size());
     }
 }

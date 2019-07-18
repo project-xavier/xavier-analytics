@@ -14,7 +14,15 @@ auto-focus true
 rule "Copy input fields and agenda controller"
     salience 65001
     when
-        uploadedPayload : UploadFormInputDataModel(customerId != null)
+        uploadedPayload : UploadFormInputDataModel(
+            customerId != null,
+            fileName != null,
+            hypervisor != null,
+            year1HypervisorPercentage != null,
+            year2HypervisorPercentage != null,
+            year3HypervisorPercentage != null,
+            growthRatePercentage != null
+        )
     then
         InitialSavingsEstimationReportModel initialSavingsEstimationReport = new InitialSavingsEstimationReportModel();
         initialSavingsEstimationReport.setCustomerId(uploadedPayload.getCustomerId());
