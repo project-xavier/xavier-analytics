@@ -1,0 +1,36 @@
+package org.jboss.xavier.analytics.rules;
+
+import java.lang.Number;
+import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel
+import org.jboss.xavier.analytics.pojo.output.SourceCostsModel
+import org.jboss.xavier.analytics.pojo.output.RHVSavingsModel
+import org.jboss.xavier.analytics.pojo.output.RHVAdditionalContainerCapacityModel;
+
+
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.round;
+
+dialect "java"
+agenda-group "RHVAdditionalContainerCapacity"
+lock-on-active true
+
+rule "RHVAdditionalContainerCapacity"
+    when
+        pricing : PricingDataModel( rhOSListValue != null )
+        report : InitialSavingsEstimationReportModel(
+                rhvSavingsModel != null,
+                rhvSavingsModel.rhvSaveHighValue != null,
+                rhvSavingsModel.rhvSaveLikelyValue != null,
+                rhvSavingsModel.rhvSaveLowValue != null)
+    then
+        RHVAdditionalContainerCapacityModel additionalContainerCapacityModel = new RHVAdditionalContainerCapacityModel();
+        additionalContainerCapacityModel.setRhvContainerHigh((double)round((report.getRhvSavingsModel().getRhvSaveHighValue()/pricing.getRhOSListValue())*100));
+        additionalContainerCapacityModel.setRhvContainerLikely((double)round((report.getRhvSavingsModel().getRhvSaveLikelyValue()/pricing.getRhOSListValue())*100));
+        additionalContainerCapacityModel.setRhvContainerLow((double)round((report.getRhvSavingsModel().getRhvSaveLowValue()/pricing.getRhOSListValue())*100));
+        modify(report)
+        {
+            setRhvAdditionalContainerCapacityModel(additionalContainerCapacityModel)
+        }
+end

@@ -102,7 +102,7 @@ public class InitialSavingsEstimationReportTest
     public void test_SourceNewELAIndicator_0()
     {
         // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules", 25);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules", 26);
 
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
@@ -131,7 +131,7 @@ public class InitialSavingsEstimationReportTest
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(20, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(21, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // Environment
@@ -147,8 +147,9 @@ public class InitialSavingsEstimationReportTest
                 // RHVYearByYearCosts
                  "RHVYearByYearCostsRules",
                 // RHVSavings
-                 "RHVSavingsRules"
+                 "RHVSavingsRules",
                 // RHVAdditionalContainerCapacity
+                 "RHVAdditionalContainerCapacity"
                 // RHVOrderForm
                 );
 
@@ -335,7 +336,10 @@ public class InitialSavingsEstimationReportTest
         Assert.assertEquals(36594000, savingsModel.getRhvSaveLowValue(), 0);
 
         // RHVAdditionalContainerCapacity
-
+        RHVAdditionalContainerCapacityModel model = report.getRhvAdditionalContainerCapacityModel();
+        Assert.assertEquals(446460, model.getRhvContainerHigh(), 0);
+        Assert.assertEquals(345210, model.getRhvContainerLikely(), 0);
+        Assert.assertEquals(243960, model.getRhvContainerLow(), 0);
         // RHVOrderForm
     }
 
