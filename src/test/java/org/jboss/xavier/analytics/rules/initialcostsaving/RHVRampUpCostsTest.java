@@ -1,8 +1,10 @@
-package org.jboss.xavier.analytics.test;
+package org.jboss.xavier.analytics.rules.initialcostsaving;
 
 import org.jboss.xavier.analytics.pojo.output.*;
-import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.support.initialcostsaving.PricingDataModel;
 
+import org.jboss.xavier.analytics.rules.BaseTest;
+import org.jboss.xavier.analytics.test.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kie.api.command.Command;
@@ -15,21 +17,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.jboss.xavier.analytics.functions.HelperFunctions.round;
-
 public class RHVRampUpCostsTest extends BaseTest
 {
     public RHVRampUpCostsTest()
     {
         // provide the name of the DRL file you want to test
-        super("/org/jboss/xavier/analytics/rules/RHVRampUpCosts.drl", ResourceType.DRL);
+        super("/org/jboss/xavier/analytics/rules/initialcostsaving/RHVRampUpCosts.drl", ResourceType.DRL);
     }
 
     @Test
     public void testVSphereNoFreeSubs()
     {
         // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber(1);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
 
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
@@ -143,7 +143,7 @@ public class RHVRampUpCostsTest extends BaseTest
     public void testVSphereWithFreeSubs()
     {
         // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber(1);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
 
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
@@ -256,7 +256,7 @@ public class RHVRampUpCostsTest extends BaseTest
     public void testVCloudNoFreeSubs()
     {
         // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber(1);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
 
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
@@ -370,7 +370,7 @@ public class RHVRampUpCostsTest extends BaseTest
     public void testVCloudWithFreeSubs()
     {
         // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber(1);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
 
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();

@@ -1,8 +1,10 @@
-package org.jboss.xavier.analytics.test;
+package org.jboss.xavier.analytics.rules.initialcostsaving;
 
 import org.jboss.xavier.analytics.pojo.input.UploadFormInputDataModel;
 import org.jboss.xavier.analytics.pojo.output.EnvironmentModel;
 import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel;
+import org.jboss.xavier.analytics.rules.BaseTest;
+import org.jboss.xavier.analytics.test.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kie.api.command.Command;
@@ -23,12 +25,12 @@ public class EnvironmentTest extends BaseTest {
     private static final int DEFAULT_SOURCE_PRODUCT_INDICATOR = 1;
 
     public EnvironmentTest() {
-        super("/org/jboss/xavier/analytics/rules/Environment.drl", ResourceType.DRL);
+        super("/org/jboss/xavier/analytics/rules/initialcostsaving/Environment.drl", ResourceType.DRL);
     }
 
     @Test
     public void test() {
-        checkLoadedRulesNumber(1);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
 
         Map<String, Object> facts = new HashMap<>();
 

@@ -1,5 +1,6 @@
-package org.jboss.xavier.analytics.test;
+package org.jboss.xavier.analytics.rules;
 
+import org.jboss.xavier.analytics.test.Utils;
 import org.junit.After;
 import org.junit.Before;
 import org.kie.api.KieServices;
@@ -65,11 +66,6 @@ public abstract class BaseTest {
         kieSession.addEventListener(new DebugRuleRuntimeEventListener());
         kieSession.addEventListener(new DebugAgendaEventListener());
         kieSession.addEventListener(agendaEventListener);
-    }
-
-    public void checkLoadedRulesNumber(int expectedLoadedRules)
-    {
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules", expectedLoadedRules);
     }
 
     protected KieBuilder createAndBuildKieBuilder(URL resource)

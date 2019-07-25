@@ -5,4 +5,13 @@
   <kbase name="kiebaseStatefull" default="false" eventProcessingMode="stream" equalsBehavior="identity">
     <ksession name="testStatefullSession" type="stateful" default="true" clockType="realtime"/>
   </kbase>
+  <kbase name="InitialCostSavingKBase" default="false" eventProcessingMode="stream" equalsBehavior="identity" packages="org.jboss.xavier.analytics.rules.initialcostsaving">
+    <ksession name="InitialCostSavingKSession0" type="stateless" default="true" clockType="realtime"/>
+  </kbase>
+  <kbase name="WorkloadInventoryKBase" default="false" eventProcessingMode="stream" equalsBehavior="identity" packages="org.jboss.xavier.analytics.rules.workload.inventory">
+    <ksession name="WorkloadInventoryKSession0" type="stateless" default="true" clockType="realtime"/>
+  </kbase>
+  <kbase name="WorkloadSummaryKBase" default="false" eventProcessingMode="stream" equalsBehavior="identity" packages="org.jboss.xavier.analytics.rules.workload.summary">
+    <ksession name="WorkloadSummaryKSession0" type="stateless" default="true" clockType="realtime"/>
+  </kbase>
 </kmodule>

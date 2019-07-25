@@ -1,0 +1,5 @@
+package org.jboss.xavier.analytics.rules.workload.inventory;
+
+query "GetWorkloadInventoryReports"()
+    report : org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel()
+end

@@ -1,108 +1,45 @@
-package org.jboss.xavier.analytics.test;
+package org.jboss.xavier.analytics.rules.initialcostsaving;
 
 import org.jboss.xavier.analytics.pojo.input.UploadFormInputDataModel;
-import org.jboss.xavier.analytics.pojo.output.*;
-import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel;
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel;
+import org.jboss.xavier.analytics.pojo.output.RHVAdditionalContainerCapacityModel;
+import org.jboss.xavier.analytics.pojo.output.RHVRampUpCostsModel;
+import org.jboss.xavier.analytics.pojo.output.RHVSavingsModel;
+import org.jboss.xavier.analytics.pojo.output.RHVYearByYearCostsModel;
+import org.jboss.xavier.analytics.pojo.output.SourceCostsModel;
+import org.jboss.xavier.analytics.pojo.output.SourceRampDownCostsModel;
+import org.jboss.xavier.analytics.pojo.support.initialcostsaving.PricingDataModel;
+import org.jboss.xavier.analytics.rules.BaseIntegrationTest;
+import org.jboss.xavier.analytics.test.Utils;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.kie.api.KieServices;
-import org.kie.api.builder.KieBuilder;
-import org.kie.api.builder.KieFileSystem;
-import org.kie.api.builder.KieRepository;
-import org.kie.api.builder.Message;
 import org.kie.api.command.Command;
-import org.kie.api.event.rule.AgendaEventListener;
-import org.kie.api.event.rule.DebugAgendaEventListener;
-import org.kie.api.event.rule.DebugRuleRuntimeEventListener;
-import org.kie.api.io.ResourceType;
-import org.kie.api.runtime.KieContainer;
-import org.kie.api.runtime.StatelessKieSession;
+import org.kie.api.runtime.rule.QueryResults;
+import org.kie.api.runtime.rule.QueryResultsRow;
 import org.kie.internal.command.CommandFactory;
-import org.kie.internal.io.ResourceFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
-public class InitialSavingsEstimationReportTest
+public class InitialSavingsEstimationReportTest extends BaseIntegrationTest
 {
-    private static final String GET_OBJECTS_KEY = "_getObjects";
-    private static final String NUMBER_OF_FIRED_RULE_KEY = "numberOfFiredRules";
-
-    private StatelessKieSession kieSession;
-    private KieFileSystem kieFileSystem;
-    private KieServices kieServices;
-
-    private AgendaEventListener agendaEventListener = mock( AgendaEventListener.class );
-
-    @Before
-    public void setup()
+    public InitialSavingsEstimationReportTest()
     {
-        kieServices = KieServices.Factory.get();
-        kieFileSystem = kieServices.newKieFileSystem();
-        try {
-            Files.walk(Paths.get(ClassLoader.getSystemResource("org/jboss/xavier/analytics/rules/").toURI()))
-                .filter(Files::isRegularFile)
-                .forEach(file -> {
-                    File ruleFile = new File(file.toUri());
-                    if (ResourceType.DRL.matchesExtension(ruleFile.getName()))
-                    {
-                        kieFileSystem.write(ResourceFactory.newFileResource(ruleFile).setResourceType(ResourceType.DRL));
-                    }
-                    else if (ResourceType.DTABLE.matchesExtension(ruleFile.getName()))
-                    {
-                        FileInputStream ruleFileInputStream = null;
-                        try {
-                            ruleFileInputStream = new FileInputStream(ruleFile.getPath());
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        kieFileSystem.write(ResourceType.DTABLE.getDefaultPath() + ruleFile,
-                                kieServices.getResources().newInputStreamResource(ruleFileInputStream).setResourceType(ResourceType.DTABLE));
-                    }
-                    else
-                    {
-                        throw new IllegalArgumentException("File '" + ruleFile + "' is not a known resource");
-                    }
-                });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
-        kieBuilder.buildAll();
-
-        List<Message> errorMessages = kieBuilder.getResults().getMessages(Message.Level.ERROR);
-        errorMessages.forEach(System.err::println);
-        assertEquals(0, errorMessages.size());
-
-        KieRepository kieRepository = kieServices.getRepository();
-        KieContainer kContainer = kieServices.newKieContainer(kieRepository.getDefaultReleaseId());
-        kieSession = kContainer.newStatelessKieSession();
-        kieSession.addEventListener(new DebugRuleRuntimeEventListener());
-        kieSession.addEventListener(new DebugAgendaEventListener());
-        kieSession.addEventListener(agendaEventListener);
+        super("InitialCostSavingKSession0");
     }
 
     @Test
     public void test_SourceNewELAIndicator_0()
     {
         // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules", 26);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 26);
 
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
@@ -123,9 +60,12 @@ public class InitialSavingsEstimationReportTest
         commands.addAll(Utils.newInsertCommands(facts));
         // then generate the 'fireAllRules' command
         commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "get InitialSavingsEstimationReports"));
         // last create the command to retrieve the objects available in
         // the working memory at the end of the rules' execution
         commands.add(CommandFactory.newGetObjects(GET_OBJECTS_KEY));
+
 
         // execute the commands in the KIE session and get the results
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
@@ -153,19 +93,18 @@ public class InitialSavingsEstimationReportTest
                 // RHVOrderForm
                 );
 
-        // retrieve the List of Objects that were available in the working memory from the results
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        // filter the type of object you're interested in checking (e.g. InitialSavingsEstimationReportModel)
-        List<InitialSavingsEstimationReportModel> reports = objects.stream()
-                .filter(object -> object instanceof InitialSavingsEstimationReportModel)
-                .map(object -> (InitialSavingsEstimationReportModel) object)
-                .collect(Collectors.toList());
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
 
         // Check that the number of object is the right one (in this case, there must be just one report)
-        Assert.assertEquals(1, reports.size());
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(InitialSavingsEstimationReportModel.class));
 
         // Check that the object has exactly the fields that the rule tested should add/change
-        InitialSavingsEstimationReportModel report = reports.get(0);
+        InitialSavingsEstimationReportModel report = (InitialSavingsEstimationReportModel) queryResultsRow.get("report");
 
         // Environment
         Assert.assertEquals("abc123", report.getCustomerId());
@@ -183,6 +122,7 @@ public class InitialSavingsEstimationReportTest
         Assert.assertEquals(true, environmentModel.getOpenStackIndicator());
 
         // Pricing
+        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<PricingDataModel> pricingDataModelList = objects.stream()
                 .filter(object -> object instanceof PricingDataModel)
                 .map(object -> (PricingDataModel) object)
@@ -383,7 +323,7 @@ public class InitialSavingsEstimationReportTest
         commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
         // last create the command to retrieve the objects available in
         // the working memory at the end of the rules' execution
-        commands.add(CommandFactory.newGetObjects(GET_OBJECTS_KEY));
+        commands.add(CommandFactory.newGetObjects(QUERY_IDENTIFIER));
 
         // execute the commands in the KIE session and get the results
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
@@ -476,7 +416,7 @@ public class InitialSavingsEstimationReportTest
         commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
         // last create the command to retrieve the objects available in
         // the working memory at the end of the rules' execution
-        commands.add(CommandFactory.newGetObjects(GET_OBJECTS_KEY));
+        commands.add(CommandFactory.newGetObjects(QUERY_IDENTIFIER));
 
         // execute the commands in the KIE session and get the results
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);

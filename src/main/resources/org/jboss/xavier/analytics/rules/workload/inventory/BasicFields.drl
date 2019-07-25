@@ -1,0 +1,24 @@
+package org.jboss.xavier.analytics.rules.workload.inventory;
+
+import org.jboss.xavier.analytics.pojo.input.workload.inventory.VMWorkloadInventoryModel
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel;
+
+dialect "java"
+agenda-group "BasicFields"
+auto-focus true
+
+rule "Copy basic fields and agenda controller"
+    when
+        foo: VMWorkloadInventoryModel(
+            // add conditions
+        )
+    then
+        WorkloadInventoryReportModel workloadInventoryReport =  new WorkloadInventoryReportModel();
+        // add here the copy of the fields from input to output beans
+
+        insert(workloadInventoryReport);
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("Flags").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("Targets").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("Complexity").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("Workloads").setFocus();
+end

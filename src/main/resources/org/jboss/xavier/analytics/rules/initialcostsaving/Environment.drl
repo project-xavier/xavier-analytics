@@ -1,4 +1,4 @@
-package org.jboss.xavier.analytics.rules;
+package org.jboss.xavier.analytics.rules.initialcostsaving;
 
 import org.jboss.xavier.analytics.pojo.input.UploadFormInputDataModel;
 import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel;

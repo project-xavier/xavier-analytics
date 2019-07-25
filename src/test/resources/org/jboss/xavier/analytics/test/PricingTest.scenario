@@ -73,7 +73,7 @@
   <imports>
     <imports>
       <org.kie.soup.project.datamodel.imports.Import>
-        <type>org.jboss.xavier.analytics.pojo.support.PricingDataModel</type>
+        <type>org.jboss.xavier.analytics.pojo.support.initialcostsaving.PricingDataModel</type>
       </org.kie.soup.project.datamodel.imports.Import>
       <org.kie.soup.project.datamodel.imports.Import>
         <type>org.jboss.xavier.analytics.pojo.input.UploadFormInputDataModel</type>

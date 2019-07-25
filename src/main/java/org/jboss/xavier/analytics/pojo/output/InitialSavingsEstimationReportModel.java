@@ -19,6 +19,8 @@ public class InitialSavingsEstimationReportModel
     @javax.persistence.SequenceGenerator(sequenceName = "INITIALSAVINGSESTIMATIONREPORTMODEL_ID_SEQ", name = "INITIALSAVINGSESTIMATIONREPORTMODEL_ID_GENERATOR")
     private Long id;
 
+    private AnalysisModel analysis;
+
     @Label("Customer ID")
     private String customerId;
 
@@ -137,5 +139,13 @@ public class InitialSavingsEstimationReportModel
 
     public void setRhvOrderFormModel(RHVOrderFormModel rhvOrderFormModel) {
         this.rhvOrderFormModel = rhvOrderFormModel;
+    }
+
+    public AnalysisModel getAnalysis() {
+        return analysis;
+    }
+
+    public void setAnalysis(AnalysisModel analysis) {
+        this.analysis = analysis;
     }
 }

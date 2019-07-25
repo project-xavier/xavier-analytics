@@ -6,7 +6,7 @@
 
 ## How to create a new rule set for an agenda group with test
 The procedure describes how to create a rule set for the agenda group `FooAgendaGroup`
-1. create a copy of [SourceCosts.drl](src/main/resources/org/jboss/xavier/analytics/rules/SourceCosts.drl) with name `FooAgendaGroup.drl` within the `org.jboss.xavier.analytics.rules` package
+1. create a copy of [SourceCosts.drl](src/main/resources/org/jboss/xavier/analytics/rules/initialcostsaving/SourceCosts.drl) with name `FooAgendaGroup.drl` within the `org.jboss.xavier.analytics.rules` package
 1. in the `FooAgendaGroup.drl` file:
     1. change the `agenda-group` value to become `FooAgendaGroup`
     1. change the `rule` ID value to something like `FooAgendaGroupRules` (i.e. `rule "FooAgendaGroupRules"`)

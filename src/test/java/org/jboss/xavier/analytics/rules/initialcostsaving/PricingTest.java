@@ -1,8 +1,10 @@
-package org.jboss.xavier.analytics.test;
+package org.jboss.xavier.analytics.rules.initialcostsaving;
 
 import org.jboss.xavier.analytics.pojo.output.EnvironmentModel;
 import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel;
-import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.support.initialcostsaving.PricingDataModel;
+import org.jboss.xavier.analytics.rules.BaseTest;
+import org.jboss.xavier.analytics.test.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kie.api.builder.KieBuilder;
@@ -25,7 +27,7 @@ public class PricingTest extends BaseTest
 
     public PricingTest()
     {
-        super("/org/jboss/xavier/analytics/rules/PricingRule.xlsx", ResourceType.DTABLE);
+        super("/org/jboss/xavier/analytics/rules/initialcostsaving/PricingRule.xlsx", ResourceType.DTABLE);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class PricingTest extends BaseTest
         kieFileSystem.write("src/main/resources/" + this.rulePath, kieServices.getResources().newInputStreamResource(ruleFile).setResourceType(this.ruleResourceType));
 
 /*
-        Resource dt = ResourceFactory.newClassPathResource(this.rulePath, getClass());
+        Resource dt = ResourceFactory.newClassPathResource(this.rulesPackage, getClass());
         DecisionTableProviderImpl decisionTableProvider = new DecisionTableProviderImpl();
         DecisionTableConfiguration decisionTableConfiguration = new DecisionTableConfigurationImpl();
         decisionTableConfiguration.setInputType(DecisionTableInputType.XLSX);
@@ -58,7 +60,7 @@ public class PricingTest extends BaseTest
     @Test
     public void test()
     {
-        checkLoadedRulesNumber(15);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 15);
 
         EnvironmentModel environmentModel = new EnvironmentModel();
         environmentModel.setSourceProductIndicator(DEFAULT_SOURCE_PRODUCT_INDICATOR);

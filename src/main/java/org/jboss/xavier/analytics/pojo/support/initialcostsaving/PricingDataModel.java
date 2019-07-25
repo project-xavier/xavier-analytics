@@ -1,4 +1,4 @@
-package org.jboss.xavier.analytics.pojo.support;
+package org.jboss.xavier.analytics.pojo.support.initialcostsaving;
 
 /*
 import lombok.AllArgsConstructor;

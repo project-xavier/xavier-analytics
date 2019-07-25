@@ -1,11 +1,13 @@
-package org.jboss.xavier.analytics.test;
+package org.jboss.xavier.analytics.rules.initialcostsaving;
 
 import org.jboss.xavier.analytics.pojo.output.EnvironmentModel;
 import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel;
 import org.jboss.xavier.analytics.pojo.output.SourceCostsModel;
 import org.jboss.xavier.analytics.pojo.output.SourceRampDownCostsModel;
-import org.jboss.xavier.analytics.pojo.support.PricingDataModel;
+import org.jboss.xavier.analytics.pojo.support.initialcostsaving.PricingDataModel;
 
+import org.jboss.xavier.analytics.rules.BaseTest;
+import org.jboss.xavier.analytics.test.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kie.api.command.Command;
@@ -23,14 +25,14 @@ public class SourceRampDownCostsTest extends BaseTest
     public SourceRampDownCostsTest()
     {
         // provide the name of the DRL file you want to test
-        super("/org/jboss/xavier/analytics/rules/SourceRampDownCosts.drl", ResourceType.DRL);
+        super("/org/jboss/xavier/analytics/rules/initialcostsaving/SourceRampDownCosts.drl", ResourceType.DRL);
     }
 
     @Test
     public void test()
     {
         // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber(1);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
 
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
