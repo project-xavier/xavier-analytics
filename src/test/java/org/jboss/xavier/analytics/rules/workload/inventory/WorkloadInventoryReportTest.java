@@ -11,6 +11,7 @@ import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.runtime.rule.QueryResultsRow;
 import org.kie.internal.command.CommandFactory;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,15 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> facts = new HashMap<>();
 
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
+        vmWorkloadInventoryModel.setCluster("Cluster 1");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(new BigDecimal(100000001));
+        vmWorkloadInventoryModel.setMemory(4096);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
+        vmWorkloadInventoryModel.setOsProductName("RHEL");
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         // define the list of commands you want to be executed by Drools
@@ -73,6 +83,15 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
         // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("V2V-DC",workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals("Cluster 1",workloadInventoryReportModel.getCluster());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(new BigDecimal(100000001).intValue(),workloadInventoryReportModel.getDiskSpace().intValue());
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("RHEL",workloadInventoryReportModel.getOsName());
         // Flags
         // Targets
         // Complexity

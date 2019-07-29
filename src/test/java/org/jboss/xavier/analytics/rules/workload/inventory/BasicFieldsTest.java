@@ -10,6 +10,7 @@ import org.kie.api.command.Command;
 import org.kie.api.io.ResourceType;
 import org.kie.internal.command.CommandFactory;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,15 @@ public class BasicFieldsTest extends BaseTest {
         Map<String, Object> facts = new HashMap<>();
 
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
+        vmWorkloadInventoryModel.setCluster("Cluster 1");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(new BigDecimal(100000001));
+        vmWorkloadInventoryModel.setMemory(4096);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
+        vmWorkloadInventoryModel.setOsProductName("RHEL");
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         List<Command> commands = new ArrayList<>();
@@ -49,7 +59,16 @@ public class BasicFieldsTest extends BaseTest {
 
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
-
         WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertEquals("IMS vCenter",report.getProvider());
+        Assert.assertEquals("V2V-DC",report.getDatacenter());
+        Assert.assertEquals("Cluster 1",report.getCluster());
+        Assert.assertEquals("vm tests",report.getVmName());
+        Assert.assertEquals(new BigDecimal(100000001).intValue(),report.getDiskSpace().intValue());
+        Assert.assertEquals(4096,report.getMemory().intValue());
+        Assert.assertEquals(4,report.getCpuCores().intValue());
+        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)",report.getOsDescription());
+        Assert.assertEquals("RHEL",report.getOsName());
+
     }
 }

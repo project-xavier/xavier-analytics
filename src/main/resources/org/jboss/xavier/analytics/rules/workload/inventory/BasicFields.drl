@@ -9,12 +9,28 @@ auto-focus true
 
 rule "Copy basic fields and agenda controller"
     when
-        foo: VMWorkloadInventoryModel(
-            // add conditions
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            provider != null ,
+            datacenter != null,
+            cluster != null,
+            vmName != null,
+            diskSpace != null,
+            memory != null,
+            cpuCores != null,
+            guestOSFullName !=null,
+            osProductName != null
         )
     then
         WorkloadInventoryReportModel workloadInventoryReport =  new WorkloadInventoryReportModel();
-        // add here the copy of the fields from input to output beans
+        workloadInventoryReport.setProvider(vmWorkloadInventoryModel.getProvider());
+        workloadInventoryReport.setDatacenter(vmWorkloadInventoryModel.getDatacenter());
+        workloadInventoryReport.setCluster(vmWorkloadInventoryModel.getCluster());
+        workloadInventoryReport.setVmName(vmWorkloadInventoryModel.getVmName());
+        workloadInventoryReport.setDiskSpace(vmWorkloadInventoryModel.getDiskSpace());
+        workloadInventoryReport.setMemory(vmWorkloadInventoryModel.getMemory());
+        workloadInventoryReport.setCpuCores(vmWorkloadInventoryModel.getCpuCores());
+        workloadInventoryReport.setOsDescription(vmWorkloadInventoryModel.getGuestOSFullName());
+        workloadInventoryReport.setOsName(vmWorkloadInventoryModel.getOsProductName());
 
         insert(workloadInventoryReport);
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Flags").setFocus();
