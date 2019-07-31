@@ -34,8 +34,8 @@ public class BasicFieldsTest extends BaseTest {
         vmWorkloadInventoryModel.setDatacenter("V2V-DC");
         vmWorkloadInventoryModel.setCluster("Cluster 1");
         vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(new BigDecimal(100000001));
-        vmWorkloadInventoryModel.setMemory(4096);
+        vmWorkloadInventoryModel.setDiskSpace(new Long(100000001));
+        vmWorkloadInventoryModel.setMemory(new Long(4096));
         vmWorkloadInventoryModel.setCpuCores(4);
         vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
         vmWorkloadInventoryModel.setOsProductName("RHEL");

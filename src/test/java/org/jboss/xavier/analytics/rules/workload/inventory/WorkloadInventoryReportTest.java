@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
@@ -29,21 +30,27 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
     @Test
     public void test() {
         // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 2);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 4);
 
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
+        //Basic Fields
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
         vmWorkloadInventoryModel.setProvider("IMS vCenter");
         vmWorkloadInventoryModel.setDatacenter("V2V-DC");
         vmWorkloadInventoryModel.setCluster("Cluster 1");
         vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(new BigDecimal(100000001));
-        vmWorkloadInventoryModel.setMemory(4096);
+        vmWorkloadInventoryModel.setDiskSpace(new Long(100000001));
+        vmWorkloadInventoryModel.setMemory(new Long(4096));
         vmWorkloadInventoryModel.setCpuCores(4);
         vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
         vmWorkloadInventoryModel.setOsProductName("RHEL");
+
+        //Flags
+        vmWorkloadInventoryModel.setNicsCount(5);
+        vmWorkloadInventoryModel.setHasRdmDisk(true);
+
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         // define the list of commands you want to be executed by Drools
@@ -59,12 +66,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
-        Utils.verifyRulesFiredNames(this.agendaEventListener,
+       Utils.verifyRulesFiredNames(this.agendaEventListener,
             // BasicFields
-            "Copy basic fields and agenda controller"
+            "Copy basic fields and agenda controller",
             // Flags
+               "Flag_Nics", "Flag_Rdm_Disk"
             // Targets
             // Complexity
             // Workloads
@@ -87,12 +95,17 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals("V2V-DC",workloadInventoryReportModel.getDatacenter());
         Assert.assertEquals("Cluster 1",workloadInventoryReportModel.getCluster());
         Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(new BigDecimal(100000001).intValue(),workloadInventoryReportModel.getDiskSpace().intValue());
+        Assert.assertEquals(new Long(100000001).intValue(),workloadInventoryReportModel.getDiskSpace().intValue());
         Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
         Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
         Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)",workloadInventoryReportModel.getOsDescription());
         Assert.assertEquals("RHEL",workloadInventoryReportModel.getOsName());
         // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNotNull(flagsIMS);
+        Assert.assertEquals(2, flagsIMS.size());
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         // Targets
         // Complexity
         // Workloads

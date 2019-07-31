@@ -1,0 +1,39 @@
+package org.jboss.xavier.analytics.rules.workload.inventory;
+
+import org.jboss.xavier.analytics.pojo.input.workload.inventory.VMWorkloadInventoryModel
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+import java.util.HashSet;
+
+dialect "java"
+agenda-group "Flags"
+lock-on-active true
+
+rule "Flag_Nics"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            nicsCount != null,
+            nicsCount > 4
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME)
+        }
+end
+
+rule "Flag_Rdm_Disk"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            hasRdmDisk != null,
+            hasRdmDisk == true
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME)
+        }
+end
+
+//TODO Add Shared Disk check to the rule here
