@@ -36,4 +36,15 @@ rule "Flag_Rdm_Disk"
         }
 end
 
-//TODO Add Shared Disk check to the rule here
+//TODO Implement Shared Disk check to the rule here
+rule "Flag_Shared_Disks"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            vmDiskFilenames != null,
+            vmDiskFilenames.size() > 0
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        System.out.println(vmWorkloadInventoryModel.getVmName() + " has vmDiskFilenames: ");
+        vmWorkloadInventoryModel.getVmDiskFilenames().forEach(System.out::println);
+end

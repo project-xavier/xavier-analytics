@@ -1,0 +1,33 @@
+package org.jboss.xavier.analytics.rules.workload.inventory;
+
+import org.jboss.xavier.analytics.pojo.input.workload.inventory.VMWorkloadInventoryModel
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+import java.util.HashSet;
+
+dialect "java"
+agenda-group "Workloads"
+lock-on-active true
+
+rule "Workloads_sample_systemServicesNames_rule"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            systemServicesNames != null,
+            systemServicesNames.size() > 0
+        )
+        //workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        System.out.println(vmWorkloadInventoryModel.getVmName() + " has systemServicesNames: ");
+        vmWorkloadInventoryModel.getSystemServicesNames().forEach(System.out::println);
+end
+
+rule "Workloads_sample_files_rule"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            files != null,
+            files.size() > 0
+        )
+        //workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        System.out.println(vmWorkloadInventoryModel.getVmName() + " has files: ");
+        vmWorkloadInventoryModel.getFiles().forEach((key, value) -> System.out.println(key));
+end
