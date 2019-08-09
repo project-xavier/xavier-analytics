@@ -25,3 +25,17 @@ Now you have a working rule set with a test and you can start developing the rul
 1. `oc port-forward ` `oc get pod | grep "^analytics-rhdmcentr" | awk '{print $1}'`` 8001:8001`
 1. from your `xavier-analytics` project root folder, execute `git remote add remote-dm ssh://adminUser@localhost:8001/MySpace/xavier-analytics` replacing the remote host's name (e.g. `analytics-rhdmcentr-2-9ws6w`) with `localhost`
 1. retrieve the code from Decision Manager Business Central using `git pull remote-dm MIGENG-45`
+
+## Known issues
+### Business Central project deployment
+When deploying the latest master in Business Central, it could fail due to a missing dependency.
+To solve the issue:
+1. go to the `Settings` tab in Business Central main project page
+1. select `Dependencies` from left menu
+1. add the dependency:
+   1. Group ID `org.mockito`
+   1. Artifact ID `mockito-core`
+   1. Version `2.28.2`
+1. save it (if it complains for the project name, change it to `Xavier-Analytics` in `General Settings`)
+
+Now it will be safe the `Build & Install` and `Deploy` the project.
