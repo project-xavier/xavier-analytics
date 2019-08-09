@@ -7,6 +7,7 @@ import java.util.HashSet;
 dialect "java"
 agenda-group "Workloads"
 lock-on-active true
+auto-focus false
 
 rule "Workloads_sample_systemServicesNames_rule"
     when
@@ -14,7 +15,7 @@ rule "Workloads_sample_systemServicesNames_rule"
             systemServicesNames != null,
             systemServicesNames.size() > 0
         )
-        //workloadInventoryReport : WorkloadInventoryReportModel()
+        workloadInventoryReport : WorkloadInventoryReportModel()
     then
         System.out.println(vmWorkloadInventoryModel.getVmName() + " has systemServicesNames: ");
         vmWorkloadInventoryModel.getSystemServicesNames().forEach(System.out::println);
@@ -26,7 +27,7 @@ rule "Workloads_sample_files_rule"
             files != null,
             files.size() > 0
         )
-        //workloadInventoryReport : WorkloadInventoryReportModel()
+        workloadInventoryReport : WorkloadInventoryReportModel()
     then
         System.out.println(vmWorkloadInventoryModel.getVmName() + " has files: ");
         vmWorkloadInventoryModel.getFiles().forEach((key, value) -> System.out.println(key));

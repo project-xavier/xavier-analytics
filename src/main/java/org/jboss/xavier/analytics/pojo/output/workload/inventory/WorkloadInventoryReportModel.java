@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +22,11 @@ public class WorkloadInventoryReportModel
     public static final String MORE_THAN_4_NICS_FLAG_NAME = ">4 vNICs";
     public static final String RDM_DISK_FLAG_NAME = "RDM";
     public static final String SHARED_DISK_FLAG_NAME = "Shared Disk";
+
+    public static final String COMPLEXITY_EASY = "Easy";
+    public static final String COMPLEXITY_MEDIUM = "Medium";
+    public static final String COMPLEXITY_HARD = "Hard";
+    public static final String COMPLEXITY_UNKNOWN = "Unknown";
 
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "WORKLOADINVENTORYREPORTMODEL_ID_GENERATOR")

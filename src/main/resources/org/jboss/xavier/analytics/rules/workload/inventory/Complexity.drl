@@ -1,0 +1,100 @@
+package org.jboss.xavier.analytics.rules.workload.inventory;
+
+import org.jboss.xavier.analytics.pojo.input.workload.inventory.VMWorkloadInventoryModel
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+import java.util.HashSet;
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isSupportedOS;
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsupportedOS;
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isUndetectedOS;
+
+dialect "java"
+agenda-group "Complexity"
+lock-on-active true
+auto-focus false
+
+rule "No_Flag_Supported_OS"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS == null,
+            osDescription != null,
+            isSupportedOS(osDescription)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_EASY)
+        }
+end
+
+rule "One_Flag_Supported_OS"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS != null,
+            flagsIMS.size() == 1,
+            osDescription != null,
+            isSupportedOS(osDescription)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM)
+        }
+end
+
+rule "More_Than_One_Flag_Supported_OS"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS != null,
+            flagsIMS.size() > 1,
+            osDescription != null,
+            isSupportedOS(osDescription)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_HARD)
+        }
+end
+
+rule "No_Flags_Not_Supported_OS"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS == null,
+            osDescription != null,
+            isUnsupportedOS(osDescription)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM)
+        }
+end
+
+rule "One_Or_More_Flags_Not_Supported_OS"
+    when
+            workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS != null,
+            flagsIMS.size() >= 1,
+            osDescription != null,
+            isUnsupportedOS(osDescription)
+    )
+    then
+        modify(workloadInventoryReport)
+        {
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_HARD)
+        }
+end
+
+rule "Not_Detected_OS"
+    when
+            workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            isUndetectedOS(osDescription)
+    )
+    then
+        modify(workloadInventoryReport)
+        {
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_UNKNOWN)
+        }
+end

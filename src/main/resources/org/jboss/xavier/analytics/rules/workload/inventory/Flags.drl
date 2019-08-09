@@ -7,6 +7,7 @@ import java.util.HashSet;
 dialect "java"
 agenda-group "Flags"
 lock-on-active true
+auto-focus false
 
 rule "Flag_Nics"
     when
