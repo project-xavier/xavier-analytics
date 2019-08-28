@@ -1,0 +1,60 @@
+package org.jboss.xavier.analytics.rules.workload.inventory;
+
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+import java.util.HashSet;
+import org.jboss.xavier.analytics.functions.HelperFunctions
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isSupportedOS;
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsupportedOS;
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsuitableFlag;
+
+dialect "java"
+agenda-group "Targets"
+lock-on-active true
+auto-focus false
+
+function boolean flagsSuitableForOSP(WorkloadInventoryReportModel report)
+{
+    return report.getFlagsIMS().stream().noneMatch(flag -> isUnsuitableFlag(flag));
+}
+
+rule "Target_RHV"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            eval(isSupportedOS(osDescription) || isUnsupportedOS(osDescription))
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            addRecommendedTargetsIMS("RHV")
+        }
+end
+
+rule "Target_OSP"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            flagsIMS == null || eval(flagsIMS != null && flagsSuitableForOSP(this)),
+            eval(isSupportedOS(osDescription) || isUnsupportedOS(osDescription))
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            addRecommendedTargetsIMS("OSP")
+        }
+end
+
+rule "Target_Convert2RHEL"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            osDescription.toLowerCase().contains(HelperFunctions.OSSupport.CENTOS.getName().toLowerCase()) ||
+            osDescription.toLowerCase().contains(HelperFunctions.OSSupport.ORACLE.getName().toLowerCase())
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            addRecommendedTargetsIMS("Convert2RHEL")
+        }
+end
