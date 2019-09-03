@@ -68,7 +68,7 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("SUSE Linux Enterprise Server");
-        workloadInventoryReportModel.addFlagIMS("> 4 NICs");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -105,8 +105,8 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("Microsoft Windows");
-        workloadInventoryReportModel.addFlagIMS("> 4 NICs");
-        workloadInventoryReportModel.addFlagIMS("Shared Storage");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -180,7 +180,7 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("CENTOS");
-        workloadInventoryReportModel.addFlagIMS("RDM");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -217,8 +217,8 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("DEBIAN");
-        workloadInventoryReportModel.addFlagIMS("RDM");
-        workloadInventoryReportModel.addFlagIMS("Shared Storage");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -292,7 +292,7 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("OSX");
-        workloadInventoryReportModel.addFlagIMS("RDM");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -331,8 +331,8 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("OSX");
-        workloadInventoryReportModel.addFlagIMS("RDM");
-        workloadInventoryReportModel.addFlagIMS("Shared Storage");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 

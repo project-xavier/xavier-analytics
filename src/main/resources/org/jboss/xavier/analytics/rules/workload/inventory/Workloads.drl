@@ -9,26 +9,143 @@ agenda-group "Workloads"
 lock-on-active true
 auto-focus false
 
-rule "Workloads_sample_systemServicesNames_rule"
+function boolean servicesContainsString(VMWorkloadInventoryModel vmWorkloadInventoryModel, String searchTerm)
+{
+    return vmWorkloadInventoryModel.getSystemServicesNames().stream().anyMatch(systemServiceName -> systemServiceName.toLowerCase().contains(searchTerm.toLowerCase()));
+}
+
+function boolean filesValuesContainsString(VMWorkloadInventoryModel vmWorkloadInventoryModel, String searchTerm)
+{
+    return vmWorkloadInventoryModel.getFiles().keySet().stream().anyMatch(value -> value.toLowerCase().contains(searchTerm.toLowerCase()));
+}
+
+rule "Workloads_Tomcat"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
             systemServicesNames != null,
-            systemServicesNames.size() > 0
+            systemServicesNames.size() > 0,
+            servicesContainsString(this,"tomcat")
         )
         workloadInventoryReport : WorkloadInventoryReportModel()
     then
-        System.out.println(vmWorkloadInventoryModel.getVmName() + " has systemServicesNames: ");
-        vmWorkloadInventoryModel.getSystemServicesNames().forEach(System.out::println);
+        modify(workloadInventoryReport)
+        {
+            addWorkload("Tomcat")
+        }
 end
 
-rule "Workloads_sample_files_rule"
+rule "Workloads_EAP"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
-            files != null,
-            files.size() > 0
+            systemServicesNames != null,
+            systemServicesNames.size() > 0,
+            servicesContainsString(this,"jboss-as-standalone.sh") ||
+            servicesContainsString(this,"jboss-as-domain.sh") ||
+            servicesContainsString(this,"jboss-eap-rhel.sh") ||
+            servicesContainsString(this,"eap7-domain") ||
+            servicesContainsString(this,"eap7-standalone") ||
+            servicesContainsString(this,"jboss") ||
+            servicesContainsString(this,"jboss-host-controller")
         )
         workloadInventoryReport : WorkloadInventoryReportModel()
     then
-        System.out.println(vmWorkloadInventoryModel.getVmName() + " has files: ");
-        vmWorkloadInventoryModel.getFiles().forEach((key, value) -> System.out.println(key));
+        modify(workloadInventoryReport)
+        {
+            addWorkload("Red Hat JBoss EAP")
+        }
+end
+
+rule "Workloads_Websphere"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            systemServicesNames != null,
+            systemServicesNames.size() > 0,
+            servicesContainsString(this,"Dmgr_was.init") ||
+            servicesContainsString(this,"Node_was.init") ||
+            servicesContainsString(this,"nodeagent_was.init")
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addWorkload("IBM Websphere App Server")
+        }
+end
+
+rule "Workloads_Weblogic"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            systemServicesNames != null,
+            systemServicesNames.size() > 0,
+            servicesContainsString(this,"wls_nodemanager") ||
+            servicesContainsString(this,"wls_adminmanager") ||
+            servicesContainsString(this,"weblogic_nodemanager") ||
+            servicesContainsString(this,"weblogic_adminmanager")
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addWorkload("Oracle Weblogic")
+        }
+end
+
+rule "Workloads_Oracle_DB"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            systemServicesNames != null,
+            systemServicesNames.size() > 0,
+            servicesContainsString(this,"dbora")
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addWorkload("Oracle Database")
+        }
+end
+
+rule "Workloads_SAP_HANA"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            systemServicesNames != null,
+            systemServicesNames.size() > 0,
+            servicesContainsString(this,"sapinit")
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addWorkload("SAP HANA")
+        }
+end
+
+rule "Workloads_Microsoft_SQL_Server_On_Linux"
+       when
+           vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+               systemServicesNames != null,
+               systemServicesNames.size() > 0,
+               servicesContainsString(this,"mssql-server")
+           )
+           workloadInventoryReport : WorkloadInventoryReportModel()
+       then
+           modify(workloadInventoryReport)
+           {
+               addWorkload("Microsoft SQL Server")
+           }
+end
+
+rule "Workloads_Microsoft_SQL_Server_On_Windows"
+       when
+           vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+               files != null,
+               files.size() > 0,
+               filesValuesContainsString(this, "C:\\Program Files\\Microsoft SQL Server")
+           )
+           workloadInventoryReport : WorkloadInventoryReportModel()
+       then
+           modify(workloadInventoryReport)
+           {
+               addWorkload("Microsoft SQL Server")
+           }
 end
