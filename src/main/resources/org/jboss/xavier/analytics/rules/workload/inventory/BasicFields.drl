@@ -18,7 +18,10 @@ rule "Copy basic fields and agenda controller"
             memory != null,
             cpuCores != null,
             guestOSFullName !=null,
-            osProductName != null
+            osProductName != null,
+            product != null,
+            version != null,
+            host_name != null
         )
     then
         WorkloadInventoryReportModel workloadInventoryReport =  new WorkloadInventoryReportModel();
@@ -31,6 +34,9 @@ rule "Copy basic fields and agenda controller"
         workloadInventoryReport.setCpuCores(vmWorkloadInventoryModel.getCpuCores());
         workloadInventoryReport.setOsDescription(vmWorkloadInventoryModel.getGuestOSFullName());
         workloadInventoryReport.setOsName(vmWorkloadInventoryModel.getOsProductName());
+        workloadInventoryReport.setProduct(vmWorkloadInventoryModel.getProduct());
+        workloadInventoryReport.setVersion(vmWorkloadInventoryModel.getVersion());
+        workloadInventoryReport.setHost_name(vmWorkloadInventoryModel.getHost_name());
 
         insert(workloadInventoryReport);
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Workloads").setFocus();

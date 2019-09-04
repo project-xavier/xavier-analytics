@@ -39,6 +39,9 @@ public class BasicFieldsTest extends BaseTest {
         vmWorkloadInventoryModel.setCpuCores(4);
         vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
         vmWorkloadInventoryModel.setOsProductName("RHEL");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         List<Command> commands = new ArrayList<>();
@@ -69,6 +72,8 @@ public class BasicFieldsTest extends BaseTest {
         Assert.assertEquals(4,report.getCpuCores().intValue());
         Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)",report.getOsDescription());
         Assert.assertEquals("RHEL",report.getOsName());
-
+        Assert.assertEquals("VMware vCenter", report.getProduct());
+        Assert.assertEquals("6.5", report.getVersion());
+        Assert.assertEquals("esx13.v2v.bos.redhat.com", report.getHost_name());
     }
 }

@@ -55,6 +55,9 @@ public class WorkloadInventoryReportModel
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> flagsIMS;
     private Date creationDate;
+    private String product;
+    private String version;
+    private String host_name;
 
     public WorkloadInventoryReportModel() {}
 
@@ -206,5 +209,29 @@ public class WorkloadInventoryReportModel
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getHost_name() {
+        return host_name;
+    }
+
+    public void setHost_name(String host_name) {
+        this.host_name = host_name;
     }
 }
