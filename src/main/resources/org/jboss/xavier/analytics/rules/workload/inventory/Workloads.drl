@@ -62,7 +62,9 @@ rule "Workloads_Websphere"
             systemServicesNames.size() > 0,
             servicesContainsString(this,"Dmgr_was.init") ||
             servicesContainsString(this,"Node_was.init") ||
-            servicesContainsString(this,"nodeagent_was.init")
+            servicesContainsString(this,"nodeagent_was.init")||
+            servicesContainsString(this,"was")||
+            servicesContainsString(this,"websphere")
         )
         workloadInventoryReport : WorkloadInventoryReportModel()
     then
