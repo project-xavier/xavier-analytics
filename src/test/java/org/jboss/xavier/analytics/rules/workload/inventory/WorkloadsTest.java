@@ -994,6 +994,50 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Microsoft SQL Server".toLowerCase())));
     }
 
+
+
+    @Test
+    public void testMSSQLServerOnWindows2() {
+        checkLoadedRulesNumber();
+
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        Map<String, String> files = new HashMap<>();
+        files.put("C:/Program Files/Microsoft SQL Server", null);
+        vmWorkloadInventoryModel.setFiles(files);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        List<Command> commands = new ArrayList<>();
+        commands.addAll(Utils.newInsertCommands(facts));
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        commands.add(CommandFactory.newGetObjects(GET_OBJECTS_KEY));
+
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Microsoft_SQL_Server_On_Windows");
+
+        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
+        List<WorkloadInventoryReportModel> reports = objects.stream()
+                .filter(object -> object instanceof WorkloadInventoryReportModel)
+                .map(object -> (WorkloadInventoryReportModel) object)
+                .collect(Collectors.toList());
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getWorkloads());
+        Assert.assertEquals(1, report.getWorkloads().size());
+        Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Microsoft SQL Server".toLowerCase())));
+    }
+
     @Test
     public void testFileWithNullContent() {
         checkLoadedRulesNumber();

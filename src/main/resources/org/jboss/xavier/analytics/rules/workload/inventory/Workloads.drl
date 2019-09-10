@@ -142,7 +142,8 @@ rule "Workloads_Microsoft_SQL_Server_On_Windows"
            vmWorkloadInventoryModel : VMWorkloadInventoryModel(
                files != null,
                files.size() > 0,
-               filesValuesContainsString(this, "C:\\Program Files\\Microsoft SQL Server")
+               filesValuesContainsString(this, "C:\\Program Files\\Microsoft SQL Server") ||
+               filesValuesContainsString(this, "C:/Program Files/Microsoft SQL Server")
            )
            workloadInventoryReport : WorkloadInventoryReportModel()
        then
