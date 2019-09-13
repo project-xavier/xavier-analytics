@@ -14,6 +14,11 @@ function boolean servicesContainsString(VMWorkloadInventoryModel vmWorkloadInven
     return vmWorkloadInventoryModel.getSystemServicesNames().stream().anyMatch(systemServiceName -> systemServiceName.toLowerCase().contains(searchTerm.toLowerCase()));
 }
 
+function boolean servicesStartsWithString(VMWorkloadInventoryModel vmWorkloadInventoryModel, String searchTerm)
+{
+    return vmWorkloadInventoryModel.getSystemServicesNames().stream().anyMatch(systemServiceName -> systemServiceName.toLowerCase().startsWith(searchTerm.toLowerCase()));
+}
+
 function boolean filesValuesContainsString(VMWorkloadInventoryModel vmWorkloadInventoryModel, String searchTerm)
 {
     return vmWorkloadInventoryModel.getFiles().keySet().stream().anyMatch(value -> value.toLowerCase().contains(searchTerm.toLowerCase()));
@@ -63,7 +68,7 @@ rule "Workloads_Websphere"
             servicesContainsString(this,"Dmgr_was.init") ||
             servicesContainsString(this,"Node_was.init") ||
             servicesContainsString(this,"nodeagent_was.init")||
-            servicesContainsString(this,"was")||
+            servicesStartsWithString(this,"was")||
             servicesContainsString(this,"websphere")
         )
         workloadInventoryReport : WorkloadInventoryReportModel()

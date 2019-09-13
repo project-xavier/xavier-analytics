@@ -1448,9 +1448,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setVersion("6.5");
         vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
 
-        List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
-        systemServicesNames.add("unix_service");
+        systemServicesNames.add("NOTwas");
         vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
         Map<String, String> files = new HashMap<>();
         // TODO remove the wrong test file once it will clear how the rule should work

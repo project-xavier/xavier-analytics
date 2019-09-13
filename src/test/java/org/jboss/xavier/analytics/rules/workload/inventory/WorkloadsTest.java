@@ -964,6 +964,9 @@ public class WorkloadsTest extends BaseTest {
         Map<String, String> files = new HashMap<>();
         files.put("C:\\Program Files\\Microsoft SQL Server", null);
         vmWorkloadInventoryModel.setFiles(files);
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("NOTwas");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
