@@ -157,3 +157,35 @@ rule "Workloads_Microsoft_SQL_Server_On_Windows"
                addWorkload("Microsoft SQL Server")
            }
 end
+
+rule "SsaEnabled_System_Services_Present"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            systemServicesNames != null,
+            systemServicesNames.size() > 0
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+
+    then
+        modify(workloadInventoryReport)
+        {
+
+            setSsaEnabled(true)
+        }
+
+end
+
+rule "SsaDisabled_System_Services_Not_Present"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            systemServicesNames == null || systemServicesNames.size() == 0
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+
+    then
+        modify(workloadInventoryReport)
+        {
+            setSsaEnabled(false)
+        }
+
+end

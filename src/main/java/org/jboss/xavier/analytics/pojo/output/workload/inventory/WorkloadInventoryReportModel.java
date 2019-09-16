@@ -58,6 +58,7 @@ public class WorkloadInventoryReportModel
     private String product;
     private String version;
     private String host_name;
+    private Boolean ssaEnabled;
 
     public WorkloadInventoryReportModel() {}
 
@@ -233,5 +234,13 @@ public class WorkloadInventoryReportModel
 
     public void setHost_name(String host_name) {
         this.host_name = host_name;
+    }
+
+    public Boolean getSsaEnabled() {
+        return ssaEnabled;
+    }
+
+    public void setSsaEnabled(Boolean ssaEnabled) {
+        this.ssaEnabled = ssaEnabled;
     }
 }

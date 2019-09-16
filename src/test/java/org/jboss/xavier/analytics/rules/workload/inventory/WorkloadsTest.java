@@ -25,7 +25,7 @@ public class WorkloadsTest extends BaseTest {
 
     private void checkLoadedRulesNumber()
     {
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 8);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 10);
     }
 
     @Test
@@ -57,8 +57,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Tomcat");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Tomcat", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -72,6 +72,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("tomcat")));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -103,8 +104,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -118,6 +119,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -149,8 +151,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -164,6 +166,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -195,8 +198,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -210,6 +213,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -241,8 +245,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -256,6 +260,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -287,8 +292,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -302,6 +307,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -333,8 +339,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -348,6 +354,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -379,8 +386,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -394,6 +401,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -425,8 +433,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -440,6 +448,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("IBM Websphere App Server".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -471,8 +480,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -486,6 +495,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("IBM Websphere App Server".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -517,8 +527,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -532,6 +542,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("IBM Websphere App Server".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
 
@@ -565,8 +576,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere","SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -613,8 +624,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Websphere", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -659,8 +670,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Weblogic");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Weblogic", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -674,6 +685,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Oracle Weblogic".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -705,8 +717,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Weblogic");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Weblogic", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -720,6 +732,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Oracle Weblogic".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -751,8 +764,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Weblogic");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Weblogic", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -766,6 +779,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Oracle Weblogic".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -797,8 +811,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Weblogic");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Weblogic", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -812,6 +826,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Oracle Weblogic".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -843,8 +858,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Oracle_DB");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Oracle_DB", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -858,6 +873,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Oracle Database".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -889,8 +905,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_SAP_HANA");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_SAP_HANA", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -904,6 +920,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("SAP HANA".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -935,8 +952,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Microsoft_SQL_Server_On_Linux");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Microsoft_SQL_Server_On_Linux", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -950,6 +967,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Microsoft SQL Server".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
     @Test
@@ -980,8 +998,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Microsoft_SQL_Server_On_Windows");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Microsoft_SQL_Server_On_Windows", "SsaEnabled_System_Services_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -995,6 +1013,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertNotNull(report.getWorkloads());
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Microsoft SQL Server".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
 
@@ -1024,8 +1043,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Microsoft_SQL_Server_On_Windows");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Microsoft_SQL_Server_On_Windows","SsaDisabled_System_Services_Not_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -1065,8 +1084,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "SsaDisabled_System_Services_Not_Present");
 
         List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
         List<WorkloadInventoryReportModel> reports = objects.stream()
@@ -1078,6 +1097,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNull(report.getWorkloads());
+        Assert.assertFalse(report.getSsaEnabled());
     }
 
 }

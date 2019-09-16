@@ -1,7 +1,8 @@
 package org.jboss.xavier.analytics.rules.workload.inventory;
 
 import org.jboss.xavier.analytics.pojo.input.workload.inventory.VMWorkloadInventoryModel
-import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel;
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+import java.util.Date;
 
 dialect "java"
 agenda-group "BasicFields"
@@ -37,6 +38,7 @@ rule "Copy basic fields and agenda controller"
         workloadInventoryReport.setProduct(vmWorkloadInventoryModel.getProduct());
         workloadInventoryReport.setVersion(vmWorkloadInventoryModel.getVersion());
         workloadInventoryReport.setHost_name(vmWorkloadInventoryModel.getHost_name());
+        workloadInventoryReport.setCreationDate(new Date());
 
         insert(workloadInventoryReport);
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Workloads").setFocus();
