@@ -28,7 +28,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     private void checkLoadedRulesNumber()
     {
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 24);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 23);
     }
 
     @Test
@@ -290,13 +290,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
        Utils.verifyRulesFiredNames(this.agendaEventListener,
             // BasicFields
             "Copy basic fields and agenda controller",
             // Flags
-           "Flag_Nics", "Flag_Rdm_Disk", "Flag_Shared_Disks",
+           "Flag_Nics", "Flag_Rdm_Disk",
             // Target
            "Target_RHV",
             // Complexity
@@ -813,13 +813,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
-                "Flag_Nics", "Flag_Rdm_Disk", "Flag_Shared_Disks",
+                "Flag_Nics", "Flag_Rdm_Disk",
                 // Target
                 "Target_RHV",
                 // Complexity
@@ -1692,13 +1692,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
-                "Flag_Shared_Disks",
+
                 // Target
                 "Target_RHV", "Target_OSP",
                 // Complexity

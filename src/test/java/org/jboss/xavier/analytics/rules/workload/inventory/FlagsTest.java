@@ -27,7 +27,7 @@ public class FlagsTest extends BaseTest {
 
     private void checkLoadedRulesNumber()
     {
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 3);
+        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 2);
     }
 
     @Test
@@ -274,43 +274,6 @@ public class FlagsTest extends BaseTest {
         Assert.assertNull(flagsIMS);
     }
 
-    @Test
-    public void test_Shared_Disks()
-    {
-        checkLoadedRulesNumber();
 
-        Map<String, Object> facts = new HashMap<>();
-        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
-        facts.put("agendaGroup", "Flags");
-
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        List<String> vmDiskFilenames = new ArrayList<>();
-        vmDiskFilenames.add("/path/to/disk.vdmk");
-        vmWorkloadInventoryModel.setVmDiskFilenames(vmDiskFilenames);
-        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
-
-        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
-        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
-
-        List<Command> commands = new ArrayList<>();
-        commands.addAll(Utils.newInsertCommands(facts));
-        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
-        commands.add(CommandFactory.newGetObjects(GET_OBJECTS_KEY));
-
-        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
-
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Flag_Shared_Disks");
-
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        List<WorkloadInventoryReportModel> reports = objects.stream()
-                .filter(object -> object instanceof WorkloadInventoryReportModel)
-                .map(object -> (WorkloadInventoryReportModel) object)
-                .collect(Collectors.toList());
-
-        // just one report has to be created
-        Assert.assertEquals(1, reports.size());
-        WorkloadInventoryReportModel report = reports.get(0);
-    }
 }
 
