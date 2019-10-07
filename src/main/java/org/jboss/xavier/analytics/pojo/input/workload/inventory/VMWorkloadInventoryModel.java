@@ -3,6 +3,7 @@ package org.jboss.xavier.analytics.pojo.input.workload.inventory;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +35,9 @@ public class VMWorkloadInventoryModel
     private String product;
     private String version;
     private String host_name;
+
+    private Date scanRunDate;
+
     //hardware/disks/filename
     private Collection<String> vmDiskFilenames;
     private Collection<String> systemServicesNames;
@@ -203,5 +207,13 @@ public class VMWorkloadInventoryModel
 
     public void setHost_name(String host_name) {
         this.host_name = host_name;
+    }
+
+    public Date getScanRunDate() {
+        return scanRunDate;
+    }
+
+    public void setScanRunDate(Date scanRunDate) {
+        this.scanRunDate = scanRunDate;
     }
 }

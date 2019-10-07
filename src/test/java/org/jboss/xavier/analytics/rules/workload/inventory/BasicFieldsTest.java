@@ -11,6 +11,8 @@ import org.kie.api.io.ResourceType;
 import org.kie.internal.command.CommandFactory;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,7 @@ public class BasicFieldsTest extends BaseTest {
     }
 
     @Test
-    public void test() {
+    public void test() throws ParseException {
         Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 1);
 
         Map<String, Object> facts = new HashMap<>();
@@ -42,6 +44,7 @@ public class BasicFieldsTest extends BaseTest {
         vmWorkloadInventoryModel.setProduct("VMware vCenter");
         vmWorkloadInventoryModel.setVersion("6.5");
         vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         List<Command> commands = new ArrayList<>();
@@ -75,5 +78,6 @@ public class BasicFieldsTest extends BaseTest {
         Assert.assertEquals("VMware vCenter", report.getProduct());
         Assert.assertEquals("6.5", report.getVersion());
         Assert.assertEquals("esx13.v2v.bos.redhat.com", report.getHost_name());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), report.getCreationDate());
     }
 }
