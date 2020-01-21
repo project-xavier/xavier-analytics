@@ -1,24 +1,28 @@
 package org.jboss.xavier.analytics.rules;
 
 import org.jboss.xavier.analytics.test.Utils;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.KieRepository;
 import org.kie.api.builder.Message;
+import org.kie.api.command.Command;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.DebugAgendaEventListener;
 import org.kie.api.event.rule.DebugRuleRuntimeEventListener;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.StatelessKieSession;
+import org.kie.internal.command.CommandFactory;
 import org.kie.internal.io.ResourceFactory;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -29,6 +33,8 @@ public abstract class BaseTest {
 
     protected final String rulePath;
     protected final ResourceType ruleResourceType;
+    protected final String expectedKiePackageName;
+    protected final int expectedLoadedRules;
 
     protected StatelessKieSession kieSession;
     protected KieFileSystem kieFileSystem;
@@ -36,12 +42,14 @@ public abstract class BaseTest {
 
     protected AgendaEventListener agendaEventListener;
 
-    public BaseTest(String rulePath, ResourceType resourceType)
+    public BaseTest(String rulePath, ResourceType resourceType, String expectedKiePackageName, int expectedLoadedRules)
     {
         this.rulePath = rulePath;
         this.ruleResourceType = resourceType;
         // AgendaEventListeners allow one to monitor and check rules that activate, fire, etc
         agendaEventListener = mock( AgendaEventListener.class );
+        this.expectedKiePackageName = expectedKiePackageName;
+        this.expectedLoadedRules = expectedLoadedRules;
     }
 
     @Before
@@ -68,6 +76,13 @@ public abstract class BaseTest {
         kieSession.addEventListener(agendaEventListener);
     }
 
+    // check that the number of rule (from the DRL files) is the number of rules loaded
+    @Test
+    public void checkLoadedRulesNumber()
+    {
+        Utils.checkLoadedRulesNumber(kieSession, expectedKiePackageName, expectedLoadedRules);
+    }
+
     protected KieBuilder createAndBuildKieBuilder(URL resource)
     {
         File ruleFile = new File(resource.getPath());
@@ -84,8 +99,12 @@ public abstract class BaseTest {
         kieFileSystem.write(ResourceFactory.newFileResource(agendaFocusForTestFile).setResourceType(ResourceType.DRL));
     }
 
-    @After
-    public void tearDown()
+    public Map<String, Object> createAndExecuteCommandsAndGetResults(final Map<String, Object> facts)
     {
+        final List<Command> commands = new ArrayList<>();
+        commands.addAll(Utils.newInsertCommands(facts));
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        commands.add(CommandFactory.newGetObjects(GET_OBJECTS_KEY));
+        return Utils.executeCommandsAndGetResults(kieSession, commands);
     }
 }

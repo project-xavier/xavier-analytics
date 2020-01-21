@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
@@ -32,15 +31,12 @@ public class InitialSavingsEstimationReportTest extends BaseIntegrationTest
 {
     public InitialSavingsEstimationReportTest()
     {
-        super("InitialCostSavingKSession0");
+        super("InitialCostSavingKSession0", "org.jboss.xavier.analytics.rules.initialcostsaving", 26);
     }
 
     @Test
     public void test_SourceNewELAIndicator_0()
     {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 26);
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -122,11 +118,7 @@ public class InitialSavingsEstimationReportTest extends BaseIntegrationTest
         Assert.assertEquals(true, environmentModel.getOpenStackIndicator());
 
         // Pricing
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        List<PricingDataModel> pricingDataModelList = objects.stream()
-                .filter(object -> object instanceof PricingDataModel)
-                .map(object -> (PricingDataModel) object)
-                .collect(Collectors.toList());
+        List<PricingDataModel> pricingDataModelList = Utils.extractModels(GET_OBJECTS_KEY, results, PricingDataModel.class);
 
         Assert.assertEquals(1, pricingDataModelList.size());
         PricingDataModel pricingDataModel = pricingDataModelList.get(0);
@@ -286,9 +278,6 @@ public class InitialSavingsEstimationReportTest extends BaseIntegrationTest
     @Test @Ignore
     public void test_SourceNewELAIndicator_1()
     {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules", 23);
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
@@ -333,13 +322,9 @@ public class InitialSavingsEstimationReportTest extends BaseIntegrationTest
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "SourceCostsRules_0", "SourceCostsRules_sourceNewELAIndicator_1");
 
-        // retrieve the List of Objects that were available in the working memory from the results
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        // filter the type of object you're interested in checking (e.g. InitialSavingsEstimationReportModel)
-        List<InitialSavingsEstimationReportModel> reports = objects.stream()
-                .filter(object -> object instanceof InitialSavingsEstimationReportModel)
-                .map(object -> (InitialSavingsEstimationReportModel) object)
-                .collect(Collectors.toList());
+        // this method retrieves the List of Objects that were available in the working memory from the results
+        // and filters the type of object you're interested in retrieving (e.g. InitialSavingsEstimationReportModel)
+        List<InitialSavingsEstimationReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, InitialSavingsEstimationReportModel.class);
 
         // Check that the number of object is the right one (in this case, there must be just one report)
         Assert.assertEquals(1, reports.size());
@@ -379,9 +364,6 @@ public class InitialSavingsEstimationReportTest extends BaseIntegrationTest
     @Test @Ignore
     public void test_SourceNewELAIndicator_2()
     {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules", 23);
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
@@ -426,13 +408,9 @@ public class InitialSavingsEstimationReportTest extends BaseIntegrationTest
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "SourceCostsRules_0", "SourceCostsRules_sourceNewELAIndicator_2");
 
-        // retrieve the List of Objects that were available in the working memory from the results
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        // filter the type of object you're interested in checking (e.g. InitialSavingsEstimationReportModel)
-        List<InitialSavingsEstimationReportModel> reports = objects.stream()
-                .filter(object -> object instanceof InitialSavingsEstimationReportModel)
-                .map(object -> (InitialSavingsEstimationReportModel) object)
-                .collect(Collectors.toList());
+        // this method retrieves the List of Objects that were available in the working memory from the results
+        // and filters the type of object you're interested in retrieving (e.g. InitialSavingsEstimationReportModel)
+        List<InitialSavingsEstimationReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, InitialSavingsEstimationReportModel.class);
 
         // Check that the number of object is the right one (in this case, there must be just one report)
         Assert.assertEquals(1, reports.size());

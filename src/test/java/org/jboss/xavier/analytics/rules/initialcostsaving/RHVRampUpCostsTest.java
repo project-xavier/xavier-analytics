@@ -1,8 +1,10 @@
 package org.jboss.xavier.analytics.rules.initialcostsaving;
 
-import org.jboss.xavier.analytics.pojo.output.*;
+import org.jboss.xavier.analytics.pojo.output.EnvironmentModel;
+import org.jboss.xavier.analytics.pojo.output.InitialSavingsEstimationReportModel;
+import org.jboss.xavier.analytics.pojo.output.RHVRampUpCostsModel;
+import org.jboss.xavier.analytics.pojo.output.SourceRampDownCostsModel;
 import org.jboss.xavier.analytics.pojo.support.initialcostsaving.PricingDataModel;
-
 import org.jboss.xavier.analytics.rules.BaseTest;
 import org.jboss.xavier.analytics.test.Utils;
 import org.junit.Assert;
@@ -15,22 +17,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RHVRampUpCostsTest extends BaseTest
 {
     public RHVRampUpCostsTest()
     {
         // provide the name of the DRL file you want to test
-        super("/org/jboss/xavier/analytics/rules/initialcostsaving/RHVRampUpCosts.drl", ResourceType.DRL);
+        super("/org/jboss/xavier/analytics/rules/initialcostsaving/RHVRampUpCosts.drl", ResourceType.DRL,
+                "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
     }
 
     @Test
     public void testVSphereNoFreeSubs()
     {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
@@ -85,13 +84,9 @@ public class RHVRampUpCostsTest extends BaseTest
         // check that the number of rules fired is what you expect
         Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
 
-        // retrieve the List of Objects that were available in the working memory from the results
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        // filter the type of object you're interested in checking (e.g. InitialSavingsEstimationReportModel)
-        List<InitialSavingsEstimationReportModel> reports = objects.stream()
-                .filter(object -> object instanceof InitialSavingsEstimationReportModel)
-                .map(object -> (InitialSavingsEstimationReportModel) object)
-                .collect(Collectors.toList());
+        // this method retrieves the List of Objects that were available in the working memory from the results
+        // and filters the type of object you're interested in retrieving (e.g. InitialSavingsEstimationReportModel)
+        List<InitialSavingsEstimationReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, InitialSavingsEstimationReportModel.class);
 
         // Check that the number of object is the right one (in this case, there must be just one report)
         Assert.assertEquals(1, reports.size());
@@ -142,9 +137,6 @@ public class RHVRampUpCostsTest extends BaseTest
     @Test
     public void testVSphereWithFreeSubs()
     {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
@@ -199,13 +191,9 @@ public class RHVRampUpCostsTest extends BaseTest
         // check that the number of rules fired is what you expect
         Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
 
-        // retrieve the List of Objects that were available in the working memory from the results
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        // filter the type of object you're interested in checking (e.g. InitialSavingsEstimationReportModel)
-        List<InitialSavingsEstimationReportModel> reports = objects.stream()
-                .filter(object -> object instanceof InitialSavingsEstimationReportModel)
-                .map(object -> (InitialSavingsEstimationReportModel) object)
-                .collect(Collectors.toList());
+        // this method retrieves the List of Objects that were available in the working memory from the results
+        // and filters the type of object you're interested in retrieving (e.g. InitialSavingsEstimationReportModel)
+        List<InitialSavingsEstimationReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, InitialSavingsEstimationReportModel.class);
 
         // Check that the number of object is the right one (in this case, there must be just one report)
         Assert.assertEquals(1, reports.size());
@@ -255,9 +243,6 @@ public class RHVRampUpCostsTest extends BaseTest
     @Test
     public void testVCloudNoFreeSubs()
     {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
@@ -312,13 +297,9 @@ public class RHVRampUpCostsTest extends BaseTest
         // check that the number of rules fired is what you expect
         Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
 
-        // retrieve the List of Objects that were available in the working memory from the results
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        // filter the type of object you're interested in checking (e.g. InitialSavingsEstimationReportModel)
-        List<InitialSavingsEstimationReportModel> reports = objects.stream()
-                .filter(object -> object instanceof InitialSavingsEstimationReportModel)
-                .map(object -> (InitialSavingsEstimationReportModel) object)
-                .collect(Collectors.toList());
+        // this method retrieves the List of Objects that were available in the working memory from the results
+        // and filters the type of object you're interested in retrieving (e.g. InitialSavingsEstimationReportModel)
+        List<InitialSavingsEstimationReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, InitialSavingsEstimationReportModel.class);
 
         // Check that the number of object is the right one (in this case, there must be just one report)
         Assert.assertEquals(1, reports.size());
@@ -369,9 +350,6 @@ public class RHVRampUpCostsTest extends BaseTest
     @Test
     public void testVCloudWithFreeSubs()
     {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 1);
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
@@ -426,13 +404,9 @@ public class RHVRampUpCostsTest extends BaseTest
         // check that the number of rules fired is what you expect
         Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
 
-        // retrieve the List of Objects that were available in the working memory from the results
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-        // filter the type of object you're interested in checking (e.g. InitialSavingsEstimationReportModel)
-        List<InitialSavingsEstimationReportModel> reports = objects.stream()
-                .filter(object -> object instanceof InitialSavingsEstimationReportModel)
-                .map(object -> (InitialSavingsEstimationReportModel) object)
-                .collect(Collectors.toList());
+        // this method retrieves the List of Objects that were available in the working memory from the results
+        // and filters the type of object you're interested in retrieving (e.g. InitialSavingsEstimationReportModel)
+        List<InitialSavingsEstimationReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, InitialSavingsEstimationReportModel.class);
 
         // Check that the number of object is the right one (in this case, there must be just one report)
         Assert.assertEquals(1, reports.size());

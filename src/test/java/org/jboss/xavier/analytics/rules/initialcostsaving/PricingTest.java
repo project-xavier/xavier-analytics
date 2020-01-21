@@ -8,18 +8,14 @@ import org.jboss.xavier.analytics.test.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kie.api.builder.KieBuilder;
-import org.kie.api.command.Command;
 import org.kie.api.io.ResourceType;
-import org.kie.internal.command.CommandFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class PricingTest extends BaseTest
 {
@@ -27,7 +23,8 @@ public class PricingTest extends BaseTest
 
     public PricingTest()
     {
-        super("/org/jboss/xavier/analytics/rules/initialcostsaving/PricingRule.xlsx", ResourceType.DTABLE);
+        super("/org/jboss/xavier/analytics/rules/initialcostsaving/PricingRule.xlsx", ResourceType.DTABLE,
+                "org.jboss.xavier.analytics.rules.initialcostsaving", 15);
     }
 
     @Override
@@ -60,8 +57,6 @@ public class PricingTest extends BaseTest
     @Test
     public void test()
     {
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.initialcostsaving", 15);
-
         EnvironmentModel environmentModel = new EnvironmentModel();
         environmentModel.setSourceProductIndicator(DEFAULT_SOURCE_PRODUCT_INDICATOR);
         environmentModel.setDealIndicator(1);
@@ -72,29 +67,16 @@ public class PricingTest extends BaseTest
         facts.put("reportModel", reportModel);
         facts.put("agendaGroup", "Pricing");
 
-        List<Command> commands = new ArrayList<>();
-        commands.addAll(Utils.newInsertCommands(facts));
-        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
-        commands.add(CommandFactory.newGetObjects(GET_OBJECTS_KEY));
-
-        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
         Assert.assertEquals(14, results.get(NUMBER_OF_FIRED_RULE_KEY));
 
-        List<Object> objects = (List<Object>) results.get((GET_OBJECTS_KEY));
-
-        List<InitialSavingsEstimationReportModel> reports = objects.stream()
-                .filter(object -> object instanceof InitialSavingsEstimationReportModel)
-                .map(object -> (InitialSavingsEstimationReportModel) object)
-                .collect(Collectors.toList());
+        List<InitialSavingsEstimationReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, InitialSavingsEstimationReportModel.class);
 
         // just one InitialSavingsEstimationReportModel has to be available
         Assert.assertEquals(1, reports.size());
 
-        List<PricingDataModel> pricingDataModelList = objects.stream()
-                .filter(object -> object instanceof PricingDataModel)
-                .map(object -> (PricingDataModel) object)
-                .collect(Collectors.toList());
+        List<PricingDataModel> pricingDataModelList = Utils.extractModels(GET_OBJECTS_KEY, results, PricingDataModel.class);
 
         // just one PricingDataModel has to be created
         Assert.assertEquals(1, pricingDataModelList.size());

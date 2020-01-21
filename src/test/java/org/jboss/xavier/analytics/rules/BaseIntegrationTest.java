@@ -1,7 +1,8 @@
 package org.jboss.xavier.analytics.rules;
 
-import org.junit.After;
+import org.jboss.xavier.analytics.test.Utils;
 import org.junit.Before;
+import org.junit.Test;
 import org.kie.api.KieServices;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.DebugAgendaEventListener;
@@ -22,11 +23,17 @@ public abstract class BaseIntegrationTest {
 
     protected AgendaEventListener agendaEventListener;
 
-    public BaseIntegrationTest(String kSessionName)
+    protected final String expectedKiePackageName;
+    protected final int expectedLoadedRules;
+
+
+    public BaseIntegrationTest(String kSessionName, String expectedKiePackageName, int expectedLoadedRules)
     {
         this.kSessionName = kSessionName;
         // AgendaEventListeners allow one to monitor and check rules that activate, fire, etc
         agendaEventListener = mock( AgendaEventListener.class );
+        this.expectedKiePackageName = expectedKiePackageName;
+        this.expectedLoadedRules = expectedLoadedRules;
     }
 
     @Before
@@ -39,8 +46,10 @@ public abstract class BaseIntegrationTest {
         kieSession.addEventListener(agendaEventListener);
     }
 
-    @After
-    public void tearDown()
+    // check that the number of rule (from the DRL files) is the number of rules loaded
+    @Test
+    public void checkLoadedRulesNumber()
     {
+        Utils.checkLoadedRulesNumber(kieSession, expectedKiePackageName, expectedLoadedRules);
     }
 }

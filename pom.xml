@@ -195,21 +195,4 @@
         </profile>
     </profiles>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
-    <scm>
-        <connection>scm:git:https://github.com/proj-xavier/xavier-analytics.git</connection>
-        <url>https://github.com/proj-xavier/xavier-analytics</url>
-    </scm>
-
-
 </project>

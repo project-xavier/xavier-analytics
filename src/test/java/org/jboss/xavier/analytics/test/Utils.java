@@ -64,14 +64,13 @@ public class Utils
         return results;
     }
 
-    public static <T> List<T> getListOf(Class<T> t, Map<String, Object> results, String objectKey)
+    public static <T> List<T> extractModels(String objectKeyInResults, Map<String, Object> results, Class<T> model)
     {
-        List<Object> objects = (List<Object>) results.get((objectKey));
-        List<T> tList = objects.stream()
-                .filter(object -> t.isAssignableFrom(object.getClass()))
-                .map(object -> (T) object)
+        final List<Object> objects = (List<Object>) results.get(objectKeyInResults);
+        return objects.stream()
+                .filter(model::isInstance)
+                .map(model::cast)
                 .collect(Collectors.toList());
-        return tList;
     }
 
     public static void verifyRulesFiredNames(AgendaEventListener agendaEventListener, String ... rulesNames)

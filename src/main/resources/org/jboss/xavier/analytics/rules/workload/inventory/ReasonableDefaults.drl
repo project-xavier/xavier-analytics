@@ -1,0 +1,34 @@
+package org.jboss.xavier.analytics.rules.workload.inventory;
+
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+
+dialect "java"
+agenda-group "ReasonableDefaults"
+auto-focus true
+
+rule "Fill 'datacenter' field with reasonable default"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            datacenter == null
+        )
+    then
+        workloadInventoryReport.setDatacenter(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE);
+end
+
+rule "Fill 'cluster' field with reasonable default"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            cluster == null
+        )
+    then
+        workloadInventoryReport.setCluster(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE);
+end
+
+rule "Fill 'host_name' field with reasonable default"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            host_name == null
+        )
+    then
+        workloadInventoryReport.setHost_name(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE);
+end

@@ -9,7 +9,15 @@ public class WorkloadSummaryReportTest extends BaseIntegrationTest
 
     public WorkloadSummaryReportTest()
     {
-        super("WorkloadSummaryKSession0");
+        super("WorkloadSummaryKSession0", "org.jboss.xavier.analytics.rules.workload.summary", 0);
+    }
+
+    @Override
+    @Test
+    // TODO Remove this method once WorkloadSummaryReportTest will be testing new Workload Summary rules
+    public void checkLoadedRulesNumber()
+    {
+        Assert.assertTrue(true);
     }
 
     @Test

@@ -12,8 +12,9 @@ rule "Copy basic fields and agenda controller"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
             provider != null ,
-            datacenter != null,
-            cluster != null,
+            // These fields became optional in https://issues.redhat.com/browse/MIGENG-328
+            // datacenter != null,
+            // cluster != null,
             vmName != null,
             diskSpace != null,
             memory != null,
@@ -22,12 +23,15 @@ rule "Copy basic fields and agenda controller"
             osProductName != null,
             product != null,
             version != null,
-            host_name != null,
+            // This field became optional in https://issues.redhat.com/browse/MIGENG-328
+            // host_name != null,
             scanRunDate != null
         )
     then
         WorkloadInventoryReportModel workloadInventoryReport =  new WorkloadInventoryReportModel();
         workloadInventoryReport.setProvider(vmWorkloadInventoryModel.getProvider());
+        // It could be that, since it's an optional input field, we are setting it to null:
+        // in such a case it will be up to 'ReasonableDefaults' rules it to the default value
         workloadInventoryReport.setDatacenter(vmWorkloadInventoryModel.getDatacenter());
         workloadInventoryReport.setCluster(vmWorkloadInventoryModel.getCluster());
         workloadInventoryReport.setVmName(vmWorkloadInventoryModel.getVmName());
@@ -46,4 +50,5 @@ rule "Copy basic fields and agenda controller"
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Complexity").setFocus();
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Targets").setFocus();
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Flags").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("ReasonableDefaults").setFocus();
 end

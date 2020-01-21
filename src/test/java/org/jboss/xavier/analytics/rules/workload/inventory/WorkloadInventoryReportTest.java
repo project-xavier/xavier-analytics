@@ -25,19 +25,11 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0");
-    }
-
-    private void checkLoadedRulesNumber()
-    {
-        Utils.checkLoadedRulesNumber(kieSession, "org.jboss.xavier.analytics.rules.workload.inventory", 23);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory", 26);
     }
 
     @Test
     public void testNoFlagsSupportedOS() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -141,9 +133,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testOneFlagSupportedOS() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -247,9 +236,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testMoreThanOneFlagSupportedOS() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -357,9 +343,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testNoFlagsUnSupportedOS() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -465,9 +448,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testFlagsCentOS() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -572,17 +552,12 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testOneOrMoreFlagsUnsupported_OS() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
         //Basic Fields
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
         vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
         vmWorkloadInventoryModel.setVmName("vm tests");
         vmWorkloadInventoryModel.setDiskSpace(100000001L);
         vmWorkloadInventoryModel.setMemory(4096L);
@@ -592,7 +567,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setOsProductName("debian");
         vmWorkloadInventoryModel.setProduct("VMware vCenter");
         vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
         vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
 
         //Flags
@@ -620,11 +594,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
                 // Flags
                 "Flag_Nics",
                 // Target
@@ -649,8 +625,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
         // BasicFields
         Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC",workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1",workloadInventoryReportModel.getCluster());
         Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
         Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
         Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
@@ -659,8 +633,11 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals("debian",workloadInventoryReportModel.getOsName());
         Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
         Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
@@ -678,9 +655,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testUndetectedOS() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -779,9 +753,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testTomcatWorkload() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -890,9 +861,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testEAPWorkload() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -988,9 +956,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testWebsphereWorkload() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -1086,9 +1051,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testWeblogicWorkload() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -1184,9 +1146,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testOracleDBWorkload() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -1282,9 +1241,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testSAP_HANA_Workload() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -1380,9 +1336,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testSQLServerOnLinux() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -1478,9 +1431,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testSQLServerOnWindows() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -1580,17 +1530,12 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testSQLServerOnWindows2() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
         //Basic Fields
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
         vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
         vmWorkloadInventoryModel.setVmName("vm tests");
         vmWorkloadInventoryModel.setDiskSpace(100000001L);
         vmWorkloadInventoryModel.setMemory(4096L);
@@ -1600,7 +1545,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setOsProductName("rhel");
         vmWorkloadInventoryModel.setProduct("VMware vCenter");
         vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
         vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
 
         List<String> vmDiskFilenames = new ArrayList<>();
@@ -1628,11 +1572,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
                 // Flags
                 // Target
                 "Target_RHV", "Target_OSP",
@@ -1656,8 +1602,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
         // BasicFields
         Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC",workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1",workloadInventoryReportModel.getCluster());
         Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
         Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
         Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
@@ -1666,8 +1610,11 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals("rhel",workloadInventoryReportModel.getOsName());
         Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
         Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
         // Flags
         // Targets
         // Complexity
@@ -1680,9 +1627,6 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     @Test
     public void testNoServicesAndNoFiles() throws ParseException {
-        // check that the numbers of rule from the DRL file is the number of rules loaded
-        checkLoadedRulesNumber();
-
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 

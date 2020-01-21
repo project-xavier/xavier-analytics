@@ -28,6 +28,10 @@ public class WorkloadInventoryReportModel
     public static final String COMPLEXITY_HARD = "Hard";
     public static final String COMPLEXITY_UNKNOWN = "Unknown";
 
+    public static final String DATACENTER_DEFAULT_VALUE = "No datacenter defined";
+    public static final String CLUSTER_DEFAULT_VALUE = "No cluster defined";
+    public static final String HOST_NAME_DEFAULT_VALUE = "No host defined";
+
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "WORKLOADINVENTORYREPORTMODEL_ID_GENERATOR")
     private Long id;
