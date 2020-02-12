@@ -847,6 +847,42 @@ public class WorkloadsTest extends BaseTest {
     }
 
     @Test
+    public void testArtifactory() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("unix_service");
+        systemServicesNames.add("artifactory");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Artifactory", "SsaEnabled_System_Services_Present");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getWorkloads());
+        Assert.assertEquals(1, report.getWorkloads().size());
+        Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Artifactory".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
+    }
+
+    @Test
     public void testFileWithNullContent() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
