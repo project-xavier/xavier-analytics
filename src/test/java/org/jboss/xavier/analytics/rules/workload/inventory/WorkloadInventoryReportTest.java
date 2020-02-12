@@ -390,7 +390,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -400,7 +400,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_Convert2RHEL",
                 // Complexity
-                "No_Flags_Not_Supported_OS",
+                //"No_Flags_Not_Supported_OS",
                 // Workloads
                 "SsaEnabled_System_Services_Present"
         );
@@ -441,7 +441,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(targets.contains("OSP"));
         Assert.assertTrue(targets.contains("Convert2RHEL"));
         // Complexity
-        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM,workloadInventoryReportModel.getComplexity());
+        //Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM,workloadInventoryReportModel.getComplexity());
         // Workloads
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
     }
@@ -495,7 +495,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -505,7 +505,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_Convert2RHEL",
                 // Complexity
-                "One_Or_More_Flags_Not_Supported_OS",
+                //"One_Or_More_Flags_Not_Supported_OS",
                 // Workloads
                 "SsaEnabled_System_Services_Present"
         );
@@ -545,7 +545,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(targets.contains("RHV"));
         Assert.assertTrue(targets.contains("Convert2RHEL"));
         // Complexity
-        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,workloadInventoryReportModel.getComplexity());
+        //Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,workloadInventoryReportModel.getComplexity());
         // Workloads
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
     }
@@ -594,7 +594,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -604,7 +604,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
                 "Flag_Nics",
                 // Target
-                "Target_RHV",
+                //"Target_RHV",
                 // Complexity
                 "One_Or_More_Flags_Not_Supported_OS",
                 // Workloads
@@ -645,8 +645,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
-        Assert.assertEquals(1, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertNull(targets);
+        //Assert.assertTrue(targets.contains("RHV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -710,7 +710,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
                 // Target
                 // Complexity
-                "Not_Detected_OS",
+                "No_Flags_Not_Supported_OS",
                 // Workloads
                 "SsaEnabled_System_Services_Present"
         );
@@ -746,7 +746,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertNull(flagsIMS);
         // Targets
         // Complexity
-        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNKNOWN,workloadInventoryReportModel.getComplexity());
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM,workloadInventoryReportModel.getComplexity());
         // Workloads
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
     }

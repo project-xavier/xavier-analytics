@@ -7,6 +7,7 @@ import org.jboss.xavier.analytics.functions.HelperFunctions
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isSupportedOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsupportedOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsuitableFlag;
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isConvertibleOS;
 
 dialect "java"
 agenda-group "Targets"
@@ -22,7 +23,7 @@ rule "Target_RHV"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
             osDescription != null,
-            eval(isSupportedOS(osDescription) || isUnsupportedOS(osDescription))
+            eval(isSupportedOS(osDescription) || isConvertibleOS(osDescription))
         )
     then
         modify(workloadInventoryReport)
@@ -36,7 +37,7 @@ rule "Target_OSP"
         workloadInventoryReport : WorkloadInventoryReportModel(
             osDescription != null,
             flagsIMS == null || eval(flagsIMS != null && flagsSuitableForOSP(this)),
-            eval(isSupportedOS(osDescription) || isUnsupportedOS(osDescription))
+            eval(isSupportedOS(osDescription) || isConvertibleOS(osDescription))
         )
     then
         modify(workloadInventoryReport)

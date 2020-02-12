@@ -130,7 +130,7 @@ public class ComplexityTest extends BaseTest {
         facts.put("agendaGroup", "Complexity");
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
-        workloadInventoryReportModel.setOsDescription("CENTOS");
+        workloadInventoryReportModel.setOsDescription("UBUNTU");
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
@@ -183,7 +183,7 @@ public class ComplexityTest extends BaseTest {
         facts.put("agendaGroup", "Complexity");
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
-        workloadInventoryReportModel.setOsDescription("OSX");
+        workloadInventoryReportModel.setOsDescription(null);
         workloadInventoryReportModel.setFlagsIMS(null);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
@@ -209,7 +209,7 @@ public class ComplexityTest extends BaseTest {
         facts.put("agendaGroup", "Complexity");
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
-        workloadInventoryReportModel.setOsDescription("OSX");
+        workloadInventoryReportModel.setOsDescription(null);
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
@@ -235,7 +235,7 @@ public class ComplexityTest extends BaseTest {
         facts.put("agendaGroup", "Complexity");
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
-        workloadInventoryReportModel.setOsDescription("OSX");
+        workloadInventoryReportModel.setOsDescription(null);
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
 

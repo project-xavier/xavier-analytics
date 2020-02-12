@@ -27,6 +27,7 @@ public class WorkloadInventoryReportModel
     public static final String COMPLEXITY_MEDIUM = "Medium";
     public static final String COMPLEXITY_HARD = "Hard";
     public static final String COMPLEXITY_UNKNOWN = "Unknown";
+    public static final String COMPLEXITY_UNSUPPORTED = "Unsupported";
 
     public static final String DATACENTER_DEFAULT_VALUE = "No datacenter defined";
     public static final String CLUSTER_DEFAULT_VALUE = "No cluster defined";

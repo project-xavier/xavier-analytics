@@ -16,14 +16,19 @@ public class HelperFunctions
         return Arrays.stream(OSSupport.values()).anyMatch(value -> osToCheck.toLowerCase().contains(value.getName().toLowerCase()) && value.isSupported());
     }
 
-    public static boolean isUnsupportedOS(String osToCheck)
+    public static boolean isConvertibleOS(String osToCheck)
     {
         return Arrays.stream(OSSupport.values()).anyMatch(value -> osToCheck.toLowerCase().contains(value.getName().toLowerCase()) && !value.isSupported());
     }
 
-    public static boolean isUndetectedOS(String osToCheck)
+    public static boolean isUnsupportedOS(String osToCheck)
     {
         return Arrays.stream(OSSupport.values()).noneMatch(value -> osToCheck.toLowerCase().contains(value.getName().toLowerCase()));
+    }
+
+    public static boolean isUndetectedOS(String osToCheck)
+    {
+        return osToCheck == null || osToCheck.trim().isEmpty();
     }
 
     public enum OSSupport{
@@ -31,9 +36,7 @@ public class HelperFunctions
         SUSE("SUSE Linux Enterprise Server", true),
         WINDOWS("Windows",true),
         ORACLE("Oracle Enterprise Linux",false),
-        CENTOS("CentOS",false),
-        DEBIAN("Debian",false),
-        UBUNTU("Ubuntu",false);
+        CENTOS("CentOS",false);
 
         private final String name;
         private final boolean isSupported;

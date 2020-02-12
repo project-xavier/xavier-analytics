@@ -89,7 +89,6 @@ end
 rule "Not_Detected_OS"
     when
             workloadInventoryReport : WorkloadInventoryReportModel(
-            osDescription != null,
             isUndetectedOS(osDescription)
     )
     then
