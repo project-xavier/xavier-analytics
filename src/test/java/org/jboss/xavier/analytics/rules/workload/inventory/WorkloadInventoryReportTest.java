@@ -398,7 +398,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
 
                 // Target
-                "Target_RHV", "Target_OSP", "Target_Convert2RHEL",
+                "Target_RHV", "Target_OSP", "Target_RHEL",
                 // Complexity
                 "No_Flag_Convertible_OS",
                 // Workloads
@@ -439,7 +439,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
         Assert.assertTrue(targets.contains("OSP"));
-        Assert.assertTrue(targets.contains("Convert2RHEL"));
+        Assert.assertTrue(targets.contains("RHEL"));
         // Complexity
         //Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM,workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -503,7 +503,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
                 "Flag_Nics", "Flag_Rdm_Disk",
                 // Target
-                "Target_RHV", "Target_Convert2RHEL",
+                "Target_RHV", "Target_RHEL",
                 // Complexity
                 "One_Or_More_Flags_Convertible_OS",
                 // Workloads
@@ -543,7 +543,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("Convert2RHEL"));
+        Assert.assertTrue(targets.contains("RHEL"));
         // Complexity
         //Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,workloadInventoryReportModel.getComplexity());
         // Workloads

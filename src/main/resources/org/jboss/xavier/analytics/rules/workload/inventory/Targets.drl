@@ -47,7 +47,7 @@ rule "Target_OSP"
         }
 end
 
-rule "Target_Convert2RHEL"
+rule "Target_RHEL"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
             osDescription != null,
@@ -57,7 +57,7 @@ rule "Target_Convert2RHEL"
     then
         modify(workloadInventoryReport)
         {
-            addRecommendedTargetsIMS("Convert2RHEL")
+            addRecommendedTargetsIMS("RHEL")
         }
 end
 

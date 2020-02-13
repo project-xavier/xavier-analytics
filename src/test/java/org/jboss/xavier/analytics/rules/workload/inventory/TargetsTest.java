@@ -61,7 +61,9 @@ public class TargetsTest extends BaseTest {
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
         Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_Convert2RHEL");
+
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_RHEL");
+
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
@@ -148,7 +150,7 @@ public class TargetsTest extends BaseTest {
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
         Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_Convert2RHEL");
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_RHEL");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
@@ -158,7 +160,7 @@ public class TargetsTest extends BaseTest {
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(2, report.getRecommendedTargetsIMS().size());
         Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("Convert2RHEL".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHEL".toLowerCase())));
     }
 
     @Test
@@ -175,7 +177,7 @@ public class TargetsTest extends BaseTest {
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
         Assert.assertEquals(4, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_OSP","Target_Convert2RHEL");
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_OSP","Target_RHEL");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
@@ -186,7 +188,7 @@ public class TargetsTest extends BaseTest {
         Assert.assertEquals(3, report.getRecommendedTargetsIMS().size());
         Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
         Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OSP".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("Convert2RHEL".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHEL".toLowerCase())));
     }
 
     @Test
