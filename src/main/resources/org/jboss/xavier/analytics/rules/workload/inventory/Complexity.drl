@@ -7,6 +7,7 @@ import java.util.HashSet;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isSupportedOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsupportedOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUndetectedOS;
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isConvertibleOS;
 
 dialect "java"
 agenda-group "Complexity"
@@ -27,6 +28,21 @@ rule "No_Flag_Supported_OS"
         }
 end
 
+rule "No_Flag_Convertible_OS"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS == null,
+            osDescription != null,
+            isConvertibleOS(osDescription)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM)
+        }
+end
+
+
 rule "One_Flag_Supported_OS"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
@@ -39,6 +55,22 @@ rule "One_Flag_Supported_OS"
         modify(workloadInventoryReport)
         {
             setComplexity(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM)
+        }
+end
+
+
+rule "One_Or_More_Flags_Convertible_OS"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS != null,
+            flagsIMS.size() >= 1,
+            osDescription != null,
+            isConvertibleOS(osDescription)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_HARD)
         }
 end
 
@@ -67,7 +99,7 @@ rule "No_Flags_Not_Supported_OS"
     then
         modify(workloadInventoryReport)
         {
-            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM)
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED)
         }
 end
 
@@ -82,7 +114,7 @@ rule "One_Or_More_Flags_Not_Supported_OS"
     then
         modify(workloadInventoryReport)
         {
-            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_HARD)
+            setComplexity(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED)
         }
 end
 

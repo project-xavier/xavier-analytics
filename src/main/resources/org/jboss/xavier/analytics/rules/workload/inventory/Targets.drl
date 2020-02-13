@@ -8,6 +8,7 @@ import function org.jboss.xavier.analytics.functions.HelperFunctions.isSupported
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsupportedOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsuitableFlag;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isConvertibleOS;
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isUndetectedOS;
 
 dialect "java"
 agenda-group "Targets"
@@ -57,5 +58,17 @@ rule "Target_Convert2RHEL"
         modify(workloadInventoryReport)
         {
             addRecommendedTargetsIMS("Convert2RHEL")
+        }
+end
+
+rule "Target_None"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            eval((osDescription != null && isUnsupportedOS(osDescription)) || isUndetectedOS(osDescription))
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            addRecommendedTargetsIMS("None")
         }
 end

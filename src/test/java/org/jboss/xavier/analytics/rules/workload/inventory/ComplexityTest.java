@@ -15,7 +15,7 @@ public class ComplexityTest extends BaseTest {
 
     public ComplexityTest() {
         super("/org/jboss/xavier/analytics/rules/workload/inventory/Complexity.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 6);
+                "org.jboss.xavier.analytics.rules.workload.inventory", 8);
     }
 
     @Test
@@ -52,6 +52,34 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("SUSE Linux Enterprise Server");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "One_Flag_Supported_OS");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM,report.getComplexity());
+
+    }
+
+
+
+    @Test
+    public void testOneFlagSuseOS() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Complexity");
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+        workloadInventoryReportModel.setOsDescription("SUSE");
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
@@ -119,7 +147,7 @@ public class ComplexityTest extends BaseTest {
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM,report.getComplexity());
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,report.getComplexity());
 
     }
 
@@ -145,7 +173,7 @@ public class ComplexityTest extends BaseTest {
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,report.getComplexity());
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,report.getComplexity());
 
     }
 
@@ -172,7 +200,7 @@ public class ComplexityTest extends BaseTest {
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,report.getComplexity());
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,report.getComplexity());
 
     }
 
@@ -252,6 +280,85 @@ public class ComplexityTest extends BaseTest {
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNKNOWN,report.getComplexity());
+
+    }
+
+    @Test
+    public void testNoFlagConvertibleOS() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Complexity");
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+        workloadInventoryReportModel.setOsDescription("CentOS");
+        workloadInventoryReportModel.setFlagsIMS(null);
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "No_Flag_Convertible_OS");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM,report.getComplexity());
+
+    }
+
+    @Test
+    public void testOneFlagConvertibleOS() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Complexity");
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+        workloadInventoryReportModel.setOsDescription("Oracle Linux");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "One_Or_More_Flags_Convertible_OS");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,report.getComplexity());
+
+    }
+
+    @Test
+    public void testMoreThanOneFlagConvertibleOS() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Complexity");
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+        workloadInventoryReportModel.setOsDescription("CentOS");
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "One_Or_More_Flags_Convertible_OS");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,report.getComplexity());
 
     }
 }

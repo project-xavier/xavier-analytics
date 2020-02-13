@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory", 28);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory", 31);
     }
 
     @Test
@@ -342,7 +342,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void testNoFlagsUnSupportedOS() throws ParseException {
+    public void testNoFlagsConvertibleOS() throws ParseException {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
@@ -355,7 +355,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setDiskSpace(100000001L);
         vmWorkloadInventoryModel.setMemory(4096L);
         vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Oracle Enterprise Linux");
+        vmWorkloadInventoryModel.setGuestOSFullName("Oracle Linux");
         // keep it lower case to check that the rules evaluate it ignoring the case
         vmWorkloadInventoryModel.setOsProductName("Oracle");
         vmWorkloadInventoryModel.setProduct("VMware vCenter");
@@ -390,7 +390,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -400,7 +400,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_Convert2RHEL",
                 // Complexity
-                //"No_Flags_Not_Supported_OS",
+                "No_Flag_Convertible_OS",
                 // Workloads
                 "SsaEnabled_System_Services_Present"
         );
@@ -425,7 +425,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
         Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
         Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Oracle Enterprise Linux",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("Oracle Linux",workloadInventoryReportModel.getOsDescription());
         Assert.assertEquals("Oracle",workloadInventoryReportModel.getOsName());
         Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
         Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
@@ -495,7 +495,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -505,7 +505,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_Convert2RHEL",
                 // Complexity
-                //"One_Or_More_Flags_Not_Supported_OS",
+                "One_Or_More_Flags_Convertible_OS",
                 // Workloads
                 "SsaEnabled_System_Services_Present"
         );
@@ -594,7 +594,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -604,7 +604,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
                 "Flag_Nics",
                 // Target
-                //"Target_RHV",
+                "Target_None",
                 // Complexity
                 "One_Or_More_Flags_Not_Supported_OS",
                 // Workloads
@@ -645,10 +645,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
-        Assert.assertNull(targets);
-        //Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertEquals(1, targets.size());
+        Assert.assertTrue(targets.contains("None"));
         // Complexity
-        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD,workloadInventoryReportModel.getComplexity());
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,workloadInventoryReportModel.getComplexity());
         // Workloads
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
     }
@@ -667,9 +667,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setDiskSpace(100000001L);
         vmWorkloadInventoryModel.setMemory(4096L);
         vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Apple OSX");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("OSX");
+        //set to empty string because basicfields.drl doesn't allow nulls through
+        vmWorkloadInventoryModel.setGuestOSFullName("");
+        //set to empty string because basicfields.drl doesn't allow nulls through
+        vmWorkloadInventoryModel.setOsProductName("");
         vmWorkloadInventoryModel.setProduct("VMware vCenter");
         vmWorkloadInventoryModel.setVersion("6.5");
         vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
@@ -702,15 +703,16 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(4, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
+                "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS",
+                "Not_Detected_OS",
                 // Workloads
                 "SsaEnabled_System_Services_Present"
         );
@@ -735,8 +737,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
         Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
         Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Apple OSX",workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("OSX",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("",workloadInventoryReportModel.getOsName());
         Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
         Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
         Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
@@ -745,8 +747,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNull(flagsIMS);
         // Targets
+        Assert.assertEquals(1,workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("None"));
         // Complexity
-        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM,workloadInventoryReportModel.getComplexity());
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNKNOWN,workloadInventoryReportModel.getComplexity());
         // Workloads
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
     }
@@ -1910,5 +1914,768 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY,workloadInventoryReportModel.getComplexity());
         // Workloads
         Assert.assertFalse(workloadInventoryReportModel.getSsaEnabled());
+    }
+
+
+
+    @Test
+    public void testESXiOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("VMware ESXi 5.x");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("ESXi");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        //Flags
+
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
+                // Flags
+                // Target
+                "Target_None",
+                // Complexity
+                "No_Flags_Not_Supported_OS",
+                // Workloads
+                "SsaDisabled_System_Services_Not_Present"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("VMware ESXi 5.x",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("ESXi",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNull(flagsIMS);
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(1, targets.size());
+        Assert.assertTrue(targets.contains("None"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,workloadInventoryReportModel.getComplexity());
+        // Workloads
+    }
+
+    @Test
+    public void testUbuntuOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("Ubuntu");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("ubuntu");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        //Flags
+
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
+                // Flags
+                // Target
+                "Target_None",
+                // Complexity
+                "No_Flags_Not_Supported_OS",
+                // Workloads
+                "SsaDisabled_System_Services_Not_Present"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("Ubuntu",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("ubuntu",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNull(flagsIMS);
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(1, targets.size());
+        Assert.assertTrue(targets.contains("None"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,workloadInventoryReportModel.getComplexity());
+        // Workloads
+    }
+
+    @Test
+    public void testPhotonOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("VMware Photon");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("photon");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        //Flags
+
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
+                // Flags
+                // Target
+                "Target_None",
+                // Complexity
+                "No_Flags_Not_Supported_OS",
+                // Workloads
+                "SsaDisabled_System_Services_Not_Present"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("VMware Photon",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("photon",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNull(flagsIMS);
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(1, targets.size());
+        Assert.assertTrue(targets.contains("None"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,workloadInventoryReportModel.getComplexity());
+        // Workloads
+    }
+
+    @Test
+    public void testFreeBSDOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("FreeBSD");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("freebsd");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        //Flags
+
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
+                // Flags
+                // Target
+                "Target_None",
+                // Complexity
+                "No_Flags_Not_Supported_OS",
+                // Workloads
+                "SsaDisabled_System_Services_Not_Present"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("FreeBSD",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("freebsd",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNull(flagsIMS);
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(1, targets.size());
+        Assert.assertTrue(targets.contains("None"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,workloadInventoryReportModel.getComplexity());
+        // Workloads
+    }
+
+    @Test
+    public void testSuseOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("SUSE");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("suse");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        //Flags
+
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
+                // Flags
+                // Target
+                "Target_RHV", "Target_OSP",
+                // Complexity
+                "No_Flag_Supported_OS",
+                // Workloads
+                "SsaDisabled_System_Services_Not_Present"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("SUSE",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("suse",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNull(flagsIMS);
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(2, targets.size());
+        Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertTrue(targets.contains("OSP"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY,workloadInventoryReportModel.getComplexity());
+        // Workloads
+    }
+
+    @Test
+    public void testSolarisOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("Oracle Solaris");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("solaris");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        //Flags
+
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
+                // Flags
+                // Target
+                "Target_None",
+                // Complexity
+                "No_Flags_Not_Supported_OS",
+                // Workloads
+                "SsaDisabled_System_Services_Not_Present"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("Oracle Solaris",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("solaris",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNull(flagsIMS);
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(1, targets.size());
+        Assert.assertTrue(targets.contains("None"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,workloadInventoryReportModel.getComplexity());
+        // Workloads
+    }
+
+    @Test
+    public void testXPOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("Microsoft Windows XP Professional (32-bit)");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("Microsoft Windows XP Professional (32-bit)");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        //Flags
+
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
+                // Flags
+                // Target
+                "Target_None",
+                // Complexity
+                "No_Flags_Not_Supported_OS",
+                // Workloads
+                "SsaDisabled_System_Services_Not_Present"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("Microsoft Windows XP Professional (32-bit)",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("Microsoft Windows XP Professional (32-bit)",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNull(flagsIMS);
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(1, targets.size());
+        Assert.assertTrue(targets.contains("None"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,workloadInventoryReportModel.getComplexity());
+        // Workloads
+    }
+
+    @Test
+    public void testDebianOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("Debian");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("debian");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        //Flags
+
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
+                // Flags
+                // Target
+                "Target_None",
+                // Complexity
+                "No_Flags_Not_Supported_OS",
+                // Workloads
+                "SsaDisabled_System_Services_Not_Present"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        // BasicFields
+        Assert.assertEquals("IMS vCenter",workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("vm tests",workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L,workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096,workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4,workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("Debian",workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("debian",workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        // ReasonableDefaults
+        Assert.assertEquals(WorkloadInventoryReportModel.DATACENTER_DEFAULT_VALUE,workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals(WorkloadInventoryReportModel.CLUSTER_DEFAULT_VALUE,workloadInventoryReportModel.getCluster());
+        Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNull(flagsIMS);
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(1, targets.size());
+        Assert.assertTrue(targets.contains("None"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED,workloadInventoryReportModel.getComplexity());
+        // Workloads
     }
 }
