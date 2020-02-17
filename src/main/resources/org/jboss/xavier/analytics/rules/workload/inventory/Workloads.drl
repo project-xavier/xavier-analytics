@@ -189,6 +189,23 @@ rule "Workloads_Artifactory"
            }
 end
 
+rule "Workloads_F5"
+       when
+           vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+               systemServicesNames != null,
+               systemServicesNames.size() > 0,
+               servicesContainsString(this,"f5functions"),
+               servicesContainsString(this,"f5dirs"),
+               servicesContainsString(this,"f5-swap-eth")
+           )
+           workloadInventoryReport : WorkloadInventoryReportModel()
+       then
+           modify(workloadInventoryReport)
+           {
+               addWorkload("F5")
+           }
+end
+
 rule "SsaEnabled_System_Services_Present"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
