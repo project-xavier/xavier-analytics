@@ -206,6 +206,26 @@ rule "Workloads_F5"
            }
 end
 
+rule "Workloads_Citrix_Unidesk"
+       when
+           vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+               systemServicesNames != null,
+               systemServicesNames.size() > 0,
+               servicesContainsString(this,"unidesk-xenserver-connector") ||
+               servicesContainsString(this,"unidesk-vsphere-connector") ||
+               servicesContainsString(this,"unidesk-pvs-connector") ||
+               servicesContainsString(this,"unidesk-nutanix-connector") ||
+               servicesContainsString(this,"unidesk-hyperv-connector") ||
+               servicesContainsString(this,"unidesk-azure-connector")
+           )
+           workloadInventoryReport : WorkloadInventoryReportModel()
+       then
+           modify(workloadInventoryReport)
+           {
+               addWorkload("Citrix Unidesk")
+           }
+end
+
 rule "SsaEnabled_System_Services_Present"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(

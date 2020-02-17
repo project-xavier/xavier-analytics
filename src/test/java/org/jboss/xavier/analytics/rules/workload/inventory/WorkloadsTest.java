@@ -17,7 +17,7 @@ public class WorkloadsTest extends BaseTest {
 
     public WorkloadsTest() {
         super("/org/jboss/xavier/analytics/rules/workload/inventory/Workloads.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 13);
+                "org.jboss.xavier.analytics.rules.workload.inventory", 14);
     }
 
     @Test
@@ -982,6 +982,222 @@ public class WorkloadsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNull(report.getWorkloads());
         Assert.assertFalse(report.getSsaEnabled());
+    }
+
+    @Test
+    public void testCitrixUnidesk_1() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("unix_service");
+        systemServicesNames.add("unidesk-xenserver-connector");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Citrix_Unidesk", "SsaEnabled_System_Services_Present");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getWorkloads());
+        Assert.assertEquals(1, report.getWorkloads().size());
+        Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Citrix Unidesk".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
+    }
+
+    @Test
+    public void testCitrixUnidesk_2() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("unix_service");
+        systemServicesNames.add("unidesk-vsphere-connector");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Citrix_Unidesk", "SsaEnabled_System_Services_Present");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getWorkloads());
+        Assert.assertEquals(1, report.getWorkloads().size());
+        Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Citrix Unidesk".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
+    }
+
+    @Test
+    public void testCitrixUnidesk_3() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("unix_service");
+        systemServicesNames.add("unidesk-pvs-connector");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Citrix_Unidesk", "SsaEnabled_System_Services_Present");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getWorkloads());
+        Assert.assertEquals(1, report.getWorkloads().size());
+        Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Citrix Unidesk".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
+    }
+
+    @Test
+    public void testCitrixUnidesk_4() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("unix_service");
+        systemServicesNames.add("unidesk-nutanix-connector");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Citrix_Unidesk", "SsaEnabled_System_Services_Present");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getWorkloads());
+        Assert.assertEquals(1, report.getWorkloads().size());
+        Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Citrix Unidesk".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
+    }
+
+    @Test
+    public void testCitrixUnidesk_5() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("unix_service");
+        systemServicesNames.add("unidesk-hyperv-connector");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Citrix_Unidesk", "SsaEnabled_System_Services_Present");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getWorkloads());
+        Assert.assertEquals(1, report.getWorkloads().size());
+        Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Citrix Unidesk".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
+    }
+
+    @Test
+    public void testCitrixUnidesk_6() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("unix_service");
+        systemServicesNames.add("unidesk-azure-connector");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        vmWorkloadInventoryModel.setFiles(files);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_Citrix_Unidesk", "SsaEnabled_System_Services_Present");
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getWorkloads());
+        Assert.assertEquals(1, report.getWorkloads().size());
+        Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Citrix Unidesk".toLowerCase())));
+        Assert.assertTrue(report.getSsaEnabled());
     }
 
 }
