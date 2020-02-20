@@ -24,6 +24,11 @@ function boolean filesValuesContainsString(VMWorkloadInventoryModel vmWorkloadIn
     return vmWorkloadInventoryModel.getFiles().keySet().stream().anyMatch(value -> value.toLowerCase().contains(searchTerm.toLowerCase()));
 }
 
+function boolean filesContentsContainsString(VMWorkloadInventoryModel vmWorkloadInventoryModel, String searchTerm)
+{
+    return vmWorkloadInventoryModel.getFiles().values().stream().anyMatch(value -> value.toLowerCase().contains(searchTerm.toLowerCase()));
+}
+
 rule "Workloads_Tomcat"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
@@ -209,22 +214,43 @@ end
 rule "Workloads_Citrix_Unidesk"
        when
            vmWorkloadInventoryModel : VMWorkloadInventoryModel(
-               systemServicesNames != null,
-               systemServicesNames.size() > 0,
-               servicesContainsString(this,"unidesk-xenserver-connector") ||
-               servicesContainsString(this,"unidesk-vsphere-connector") ||
-               servicesContainsString(this,"unidesk-pvs-connector") ||
-               servicesContainsString(this,"unidesk-nutanix-connector") ||
-               servicesContainsString(this,"unidesk-hyperv-connector") ||
-               servicesContainsString(this,"unidesk-azure-connector")
+                      systemServicesNames != null,
+                      systemServicesNames.size() > 0,
+                      servicesContainsString(this,"unidesk-xenserver-connector") ||
+                      servicesContainsString(this,"unidesk-vsphere-connector") ||
+                      servicesContainsString(this,"unidesk-pvs-connector") ||
+                      servicesContainsString(this,"unidesk-nutanix-connector") ||
+                      servicesContainsString(this,"unidesk-hyperv-connector") ||
+                      servicesContainsString(this,"unidesk-azure-connector")
            )
            workloadInventoryReport : WorkloadInventoryReportModel()
        then
            modify(workloadInventoryReport)
            {
-               addWorkload("Citrix Unidesk")
+                addWorkload("Citrix Unidesk")
            }
 end
+
+rule "Workloads_Cisco_CallManager"
+      when
+            vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+                     systemServicesNames != null,
+                     systemServicesNames.size() > 0,
+                     servicesContainsString(this,"cisco_history_log"),
+                     files != null,
+                     files.size() > 0,
+                     filesValuesContainsString(this, "/etc/group"),
+                     filesContentsContainsString(this, "ccmservice")
+            )
+            workloadInventoryReport : WorkloadInventoryReportModel()
+      then
+            modify(workloadInventoryReport)
+            {
+                addWorkload("Cisco CallManager")
+            }
+end
+
+
 
 rule "SsaEnabled_System_Services_Present"
     when
