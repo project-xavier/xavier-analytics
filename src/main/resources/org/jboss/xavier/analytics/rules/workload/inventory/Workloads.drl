@@ -2,7 +2,6 @@ package org.jboss.xavier.analytics.rules.workload.inventory;
 
 import org.jboss.xavier.analytics.pojo.input.workload.inventory.VMWorkloadInventoryModel
 import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
-import java.util.HashSet;
 
 dialect "java"
 agenda-group "Workloads"
@@ -26,7 +25,16 @@ function boolean filesValuesContainsString(VMWorkloadInventoryModel vmWorkloadIn
 
 function boolean filesContentsContainsString(VMWorkloadInventoryModel vmWorkloadInventoryModel, String searchTerm)
 {
-    return vmWorkloadInventoryModel.getFiles().values().stream().anyMatch(value -> value.toLowerCase().contains(searchTerm.toLowerCase()));
+    return vmWorkloadInventoryModel.getFiles().values().stream().anyMatch(value -> value != null && value.toLowerCase().contains(searchTerm.toLowerCase()));
+}
+
+function boolean fileNameAndContentsContainSpecifiedStrings(VMWorkloadInventoryModel vmWorkloadInventoryModel, String nameSearchTerm, String contentsSearchTerm)
+{
+    return vmWorkloadInventoryModel.getFiles().entrySet().stream().anyMatch(entry ->
+        entry.getKey().toLowerCase().contains(nameSearchTerm.toLowerCase()) &&
+        entry.getValue() != null &&
+        entry.getValue().toLowerCase().contains(contentsSearchTerm.toLowerCase())
+    );
 }
 
 rule "Workloads_Tomcat"
@@ -239,8 +247,7 @@ rule "Workloads_Cisco_CallManager"
                      servicesContainsString(this,"cisco_history_log"),
                      files != null,
                      files.size() > 0,
-                     filesValuesContainsString(this, "/etc/group"),
-                     filesContentsContainsString(this, "ccmservice")
+                     fileNameAndContentsContainSpecifiedStrings(this, "/etc/group", "ccmservice")
             )
             workloadInventoryReport : WorkloadInventoryReportModel()
       then

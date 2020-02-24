@@ -3469,6 +3469,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
 
         Map<String, String> files = new HashMap<>();
+        files.put("/etc/foo", null);
         files.put("/etc/group", "ccmservice");
         vmWorkloadInventoryModel.setFiles(files);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
