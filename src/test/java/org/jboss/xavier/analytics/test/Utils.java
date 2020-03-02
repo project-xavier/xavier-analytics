@@ -15,14 +15,15 @@ import org.kie.internal.command.CommandFactory;
 import org.mockito.ArgumentCaptor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -91,8 +92,25 @@ public class Utils
 
     public static void checkLoadedRulesNumber(StatelessKieSession kieSession, String kiePackageName, int expectedLoadedRules)
     {
-        KiePackage kiePackage = kieSession.getKieBase().getKiePackage(kiePackageName);
-        Assert.assertNotNull("No rules have been loaded from '" + kiePackageName + "' package", kiePackage);
-        assertEquals("Wrong number of rules loaded", expectedLoadedRules, kiePackage.getRules().size());
+        int actualLoadedRules;
+        if (kiePackageName.endsWith(".*"))
+        {
+            final String baseKiePackageName = kiePackageName.substring(0, kiePackageName.length() - 2);
+            Collection<KiePackage> kiePackages = kieSession.getKieBase().getKiePackages();
+            Assert.assertNotNull("No packages have been found in kieSession", kiePackages);
+            Assert.assertFalse("No rules have been loaded from '" + kiePackageName + "' package", kiePackages.isEmpty());
+            AtomicInteger totalNumberOfRules = new AtomicInteger(0);
+            kiePackages.stream()
+                .filter(kiePackage -> kiePackage.getName().startsWith(baseKiePackageName))
+                .forEach(kiePackage -> totalNumberOfRules.addAndGet(kiePackage.getRules().size()));
+            actualLoadedRules = totalNumberOfRules.get();
+        }
+        else
+        {
+            KiePackage kiePackage = kieSession.getKieBase().getKiePackage(kiePackageName);
+            Assert.assertNotNull("No rules have been loaded from '" + kiePackageName + "' package", kiePackage);
+            actualLoadedRules = kiePackage.getRules().size();
+        }
+        Assert.assertEquals("Wrong number of rules loaded", expectedLoadedRules, actualLoadedRules);
     }
 }

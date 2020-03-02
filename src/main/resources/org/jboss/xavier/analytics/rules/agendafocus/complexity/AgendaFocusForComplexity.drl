@@ -1,0 +1,13 @@
+package org.jboss.xavier.analytics.rules.agendafocus.complexity;
+import java.lang.String;
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+dialect "java"
+
+agenda-group "MAIN"
+
+rule "AgendaFocusForComplexity"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("Complexity").setFocus();
+end

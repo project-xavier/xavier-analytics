@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory", 34);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 34);
     }
 
     @Test

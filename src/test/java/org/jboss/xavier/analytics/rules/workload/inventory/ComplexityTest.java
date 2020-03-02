@@ -14,8 +14,8 @@ import java.util.Map;
 public class ComplexityTest extends BaseTest {
 
     public ComplexityTest() {
-        super("/org/jboss/xavier/analytics/rules/workload/inventory/Complexity.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 8);
+        super("/org/jboss/xavier/analytics/rules/workload/inventory/complexity/Complexity.drl", ResourceType.DRL,
+                "org.jboss.xavier.analytics.rules.workload.inventory.complexity", 8);
     }
 
     @Test
