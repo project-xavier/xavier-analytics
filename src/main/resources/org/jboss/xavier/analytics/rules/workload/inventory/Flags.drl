@@ -37,4 +37,18 @@ rule "Flag_Rdm_Disk"
         }
 end
 
+rule "Flag_Cpu_Affinity"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            cpuAffinityNotNull != null,
+            cpuAffinityNotNull == true
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME)
+        }
+end
+
 

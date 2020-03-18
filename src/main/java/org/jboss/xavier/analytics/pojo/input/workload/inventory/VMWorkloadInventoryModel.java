@@ -35,6 +35,7 @@ public class VMWorkloadInventoryModel
     private String product;
     private String version;
     private String host_name;
+    private boolean cpuAffinityNotNull;
 
     private Date scanRunDate;
 
@@ -215,5 +216,13 @@ public class VMWorkloadInventoryModel
 
     public void setScanRunDate(Date scanRunDate) {
         this.scanRunDate = scanRunDate;
+    }
+
+    public boolean isCpuAffinityNotNull() {
+        return cpuAffinityNotNull;
+    }
+
+    public void setCpuAffinityNotNull(boolean cpuAffinityNotNull) {
+        this.cpuAffinityNotNull = cpuAffinityNotNull;
     }
 }
