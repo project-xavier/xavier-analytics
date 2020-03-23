@@ -44,6 +44,10 @@ public class VMWorkloadInventoryModel
     private Collection<String> systemServicesNames;
     private Map<String, String> files;
 
+    private Boolean hasMemoryHotAdd;
+    private Boolean hasCpuHotAdd;
+    private Boolean hasCpuHotRemove;
+
     public VMWorkloadInventoryModel()
     {
         this.systemServicesNames = new ArrayList<>();
@@ -217,6 +221,31 @@ public class VMWorkloadInventoryModel
     public void setScanRunDate(Date scanRunDate) {
         this.scanRunDate = scanRunDate;
     }
+  
+    public Boolean isHasMemoryHotAdd() {
+        return hasMemoryHotAdd;
+    }
+
+    public void setHasMemoryHotAdd(Boolean hasMemoryHotAdd) {
+        this.hasMemoryHotAdd = hasMemoryHotAdd;
+    }
+
+    public Boolean isHasCpuHotAdd() {
+        return hasCpuHotAdd;
+    }
+
+    public void setHasCpuHotAdd(Boolean hasCpuHotAdd) {
+        this.hasCpuHotAdd = hasCpuHotAdd;
+    }
+
+    public Boolean isHasCpuHotRemove() {
+        return hasCpuHotRemove;
+    }
+
+    public void setHasCpuHotRemove(Boolean hasCpuHotRemove) {
+        this.hasCpuHotRemove = hasCpuHotRemove;
+    }
+
 
     public boolean isCpuAffinityNotNull() {
         return cpuAffinityNotNull;

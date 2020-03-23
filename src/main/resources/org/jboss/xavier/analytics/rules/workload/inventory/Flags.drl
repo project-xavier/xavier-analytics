@@ -37,6 +37,22 @@ rule "Flag_Rdm_Disk"
         }
 end
 
+
+rule "Flag_Cpu_Memory_Hotplug"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            eval(hasMemoryHotAdd != null ||
+            hasCpuHotAdd != null ||
+            hasCpuHotRemove != null)
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME)
+        }
+end
+        
 rule "Flag_Cpu_Affinity"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
