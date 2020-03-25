@@ -38,12 +38,41 @@ rule "Flag_Rdm_Disk"
 end
 
 
-rule "Flag_Cpu_Memory_Hotplug"
+rule "Flag_Cpu_Memory_Hotplug_Memory_Add"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
-            eval(hasMemoryHotAdd != null ||
-            hasCpuHotAdd != null ||
-            hasCpuHotRemove != null)
+            eval(hasMemoryHotAdd != null &&
+            hasMemoryHotAdd.equals(true))
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME)
+        }
+end
+
+
+rule "Flag_Cpu_Memory_Hotplug_Cpu_Add"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            eval(hasCpuHotAdd != null &&
+            hasCpuHotAdd.equals(true))
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME)
+        }
+end
+
+
+rule "Flag_Cpu_Memory_Hotplug_Cpu_Remove"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            eval(hasCpuHotRemove != null &&
+            hasCpuHotRemove.equals(true))
         )
         workloadInventoryReport : WorkloadInventoryReportModel()
     then
