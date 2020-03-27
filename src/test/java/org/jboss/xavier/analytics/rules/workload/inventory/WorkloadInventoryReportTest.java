@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 38);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 40);
     }
 
     @Test
@@ -76,14 +76,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -121,9 +121,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertNull(flagsIMS);
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
-        Assert.assertEquals(2, targets.size());
+        Assert.assertEquals(3, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
         Assert.assertTrue(targets.contains("OSP"));
+        Assert.assertTrue(targets.contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -178,7 +179,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -186,7 +187,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
                 "Flag_Nics",
                 // Target
-                "Target_RHV",
+                "Target_RHV", "Target_CNV",
                 // Complexity
                 "One_Flag_Supported_OS",
                 // Workloads
@@ -226,8 +227,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
-        Assert.assertEquals(1, targets.size());
+        Assert.assertEquals(2, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertTrue(targets.contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -363,6 +365,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         //Flags
         vmWorkloadInventoryModel.setNicsCount(5);
         vmWorkloadInventoryModel.setHasRdmDisk(true);
+        vmWorkloadInventoryModel.setHasMemoryHotAdd(true);
         List<String> vmDiskFilenames = new ArrayList<>();
         vmDiskFilenames.add("/path/to/disk.vdmk");
         vmWorkloadInventoryModel.setVmDiskFilenames(vmDiskFilenames);
@@ -388,13 +391,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
        Utils.verifyRulesFiredNames(this.agendaEventListener,
             // BasicFields
             "Copy basic fields and agenda controller",
             // Flags
-           "Flag_Nics", "Flag_Rdm_Disk",
+           "Flag_Nics", "Flag_Rdm_Disk", "Flag_Cpu_Memory_Hotplug_Memory_Add",
             // Target
            "Target_RHV",
             // Complexity
@@ -432,9 +435,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
-        Assert.assertEquals(2, flagsIMS.size());
+        Assert.assertEquals(3, flagsIMS.size());
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(1, targets.size());
@@ -806,14 +810,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -851,9 +855,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertNull(flagsIMS);
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
-        Assert.assertEquals(2, targets.size());
+        Assert.assertEquals(3, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
         Assert.assertTrue(targets.contains("OSP"));
+        Assert.assertTrue(targets.contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1322,7 +1327,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1330,7 +1335,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
                 "Flag_Nics", "Flag_Rdm_Disk",
                 // Target
-                "Target_RHV",
+                "Target_RHV", "Target_CNV",
                 // Complexity
                 "More_Than_One_Flag_Supported_OS",
                 // Workloads
@@ -1370,6 +1375,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         // Targets
+        Assert.assertEquals(2,workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1423,14 +1431,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1465,6 +1473,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1518,14 +1530,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1560,6 +1572,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1613,14 +1629,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1655,6 +1671,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1708,14 +1728,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1750,6 +1770,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1803,14 +1827,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1845,6 +1869,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1898,14 +1926,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1940,6 +1968,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1993,14 +2025,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2035,6 +2067,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2090,14 +2126,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2132,6 +2168,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2187,7 +2227,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2196,7 +2236,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2232,6 +2272,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE, workloadInventoryReportModel.getHost_name());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2284,14 +2328,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2326,6 +2370,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2381,14 +2429,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2423,6 +2471,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2477,14 +2529,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2519,6 +2571,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2574,7 +2630,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(5, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2582,7 +2638,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
 
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2617,6 +2673,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3430,14 +3490,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3472,6 +3532,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3525,14 +3589,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3567,6 +3631,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3620,14 +3688,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3662,6 +3730,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3715,14 +3787,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3757,6 +3829,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3810,14 +3886,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3852,6 +3928,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3905,14 +3985,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3947,6 +4027,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3978,6 +4062,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
         vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
 
+        vmWorkloadInventoryModel.setHasCpuHotRemove(false);
+        vmWorkloadInventoryModel.setHasCpuHotAdd(false);
+        vmWorkloadInventoryModel.setHasMemoryHotAdd(false);
+
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
         systemServicesNames.add("unix_service");
@@ -4003,14 +4091,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP",
+                "Target_RHV", "Target_OSP", "Target_CNV",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -4045,6 +4133,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         // Targets
+        Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads

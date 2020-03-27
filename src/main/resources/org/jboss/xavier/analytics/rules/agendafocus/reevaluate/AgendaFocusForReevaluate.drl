@@ -1,13 +1,14 @@
-package org.jboss.xavier.analytics.rules.agendafocus.complexity;
+package org.jboss.xavier.analytics.rules.agendafocus.reevaluate;
+
 import java.lang.String;
 import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
-dialect "java"
 
+dialect "java"
 agenda-group "MAIN"
 
-rule "AgendaFocusForComplexity"
+rule "AgendaFocusForReevaluate"
     when
-        workloadInventoryReport : WorkloadInventoryReportModel()
     then
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Complexity").setFocus();
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("TargetsReevaluate").setFocus();
 end

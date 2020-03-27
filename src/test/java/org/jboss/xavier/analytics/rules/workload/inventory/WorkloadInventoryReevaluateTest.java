@@ -12,11 +12,13 @@ import org.kie.api.runtime.rule.QueryResultsRow;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,19 +26,21 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class WorkloadInventoryComplexityTest extends BaseIntegrationTest {
+public class WorkloadInventoryReevaluateTest extends BaseIntegrationTest {
 
     @Parameterized.Parameters(name = "{index}: Test OS name {0} for rule {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"SUSE Linux Enterprise 12 (64-bit)", "No_Flag_Supported_OS", null, WorkloadInventoryReportModel.COMPLEXITY_EASY},
-                {"Oracle Linux 6 (64-bit)", "No_Flag_Convertible_OS", null, WorkloadInventoryReportModel.COMPLEXITY_MEDIUM},
-                {"Red Hat Enterprise Linux 5 (64-bit)", "One_Flag_Supported_OS", Collections.singleton(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME), WorkloadInventoryReportModel.COMPLEXITY_MEDIUM},
-                {"CentOS 7 (64-bit)", "One_Or_More_Flags_Convertible_OS", new HashSet<>(Arrays.asList(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME, WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME)), WorkloadInventoryReportModel.COMPLEXITY_HARD},
-                {"Microsoft Windows 7 (64-bit)", "More_Than_One_Flag_Supported_OS", new HashSet<>(Arrays.asList(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME, WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME)), WorkloadInventoryReportModel.COMPLEXITY_HARD},
-                {"Microsoft Windows XP Professional (32-bit)", "No_Flags_Not_Supported_OS", null, WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED},
-                {"Ubuntu", "One_Or_More_Flags_Not_Supported_OS", Collections.singleton(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME), WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED},
-                {"", "Not_Detected_OS", new HashSet<>(Arrays.asList(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME, WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME)), WorkloadInventoryReportModel.COMPLEXITY_UNKNOWN},
+                {"SUSE Linux Enterprise 12 (64-bit)", new ArrayList<>(Arrays.asList("No_Flag_Supported_OS")), null, WorkloadInventoryReportModel.COMPLEXITY_EASY, new HashSet<>(Arrays.asList("RHV", "OSP")), new HashSet<>(Arrays.asList("RHV", "OSP"))},
+                {"Oracle Linux 6 (64-bit)", new ArrayList<>(Arrays.asList("No_Flag_Convertible_OS")), null, WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, new HashSet<>(Arrays.asList("RHV", "OSP", "RHEL")), new HashSet<>(Arrays.asList("RHV", "OSP", "RHEL"))},
+                // this VM tests specifically that a VM suitable for CNV, once added the "Shared Disk" flag, got the "CNV" target removed (ie triggering "Target_CNV_Reevaluate" rule)
+                {"Red Hat Enterprise Linux 5 (64-bit)", new ArrayList<>(Arrays.asList("Target_CNV_Reevaluate", "One_Flag_Supported_OS")), Collections.singleton(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME), WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, new HashSet<>(Arrays.asList("RHV")), new HashSet<>(Arrays.asList("RHV", "CNV"))},
+                {"CentOS 7 (64-bit)", new ArrayList<>(Arrays.asList("One_Or_More_Flags_Convertible_OS")), new HashSet<>(Arrays.asList(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME, WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME)), WorkloadInventoryReportModel.COMPLEXITY_HARD, new HashSet<>(Arrays.asList("RHV", "RHEL")), new HashSet<>(Arrays.asList("RHV", "RHEL"))},
+                // this VM tests specifically that a VM suitable for CNV, without the "Shared Disk" flag, still has the "CNV" target (ie NOT triggering "Target_CNV_Reevaluate" rule)
+                {"Microsoft Windows 7 (64-bit)", new ArrayList<>(Arrays.asList("More_Than_One_Flag_Supported_OS")), new HashSet<>(Arrays.asList(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME, WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME)), WorkloadInventoryReportModel.COMPLEXITY_HARD, new HashSet<>(Arrays.asList("RHV", "CNV")), new HashSet<>(Arrays.asList("RHV", "CNV"))},
+                {"Microsoft Windows XP Professional (32-bit)", new ArrayList<>(Arrays.asList("No_Flags_Not_Supported_OS")), null, WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED, Collections.singleton("None"), Collections.singleton("None")},
+                {"Ubuntu", new ArrayList<>(Arrays.asList("One_Or_More_Flags_Not_Supported_OS")), Collections.singleton(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME), WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED, Collections.singleton("None"), Collections.singleton("None")},
+                {"", new ArrayList<>(Arrays.asList("Not_Detected_OS")), new HashSet<>(Arrays.asList(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME, WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME)), WorkloadInventoryReportModel.COMPLEXITY_UNKNOWN, Collections.singleton("None"), Collections.singleton("None")},
         });
     }
 
@@ -44,7 +48,7 @@ public class WorkloadInventoryComplexityTest extends BaseIntegrationTest {
     public String os;
 
     @Parameterized.Parameter(1)
-    public String ruleExpected;
+    public List<String> ruleNamesExpected;
 
     @Parameterized.Parameter(2)
     public Set<String> flags;
@@ -52,9 +56,15 @@ public class WorkloadInventoryComplexityTest extends BaseIntegrationTest {
     @Parameterized.Parameter(3)
     public String complexityExpected;
 
-    public WorkloadInventoryComplexityTest()
+    @Parameterized.Parameter(4)
+    public Set<String> targetsExpected;
+
+    @Parameterized.Parameter(5)
+    public Set<String> targetsInitial;
+
+    public WorkloadInventoryReevaluateTest()
     {
-        super("WorkloadInventoryComplexityKSession0", "org.jboss.xavier.analytics.rules.*", 10);
+        super("WorkloadInventoryReevaluateKSession0", "org.jboss.xavier.analytics.rules.*", 11);
     }
 
     private static WorkloadInventoryReportModel generateWorkloadInventoryReportModel() throws ParseException
@@ -74,8 +84,6 @@ public class WorkloadInventoryComplexityTest extends BaseIntegrationTest {
         workloadInventoryReportModel.setCreationDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
         workloadInventoryReportModel.setComplexity(WorkloadInventoryReportModel.COMPLEXITY_EASY);
         workloadInventoryReportModel.setSsaEnabled(true);
-        // Targets
-        workloadInventoryReportModel.setRecommendedTargetsIMS(new HashSet<>(Arrays.asList("RHV", "OSP")));
         return  workloadInventoryReportModel;
     }
 
@@ -94,12 +102,6 @@ public class WorkloadInventoryComplexityTest extends BaseIntegrationTest {
         assertEquals("6.5", workloadInventoryReportModel.getVersion());
         assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
         assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
-        // Targets
-        final Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
-        assertNotNull(targets);
-        assertEquals(2, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("OSP"));
         // Workloads
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
     }
@@ -108,9 +110,10 @@ public class WorkloadInventoryComplexityTest extends BaseIntegrationTest {
     private WorkloadInventoryReportModel checkResultAndGet(Map<String, Object> results)
     {
         // check that the number of rules fired is what you expect
-        assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        ruleNamesExpected.add(0, "AgendaFocusForReevaluate");
+        assertEquals(ruleNamesExpected.size(), results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
-        Utils.verifyRulesFiredNames(this.agendaEventListener,"AgendaFocusForComplexity", ruleExpected);
+        Utils.verifyRulesFiredNames(this.agendaEventListener, ruleNamesExpected.toArray(new String[0]));
         // retrieve the QueryResults that was available in the working memory from the results
         QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
         // Check that the number of object is the right one (in this case, there must be just one report)
@@ -127,6 +130,7 @@ public class WorkloadInventoryComplexityTest extends BaseIntegrationTest {
         WorkloadInventoryReportModel inputWorkloadInventoryReportModel = generateWorkloadInventoryReportModel();
         inputWorkloadInventoryReportModel.setOsDescription(os);
         inputWorkloadInventoryReportModel.setFlagsIMS(flags);
+        inputWorkloadInventoryReportModel.setRecommendedTargetsIMS(targetsInitial);
 
         Map<String, Object> facts = new HashMap<>();
         facts.put("workloadInventoryReportModel", inputWorkloadInventoryReportModel);
@@ -146,5 +150,10 @@ public class WorkloadInventoryComplexityTest extends BaseIntegrationTest {
         }
         // Complexity
         assertEquals(complexityExpected, workloadInventoryReportModel.getComplexity());
+        // Targets
+        final Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        assertNotNull(targets);
+        assertEquals(targetsExpected.size(), targets.size());
+        assertArrayEquals(targetsExpected.toArray(new String[0]), targets.toArray(new String[0]));
     }
 }

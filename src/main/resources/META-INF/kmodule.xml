@@ -14,7 +14,7 @@
   <kbase name="WorkloadSummaryKBase" default="false" eventProcessingMode="stream" equalsBehavior="identity" packages="org.jboss.xavier.analytics.rules.workload.summary">
     <ksession name="WorkloadSummaryKSession0" type="stateless" default="true" clockType="realtime"/>
   </kbase>
-  <kbase name="WorkloadInventoryComplexityKBase" default="false" eventProcessingMode="stream" equalsBehavior="identity" packages="org.jboss.xavier.analytics.rules.agendafocus.complexity, org.jboss.xavier.analytics.rules.workload.inventory.complexity, org.jboss.xavier.analytics.rules.workload.inventory.queries">
-    <ksession name="WorkloadInventoryComplexityKSession0" type="stateless" default="true" clockType="realtime"/>
+  <kbase name="WorkloadInventoryReevaluateKBase" default="false" eventProcessingMode="stream" equalsBehavior="identity" packages="org.jboss.xavier.analytics.rules.agendafocus.reevaluate, org.jboss.xavier.analytics.rules.workload.inventory.complexity, org.jboss.xavier.analytics.rules.workload.inventory.targets, org.jboss.xavier.analytics.rules.workload.inventory.queries">
+    <ksession name="WorkloadInventoryReevaluateKSession0" type="stateless" default="true" clockType="realtime"/>
   </kbase>
 </kmodule>

@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +33,8 @@ public class WorkloadInventoryReportModel
     public static final String DATACENTER_DEFAULT_VALUE = "No datacenter defined";
     public static final String CLUSTER_DEFAULT_VALUE = "No cluster defined";
     public static final String HOST_NAME_DEFAULT_VALUE = "No host defined";
+
+    public static final String TARGET_CNV = "CNV";
 
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "WORKLOADINVENTORYREPORTMODEL_ID_GENERATOR")

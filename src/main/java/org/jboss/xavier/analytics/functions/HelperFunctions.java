@@ -82,25 +82,32 @@ public class HelperFunctions
         }
     }
 
-    public enum FlagUnsuitabilityForOSPTarget{
-        RDM_DISK(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME, true),
-        TOO_MANY_NICS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME, true),
-        SHARED_DISK(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME,true),
-        CPU_MEMORY_HOTPLUG(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME, true),
-        CPU_AFFINITY(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME, false);
+    public enum FlagUnsuitabilityForTargets{
+        RDM_DISK(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME, true, false),
+        TOO_MANY_NICS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME, true, false),
+        SHARED_DISK(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME,true, true),
+        CPU_MEMORY_HOTPLUG(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME, true, true),
+        CPU_AFFINITY(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME, false, true);
 
         private final String name;
-        private final boolean isUnsuitable;
+        private final boolean isUnsuitableForOSP;
+        private final boolean isUnsuitableforCNV;
 
-        FlagUnsuitabilityForOSPTarget(String name, boolean isUnsuitable)
+        FlagUnsuitabilityForTargets(String name, boolean isUnsuitableForOSP, boolean isUnsuitableForCNV)
         {
             this.name = name;
-            this.isUnsuitable = isUnsuitable;
+            this.isUnsuitableForOSP = isUnsuitableForOSP;
+            this.isUnsuitableforCNV = isUnsuitableForCNV;
         }
 
-        boolean isUnsuitable()
+        boolean isUnsuitableForOSP()
         {
-            return this.isUnsuitable;
+            return this.isUnsuitableForOSP;
+        }
+
+        boolean isUnsuitableForCNV()
+        {
+            return this.isUnsuitableforCNV;
         }
 
         public String getName()
@@ -109,8 +116,13 @@ public class HelperFunctions
         }
     }
 
-    public static boolean isUnsuitableFlag(String flagToCheck)
+    public static boolean isFlagUnsuitableForOSP(String flagToCheck)
     {
-        return Arrays.stream(FlagUnsuitabilityForOSPTarget.values()).anyMatch(value -> flagToCheck.toLowerCase().contains(value.getName().toLowerCase()) && value.isUnsuitable());
+        return Arrays.stream(FlagUnsuitabilityForTargets.values()).anyMatch(value -> flagToCheck.toLowerCase().contains(value.getName().toLowerCase()) && value.isUnsuitableForOSP());
+    }
+
+    public static boolean isFlagUnsuitableForCNV(String flagToCheck)
+    {
+        return Arrays.stream(FlagUnsuitabilityForTargets.values()).anyMatch(value -> flagToCheck.toLowerCase().contains(value.getName().toLowerCase()) && value.isUnsuitableForCNV());
     }
 }

@@ -1,4 +1,4 @@
-package org.jboss.xavier.analytics.rules.workload.inventory;
+package org.jboss.xavier.analytics.rules.workload.inventory.complexity;
 
 import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel;
 import org.jboss.xavier.analytics.rules.BaseTest;

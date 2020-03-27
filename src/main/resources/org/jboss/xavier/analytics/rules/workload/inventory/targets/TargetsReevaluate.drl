@@ -1,0 +1,23 @@
+package org.jboss.xavier.analytics.rules.workload.inventory.targets;
+
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel;
+
+dialect "java"
+agenda-group "TargetsReevaluate"
+lock-on-active true
+auto-focus false
+
+rule "Target_CNV_Reevaluate"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            getRecommendedTargetsIMS() != null,
+            getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_CNV),
+            getFlagsIMS() != null,
+            getFlagsIMS().contains(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            getRecommendedTargetsIMS().remove(WorkloadInventoryReportModel.TARGET_CNV)
+        }
+end
