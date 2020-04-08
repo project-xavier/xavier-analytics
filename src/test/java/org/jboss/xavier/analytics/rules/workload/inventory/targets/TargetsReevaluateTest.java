@@ -20,7 +20,7 @@ public class TargetsReevaluateTest extends BaseTest {
     }
 
     @Test
-    public void testFlagSharedDiskAndTargetCNV() {
+    public void testFlagSharedDiskAndTargetOCP() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "TargetsReevaluate");
@@ -28,14 +28,14 @@ public class TargetsReevaluateTest extends BaseTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("Red Hat Enterprise Linux v7.6");
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
-        workloadInventoryReportModel.addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_CNV);
+        workloadInventoryReportModel.addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_OCP);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
         Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_CNV_Reevaluate");
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_OCP_Reevaluate");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
@@ -47,7 +47,7 @@ public class TargetsReevaluateTest extends BaseTest {
     }
 
     @Test
-    public void testFlagSharedDiskAndNoTargetCNV() {
+    public void testFlagSharedDiskAndNoTargetOCP() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "TargetsReevaluate");
@@ -78,14 +78,14 @@ public class TargetsReevaluateTest extends BaseTest {
     }
 
     @Test
-    public void testNoFlagSharedDiskAndTargetCNV() {
+    public void testNoFlagSharedDiskAndTargetOCP() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "TargetsReevaluate");
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("Red Hat Enterprise Linux v7.6");
-        workloadInventoryReportModel.addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_CNV);
+        workloadInventoryReportModel.addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_OCP);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -101,11 +101,11 @@ public class TargetsReevaluateTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_CNV));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
     }
 
     @Test
-    public void testNoFlagSharedDiskAndNoTargetCNV() {
+    public void testNoFlagSharedDiskAndNoTargetOCP() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "TargetsReevaluate");

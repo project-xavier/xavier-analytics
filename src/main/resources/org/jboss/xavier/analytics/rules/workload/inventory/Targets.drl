@@ -7,7 +7,7 @@ import org.jboss.xavier.analytics.functions.HelperFunctions
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isSupportedOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsupportedOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isFlagUnsuitableForOSP;
-import function org.jboss.xavier.analytics.functions.HelperFunctions.isFlagUnsuitableForCNV;
+import function org.jboss.xavier.analytics.functions.HelperFunctions.isFlagUnsuitableForOCP;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isConvertibleOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUndetectedOS;
 
@@ -21,9 +21,9 @@ function boolean flagsSuitableForOSP(WorkloadInventoryReportModel report)
     return report.getFlagsIMS().stream().noneMatch(flag -> isFlagUnsuitableForOSP(flag));
 }
 
-function boolean flagsSuitableForCNV(WorkloadInventoryReportModel report)
+function boolean flagsSuitableForOCP(WorkloadInventoryReportModel report)
 {
-    return report.getFlagsIMS().stream().noneMatch(flag -> isFlagUnsuitableForCNV(flag));
+    return report.getFlagsIMS().stream().noneMatch(flag -> isFlagUnsuitableForOCP(flag));
 }
 
 rule "Target_RHV"
@@ -67,19 +67,19 @@ rule "Target_RHEL"
         }
 end
 
-rule "Target_CNV"
+rule "Target_OCP"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
             osDescription != null,
             osDescription.toLowerCase().contains(HelperFunctions.OSSupport.RHEL.getName().toLowerCase()) ||
             osDescription.toLowerCase().contains(HelperFunctions.OSSupport.WINDOWS.getName().toLowerCase()),
-            flagsIMS == null || eval(flagsIMS != null && flagsSuitableForCNV(this)),
+            flagsIMS == null || eval(flagsIMS != null && flagsSuitableForOCP(this)),
             isSupportedOS(osDescription)
         )
     then
         modify(workloadInventoryReport)
         {
-            addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_CNV)
+            addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_OCP)
         }
 end
 

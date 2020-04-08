@@ -7,17 +7,17 @@ agenda-group "TargetsReevaluate"
 lock-on-active true
 auto-focus false
 
-rule "Target_CNV_Reevaluate"
+rule "Target_OCP_Reevaluate"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
             getRecommendedTargetsIMS() != null,
-            getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_CNV),
+            getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP),
             getFlagsIMS() != null,
             getFlagsIMS().contains(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME)
         )
     then
         modify(workloadInventoryReport)
         {
-            getRecommendedTargetsIMS().remove(WorkloadInventoryReportModel.TARGET_CNV)
+            getRecommendedTargetsIMS().remove(WorkloadInventoryReportModel.TARGET_OCP)
         }
 end

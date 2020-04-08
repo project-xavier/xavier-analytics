@@ -83,7 +83,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -124,7 +124,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
         Assert.assertTrue(targets.contains("OSP"));
-        Assert.assertTrue(targets.contains("CNV"));
+        Assert.assertTrue(targets.contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -187,7 +187,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
                 "Flag_Nics",
                 // Target
-                "Target_RHV", "Target_CNV",
+                "Target_RHV", "Target_OCP",
                 // Complexity
                 "One_Flag_Supported_OS",
                 // Workloads
@@ -229,7 +229,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("CNV"));
+        Assert.assertTrue(targets.contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -817,7 +817,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -858,7 +858,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
         Assert.assertTrue(targets.contains("OSP"));
-        Assert.assertTrue(targets.contains("CNV"));
+        Assert.assertTrue(targets.contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1335,7 +1335,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
                 "Flag_Nics", "Flag_Rdm_Disk",
                 // Target
-                "Target_RHV", "Target_CNV",
+                "Target_RHV", "Target_OCP",
                 // Complexity
                 "More_Than_One_Flag_Supported_OS",
                 // Workloads
@@ -1377,7 +1377,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Assert.assertEquals(2,workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1438,7 +1438,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1476,7 +1476,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1537,7 +1537,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1575,7 +1575,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1636,7 +1636,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1674,7 +1674,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1735,7 +1735,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1773,7 +1773,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1834,7 +1834,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1872,7 +1872,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1933,7 +1933,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -1971,7 +1971,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2032,7 +2032,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2070,7 +2070,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2133,7 +2133,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2171,7 +2171,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2236,7 +2236,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2275,7 +2275,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2335,7 +2335,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2373,7 +2373,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2436,7 +2436,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2474,7 +2474,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2536,7 +2536,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2574,7 +2574,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2638,7 +2638,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Flags
 
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -2676,7 +2676,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3497,7 +3497,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3535,7 +3535,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3596,7 +3596,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3634,7 +3634,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3695,7 +3695,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3733,7 +3733,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3794,7 +3794,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3832,7 +3832,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3893,7 +3893,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -3931,7 +3931,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3992,7 +3992,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -4030,7 +4030,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -4098,7 +4098,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Copy basic fields and agenda controller",
                 // Flags
                 // Target
-                "Target_RHV", "Target_OSP", "Target_CNV",
+                "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
@@ -4136,7 +4136,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("CNV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads

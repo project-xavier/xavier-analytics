@@ -33,7 +33,7 @@ public class TargetsTest extends BaseTest {
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
         Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_CNV");
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_OCP");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
@@ -43,7 +43,7 @@ public class TargetsTest extends BaseTest {
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(2, report.getRecommendedTargetsIMS().size());
         Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("CNV".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OCP".toLowerCase())));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class TargetsTest extends BaseTest {
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
         Assert.assertEquals(4, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_OSP", "Target_CNV");
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_RHV", "Target_OSP", "Target_OCP");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
@@ -102,7 +102,7 @@ public class TargetsTest extends BaseTest {
         Assert.assertEquals(3, report.getRecommendedTargetsIMS().size());
         Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
         Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OSP".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("CNV".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OCP".toLowerCase())));
     }
 
     @Test
@@ -426,7 +426,7 @@ public class TargetsTest extends BaseTest {
     }
 
     @Test
-    public void testNoCNVTargetCPUAffinityFlagSupportedOS() {
+    public void testNoOCPTargetCPUAffinityFlagSupportedOS() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "Targets");
@@ -454,7 +454,7 @@ public class TargetsTest extends BaseTest {
     }
 
     @Test
-    public void testNoCNVTargetSharedDiskFlagSupportedOS() {
+    public void testNoOCPTargetSharedDiskFlagSupportedOS() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "Targets");
@@ -484,7 +484,7 @@ public class TargetsTest extends BaseTest {
 
 
     @Test
-    public void testNoCNVTargetHotplugFlagSupportedOS() {
+    public void testNoOCPTargetHotplugFlagSupportedOS() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "Targets");

@@ -34,7 +34,7 @@ public class WorkloadInventoryReportModel
     public static final String CLUSTER_DEFAULT_VALUE = "No cluster defined";
     public static final String HOST_NAME_DEFAULT_VALUE = "No host defined";
 
-    public static final String TARGET_CNV = "CNV";
+    public static final String TARGET_OCP = "OCP";
 
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "WORKLOADINVENTORYREPORTMODEL_ID_GENERATOR")

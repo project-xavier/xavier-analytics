@@ -91,13 +91,13 @@ public class HelperFunctions
 
         private final String name;
         private final boolean isUnsuitableForOSP;
-        private final boolean isUnsuitableforCNV;
+        private final boolean isUnsuitableforOCP;
 
-        FlagUnsuitabilityForTargets(String name, boolean isUnsuitableForOSP, boolean isUnsuitableForCNV)
+        FlagUnsuitabilityForTargets(String name, boolean isUnsuitableForOSP, boolean isUnsuitableForOCP)
         {
             this.name = name;
             this.isUnsuitableForOSP = isUnsuitableForOSP;
-            this.isUnsuitableforCNV = isUnsuitableForCNV;
+            this.isUnsuitableforOCP = isUnsuitableForOCP;
         }
 
         boolean isUnsuitableForOSP()
@@ -105,9 +105,9 @@ public class HelperFunctions
             return this.isUnsuitableForOSP;
         }
 
-        boolean isUnsuitableForCNV()
+        boolean isUnsuitableForOCP()
         {
-            return this.isUnsuitableforCNV;
+            return this.isUnsuitableforOCP;
         }
 
         public String getName()
@@ -121,8 +121,8 @@ public class HelperFunctions
         return Arrays.stream(FlagUnsuitabilityForTargets.values()).anyMatch(value -> flagToCheck.toLowerCase().contains(value.getName().toLowerCase()) && value.isUnsuitableForOSP());
     }
 
-    public static boolean isFlagUnsuitableForCNV(String flagToCheck)
+    public static boolean isFlagUnsuitableForOCP(String flagToCheck)
     {
-        return Arrays.stream(FlagUnsuitabilityForTargets.values()).anyMatch(value -> flagToCheck.toLowerCase().contains(value.getName().toLowerCase()) && value.isUnsuitableForCNV());
+        return Arrays.stream(FlagUnsuitabilityForTargets.values()).anyMatch(value -> flagToCheck.toLowerCase().contains(value.getName().toLowerCase()) && value.isUnsuitableForOCP());
     }
 }
