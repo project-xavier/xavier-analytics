@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 40);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 39);
     }
 
     @Test
@@ -156,6 +156,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         //Flags
         vmWorkloadInventoryModel.setNicsCount(5);
+        vmWorkloadInventoryModel.setHasRdmDisk(true);
 
         List<String> systemServicesNames = new ArrayList<>();
         systemServicesNames.add("unix_service");
@@ -185,7 +186,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
-                "Flag_Nics",
+                "Flag_Rdm_Disk",
                 // Target
                 "Target_RHV", "Target_OCP",
                 // Complexity
@@ -224,7 +225,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
         Assert.assertEquals(1, flagsIMS.size());
-        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
@@ -391,13 +392,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
        Utils.verifyRulesFiredNames(this.agendaEventListener,
             // BasicFields
             "Copy basic fields and agenda controller",
             // Flags
-           "Flag_Nics", "Flag_Rdm_Disk", "Flag_Cpu_Memory_Hotplug_Memory_Add",
+           "Flag_Rdm_Disk", "Flag_Cpu_Memory_Hotplug_Memory_Add",
             // Target
            "Target_RHV",
             // Complexity
@@ -435,8 +436,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
-        Assert.assertEquals(3, flagsIMS.size());
-        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
+        Assert.assertEquals(2, flagsIMS.size());
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME));
         // Targets
@@ -603,13 +603,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
-                "Flag_Nics", "Flag_Rdm_Disk",
+                "Flag_Rdm_Disk",
                 // Target
                 "Target_RHV", "Target_RHEL",
                 // Complexity
@@ -646,14 +646,14 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
-        Assert.assertEquals(2, flagsIMS.size());
+        Assert.assertEquals(1, flagsIMS.size());
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
         Assert.assertTrue(targets.contains("RHV"));
         Assert.assertTrue(targets.contains("RHEL"));
         // Complexity
-        //Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD, workloadInventoryReportModel.getComplexity());
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD, workloadInventoryReportModel.getComplexity());
         // Workloads
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
     }
@@ -678,7 +678,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
 
         //Flags
-        vmWorkloadInventoryModel.setNicsCount(5);
+        vmWorkloadInventoryModel.setHasRdmDisk(true);
 
         List<String> systemServicesNames = new ArrayList<>();
         systemServicesNames.add("unix_service");
@@ -710,7 +710,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // ReasonableDefaults
                 "Fill 'datacenter' field with reasonable default", "Fill 'cluster' field with reasonable default", "Fill 'host_name' field with reasonable default",
                 // Flags
-                "Flag_Nics",
+                "Flag_Rdm_Disk",
                 // Target
                 "Target_None",
                 // Complexity
@@ -750,7 +750,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
         Assert.assertEquals(1, flagsIMS.size());
-        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(1, targets.size());
@@ -1301,6 +1301,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         //Flags
         vmWorkloadInventoryModel.setNicsCount(5);
         vmWorkloadInventoryModel.setHasRdmDisk(true);
+        vmWorkloadInventoryModel.setHasCpuHotAdd(true);
         List<String> vmDiskFilenames = new ArrayList<>();
         vmDiskFilenames.add("/path/to/disk.vdmk");
         vmWorkloadInventoryModel.setVmDiskFilenames(vmDiskFilenames);
@@ -1327,15 +1328,15 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
                 "Copy basic fields and agenda controller",
                 // Flags
-                "Flag_Nics", "Flag_Rdm_Disk",
+                "Flag_Rdm_Disk", "Flag_Cpu_Memory_Hotplug_Cpu_Add",
                 // Target
-                "Target_RHV", "Target_OCP",
+                "Target_RHV",
                 // Complexity
                 "More_Than_One_Flag_Supported_OS",
                 // Workloads
@@ -1372,12 +1373,11 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
         Assert.assertEquals(2, flagsIMS.size());
-        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME));
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         // Targets
-        Assert.assertEquals(2,workloadInventoryReportModel.getRecommendedTargetsIMS().size());
+        Assert.assertEquals(1,workloadInventoryReportModel.getRecommendedTargetsIMS().size());
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD, workloadInventoryReportModel.getComplexity());
         // Workloads

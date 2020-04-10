@@ -52,7 +52,7 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("SUSE Linux Enterprise Server");
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -80,7 +80,7 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("SUSE");
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -106,7 +106,7 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("Microsoft Windows");
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME);
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
@@ -317,7 +317,7 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("Oracle Linux");
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -343,7 +343,7 @@ public class ComplexityTest extends BaseTest {
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("CentOS");
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME);
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);

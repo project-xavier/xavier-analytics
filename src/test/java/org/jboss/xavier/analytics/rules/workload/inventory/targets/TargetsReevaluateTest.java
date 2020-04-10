@@ -113,7 +113,7 @@ public class TargetsReevaluateTest extends BaseTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("Ubuntu");
         workloadInventoryReportModel.addRecommendedTargetsIMS("None");
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 

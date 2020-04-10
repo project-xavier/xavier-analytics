@@ -9,19 +9,7 @@ agenda-group "Flags"
 lock-on-active true
 auto-focus false
 
-rule "Flag_Nics"
-    when
-        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
-            nicsCount != null,
-            nicsCount > 4
-        )
-        workloadInventoryReport : WorkloadInventoryReportModel()
-    then
-        modify(workloadInventoryReport)
-        {
-            addFlagIMS(WorkloadInventoryReportModel.MORE_THAN_4_NICS_FLAG_NAME)
-        }
-end
+
 
 rule "Flag_Rdm_Disk"
     when
