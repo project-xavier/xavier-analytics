@@ -14,7 +14,7 @@ public class WorkloadsTest extends BaseTest {
 
     public WorkloadsTest() {
         super("/org/jboss/xavier/analytics/rules/workload/inventory/Workloads.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 18);
+                "org.jboss.xavier.analytics.rules.workload.inventory", 19);
     }
 
     @Test
@@ -66,6 +66,7 @@ public class WorkloadsTest extends BaseTest {
         vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
         Map<String, String> files = new HashMap<>();
         files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        files.put("/etc/redhat-access-insights/machine-id", "");
         vmWorkloadInventoryModel.setFiles(files);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
@@ -75,8 +76,8 @@ public class WorkloadsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "SsaEnabled_System_Services_Present");
+        Assert.assertEquals(4, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Workloads_EAP", "Insights_Enabled", "SsaEnabled_System_Services_Present");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
@@ -87,6 +88,7 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
         Assert.assertTrue(report.getSsaEnabled());
+        Assert.assertTrue(report.getInsightsEnabled());
     }
 
     @Test
@@ -1297,7 +1299,7 @@ public class WorkloadsTest extends BaseTest {
     public void testExcessEscapeCharsNoOracleJDKDetected()
     {
         testOracleJDK("JAVA_VERSION=\\\"13", null, null);
-        
+
     }
 
 }

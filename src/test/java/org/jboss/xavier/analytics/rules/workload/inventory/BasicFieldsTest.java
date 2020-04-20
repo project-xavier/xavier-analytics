@@ -65,6 +65,7 @@ public class BasicFieldsTest extends BaseTest {
         Assert.assertEquals("6.5", report.getVersion());
         Assert.assertEquals("esx13.v2v.bos.redhat.com", report.getHost_name());
         Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), report.getCreationDate());
+
     }
 
     @Test

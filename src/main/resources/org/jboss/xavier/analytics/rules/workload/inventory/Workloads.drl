@@ -258,6 +258,22 @@ rule "Workloads_Cisco_CallManager"
 end
 
 
+rule "Insights_Enabled"
+       when
+           vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+               files != null,
+               files.size() > 0,
+               filesValuesContainsString(this, "/etc/redhat-access-insights/machine-id")
+           )
+           workloadInventoryReport : WorkloadInventoryReportModel()
+       then
+           modify(workloadInventoryReport)
+           {
+               setInsightsEnabled(true)
+           }
+end
+
+
 
 rule "SsaEnabled_System_Services_Present"
     when

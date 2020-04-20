@@ -32,3 +32,12 @@ rule "Fill 'host_name' field with reasonable default"
     then
         workloadInventoryReport.setHost_name(WorkloadInventoryReportModel.HOST_NAME_DEFAULT_VALUE);
 end
+
+rule "Fill 'Insights' field with reasonable default"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            insightsEnabled == null
+        )
+    then
+        workloadInventoryReport.setInsightsEnabled(WorkloadInventoryReportModel.INSIGHTS_ENABLED_DEFAULT_VALUE);
+end

@@ -32,6 +32,7 @@ public class WorkloadInventoryReportModel
     public static final String DATACENTER_DEFAULT_VALUE = "No datacenter defined";
     public static final String CLUSTER_DEFAULT_VALUE = "No cluster defined";
     public static final String HOST_NAME_DEFAULT_VALUE = "No host defined";
+    public static final Boolean INSIGHTS_ENABLED_DEFAULT_VALUE = false;
 
     public static final String TARGET_OCP = "OCP";
 
@@ -66,6 +67,7 @@ public class WorkloadInventoryReportModel
     private String version;
     private String host_name;
     private Boolean ssaEnabled;
+    private Boolean insightsEnabled;
 
     public WorkloadInventoryReportModel() {}
 
@@ -249,5 +251,13 @@ public class WorkloadInventoryReportModel
 
     public void setSsaEnabled(Boolean ssaEnabled) {
         this.ssaEnabled = ssaEnabled;
+    }
+
+    public Boolean getInsightsEnabled() {
+        return insightsEnabled;
+    }
+
+    public void setInsightsEnabled(Boolean insightsEnabled) {
+        this.insightsEnabled = insightsEnabled;
     }
 }
