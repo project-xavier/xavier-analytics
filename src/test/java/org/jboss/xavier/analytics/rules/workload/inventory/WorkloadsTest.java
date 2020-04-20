@@ -8,16 +8,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.kie.api.io.ResourceType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WorkloadsTest extends BaseTest {
 
     public WorkloadsTest() {
         super("/org/jboss/xavier/analytics/rules/workload/inventory/Workloads.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 15);
+                "org.jboss.xavier.analytics.rules.workload.inventory", 18);
     }
 
     @Test
@@ -1234,6 +1231,73 @@ public class WorkloadsTest extends BaseTest {
         Assert.assertEquals(1, report.getWorkloads().size());
         Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains("Cisco CallManager".toLowerCase())));
         Assert.assertTrue(report.getSsaEnabled());
+    }
+
+    @Test
+    public void testOracleJDK8OnLinux() {
+        testOracleJDK("JAVA_VERSION=\"1.8.11", "Workloads_Oracle_JDK_8_On_Linux", "Oracle JDK 8");
+
+    }
+
+    @Test
+    public void testOracleJDK11OnLinux() {
+        testOracleJDK("JAVA_VERSION=\"11", "Workloads_Oracle_JDK_11_On_Linux", "Oracle JDK 11");
+
+    }
+
+    @Test
+    public void testOracleJDK13OnLinux() {
+        testOracleJDK("JAVA_VERSION=\"13", "Workloads_Oracle_JDK_13_On_Linux", "Oracle JDK 13");
+
+    }
+
+    private void testOracleJDK(String versionCheckText, String ruleNameCheckText, String workloadCheckText)
+    {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Workloads");
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        Map<String, String> files = new HashMap<>();
+        files.put("/usr/java/latest/release", versionCheckText);
+        vmWorkloadInventoryModel.setFiles(files);
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("NOTwas");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        String[] rulesNamesX = {"AgendaFocusForTest", "SsaEnabled_System_Services_Present", ruleNameCheckText};
+        Assert.assertEquals((Arrays.stream(rulesNamesX).filter(e-> e != null).toArray(String[]::new)).length, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, Arrays.stream(rulesNamesX).filter(e-> e != null).toArray(String[]::new));
+
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        if (workloadCheckText != null) {
+            Assert.assertNotNull(report.getWorkloads());
+            Assert.assertEquals(1, report.getWorkloads().size());
+            Assert.assertTrue(report.getWorkloads().stream().anyMatch(workload -> workload.toLowerCase().contains(workloadCheckText.toLowerCase())));
+        }else
+        {
+            Assert.assertNull(report.getWorkloads());
+        }
+        Assert.assertTrue(report.getSsaEnabled());
+    }
+
+    @Test
+    public void testExcessEscapeCharsNoOracleJDKDetected()
+    {
+        testOracleJDK("JAVA_VERSION=\\\"13", null, null);
+        
     }
 
 }

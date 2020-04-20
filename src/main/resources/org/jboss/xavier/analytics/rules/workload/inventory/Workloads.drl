@@ -290,3 +290,48 @@ rule "SsaDisabled_System_Services_Not_Present"
         }
 
 end
+
+rule "Workloads_Oracle_JDK_8_On_Linux"
+       when
+           vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+               files != null,
+               files.size() > 0,
+               fileNameAndContentsContainSpecifiedStrings(this, "/usr/java/latest/release","JAVA_VERSION=\"1.8")
+           )
+           workloadInventoryReport : WorkloadInventoryReportModel()
+       then
+           modify(workloadInventoryReport)
+           {
+               addWorkload("Oracle JDK 8")
+           }
+end
+
+rule "Workloads_Oracle_JDK_11_On_Linux"
+       when
+           vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+               files != null,
+               files.size() > 0,
+               fileNameAndContentsContainSpecifiedStrings(this, "/usr/java/latest/release","JAVA_VERSION=\"11")
+           )
+           workloadInventoryReport : WorkloadInventoryReportModel()
+       then
+           modify(workloadInventoryReport)
+           {
+               addWorkload("Oracle JDK 11")
+           }
+end
+
+rule "Workloads_Oracle_JDK_13_On_Linux"
+       when
+           vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+               files != null,
+               files.size() > 0,
+               fileNameAndContentsContainSpecifiedStrings(this, "/usr/java/latest/release","JAVA_VERSION=\"13")
+           )
+           workloadInventoryReport : WorkloadInventoryReportModel()
+       then
+           modify(workloadInventoryReport)
+           {
+               addWorkload("Oracle JDK 13")
+           }
+end

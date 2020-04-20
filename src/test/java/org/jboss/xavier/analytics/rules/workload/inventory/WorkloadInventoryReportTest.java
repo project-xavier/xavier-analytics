@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 39);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 42);
     }
 
     @Test
@@ -59,6 +59,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
         Map<String, String> files = new HashMap<>();
         files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        files.put("/usr/java/latest/release", "JAVA_VERSION=\"1.8");
         vmWorkloadInventoryModel.setFiles(files);
 
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
@@ -76,7 +77,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -87,7 +88,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Complexity
                 "No_Flag_Supported_OS",
                 // Workloads
-                "SsaEnabled_System_Services_Present"
+                "SsaEnabled_System_Services_Present", "Workloads_Oracle_JDK_8_On_Linux"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -128,7 +129,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
+        Set <String> workloads = workloadInventoryReportModel.getWorkloads();
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
+        Assert.assertEquals(1, workloads.size());
+        Assert.assertTrue(workloads.contains("Oracle JDK 8"));
 
     }
 
@@ -163,6 +167,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
         Map<String, String> files = new HashMap<>();
         files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        files.put("/usr/java/latest/release", "JAVA_VERSION=\"11");
         vmWorkloadInventoryModel.setFiles(files);
 
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
@@ -180,7 +185,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -192,7 +197,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Complexity
                 "One_Flag_Supported_OS",
                 // Workloads
-                "SsaEnabled_System_Services_Present"
+                "SsaEnabled_System_Services_Present", "Workloads_Oracle_JDK_11_On_Linux"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -233,8 +238,11 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(targets.contains("OCP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
-        // Workloads
+        //Workloads
+        Set <String> workloads = workloadInventoryReportModel.getWorkloads();
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
+        Assert.assertEquals(1, workloads.size());
+        Assert.assertTrue(workloads.contains("Oracle JDK 11"));
     }
 
     @Test
@@ -267,6 +275,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
         Map<String, String> files = new HashMap<>();
         files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        files.put("/usr/java/latest/release", "JAVA_VERSION=\"13");
         vmWorkloadInventoryModel.setFiles(files);
 
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
@@ -284,7 +293,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -296,7 +305,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Complexity
                 "One_Flag_Supported_OS",
                 // Workloads
-                "SsaEnabled_System_Services_Present"
+                "SsaEnabled_System_Services_Present", "Workloads_Oracle_JDK_13_On_Linux"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -338,7 +347,10 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
+        Set <String> workloads = workloadInventoryReportModel.getWorkloads();
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
+        Assert.assertEquals(1, workloads.size());
+        Assert.assertTrue(workloads.contains("Oracle JDK 13"));
     }
 
     @Test
