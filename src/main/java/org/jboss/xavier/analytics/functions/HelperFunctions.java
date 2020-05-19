@@ -27,6 +27,10 @@ public class HelperFunctions
                 .orElse(false);
     }
 
+    /*
+    functionally, isUnsupported is the absence of any of the other OS categorizations being true
+    so we check they are all false to return true for this method
+     */
     public static boolean isUnsupportedOS(String osToCheck)
     {
         return !isUndetectedOS(osToCheck) && !isSupportedOS(osToCheck) && !isConvertibleOS(osToCheck);
@@ -34,7 +38,7 @@ public class HelperFunctions
 
     public static boolean isUndetectedOS(String osToCheck)
     {
-        return osToCheck == null || osToCheck.trim().isEmpty();
+        return osToCheck == null || osToCheck.trim().isEmpty() || osToCheck.equals(WorkloadInventoryReportModel.OS_NAME_DEFAULT_VALUE);
     }
 
     public enum OSSupport

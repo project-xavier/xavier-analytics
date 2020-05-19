@@ -32,6 +32,7 @@ public class WorkloadInventoryReportModel
     public static final String DATACENTER_DEFAULT_VALUE = "No datacenter defined";
     public static final String CLUSTER_DEFAULT_VALUE = "No cluster defined";
     public static final String HOST_NAME_DEFAULT_VALUE = "No host defined";
+    public static final String OS_NAME_DEFAULT_VALUE = "Not detected";
     public static final Boolean INSIGHTS_ENABLED_DEFAULT_VALUE = false;
 
     public static final String TARGET_OCP = "OCP";

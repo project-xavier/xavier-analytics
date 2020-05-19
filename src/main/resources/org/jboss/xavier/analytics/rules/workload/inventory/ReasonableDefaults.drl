@@ -1,6 +1,7 @@
 package org.jboss.xavier.analytics.rules.workload.inventory;
 
 import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+import org.apache.commons.lang3.StringUtils
 
 dialect "java"
 agenda-group "ReasonableDefaults"
@@ -40,4 +41,40 @@ rule "Fill 'Insights' field with reasonable default"
         )
     then
         workloadInventoryReport.setInsightsEnabled(WorkloadInventoryReportModel.INSIGHTS_ENABLED_DEFAULT_VALUE);
+end
+
+rule "Fill 'OS' fields with reasonable default"
+       when
+           workloadInventoryReport : WorkloadInventoryReportModel(
+               StringUtils.isAllBlank(osName,osDescription)
+           )
+       then
+           workloadInventoryReport.setOsName(WorkloadInventoryReportModel.OS_NAME_DEFAULT_VALUE);
+           workloadInventoryReport.setOsDescription(WorkloadInventoryReportModel.OS_NAME_DEFAULT_VALUE);
+end
+
+rule "Fill 'osDescription' field with reasonable default"
+       when
+           workloadInventoryReport : WorkloadInventoryReportModel(
+               StringUtils.isBlank(osDescription),
+               StringUtils.isNotBlank(osName)
+           )
+       then
+       modify(workloadInventoryReport)
+       {
+           setOsDescription(workloadInventoryReport.getOsName())
+       }
+end
+
+rule "Fill 'osName' field with reasonable default"
+       when
+           workloadInventoryReport : WorkloadInventoryReportModel(
+               StringUtils.isBlank(osName),
+               StringUtils.isNotBlank(osDescription)
+           )
+       then
+       modify(workloadInventoryReport)
+       {
+           setOsName(workloadInventoryReport.getOsDescription())
+       }
 end

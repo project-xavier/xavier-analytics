@@ -19,8 +19,6 @@ rule "Copy basic fields and agenda controller"
             diskSpace != null,
             memory != null,
             cpuCores != null,
-            guestOSFullName !=null,
-            osProductName != null,
             product != null,
             version != null,
             // This field became optional in https://issues.redhat.com/browse/MIGENG-328

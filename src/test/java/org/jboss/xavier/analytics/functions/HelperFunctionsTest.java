@@ -1,5 +1,6 @@
 package org.jboss.xavier.analytics.functions;
 
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +37,7 @@ public class HelperFunctionsTest {
                 {"Microsoft Windows XP Professional (32-bit)", false, false, true, false},
                 {"Enterprise", false, false, true, false},
                 {"", false, false, false, true},
+                {WorkloadInventoryReportModel.OS_NAME_DEFAULT_VALUE, false, false, false, true},
         });
     }
 

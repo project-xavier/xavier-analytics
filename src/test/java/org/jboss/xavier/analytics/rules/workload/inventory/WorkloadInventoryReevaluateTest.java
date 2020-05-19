@@ -41,6 +41,7 @@ public class WorkloadInventoryReevaluateTest extends BaseIntegrationTest {
                 {"Microsoft Windows XP Professional (32-bit)", new ArrayList<>(Arrays.asList("No_Flags_Not_Supported_OS")), null, WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED, Collections.singleton("None"), Collections.singleton("None")},
                 {"Ubuntu", new ArrayList<>(Arrays.asList("One_Or_More_Flags_Not_Supported_OS")), Collections.singleton(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME), WorkloadInventoryReportModel.COMPLEXITY_UNSUPPORTED, Collections.singleton("None"), Collections.singleton("None")},
                 {"", new ArrayList<>(Arrays.asList("Not_Detected_OS")), new HashSet<>(Arrays.asList(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME, WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME)), WorkloadInventoryReportModel.COMPLEXITY_UNKNOWN, Collections.singleton("None"), Collections.singleton("None")},
+                {"Not detected", new ArrayList<>(Arrays.asList("Not_Detected_OS")), new HashSet<>(Arrays.asList(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME, WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME)), WorkloadInventoryReportModel.COMPLEXITY_UNKNOWN, Collections.singleton("None"), Collections.singleton("None")},
         });
     }
 

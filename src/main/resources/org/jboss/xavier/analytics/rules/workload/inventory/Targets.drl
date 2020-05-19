@@ -2,7 +2,7 @@ package org.jboss.xavier.analytics.rules.workload.inventory;
 
 import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
 import java.util.HashSet;
-import org.jboss.xavier.analytics.functions.HelperFunctions
+import org.jboss.xavier.analytics.functions.HelperFunctions;
 
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isSupportedOS;
 import function org.jboss.xavier.analytics.functions.HelperFunctions.isUnsupportedOS;
@@ -29,8 +29,8 @@ function boolean flagsSuitableForOCP(WorkloadInventoryReportModel report)
 rule "Target_RHV"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
-            osDescription != null,
-            eval(isSupportedOS(osDescription) || isConvertibleOS(osDescription))
+            workloadInventoryReport.getOsDescription() != null,
+            eval(isSupportedOS(workloadInventoryReport.getOsDescription()) || isConvertibleOS(workloadInventoryReport.getOsDescription()))
         )
     then
         modify(workloadInventoryReport)
@@ -86,7 +86,7 @@ end
 rule "Target_None"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
-            eval((osDescription != null && isUnsupportedOS(osDescription)) || isUndetectedOS(osDescription))
+            eval(( isUnsupportedOS(osDescription)) || isUndetectedOS(osDescription))
         )
     then
         modify(workloadInventoryReport)
