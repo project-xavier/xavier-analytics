@@ -1,0 +1,122 @@
+package org.jboss.xavier.analytics.rules.workload.inventory;
+
+import org.jboss.xavier.analytics.pojo.input.workload.inventory.VMWorkloadInventoryModel;
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel;
+import java.util.HashSet;
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.valueMatchesAll;
+
+dialect "java"
+agenda-group "OSFamily"
+lock-on-active true
+auto-focus false
+
+rule "Fill 'osFamily' field with 'Other'"
+    salience -1
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osFamily == null
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setOsFamily(WorkloadInventoryReportModel.OS_FAMILY_DEFAULT_VALUE)
+        }
+end
+
+rule "RHEL_OSFamily"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            valueMatchesAll(osDescription, "Red Hat Enterprise Linux")
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setOsFamily("RHEL")
+        }
+end
+
+rule "SUSE_OSFamily"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            valueMatchesAll(osDescription, "SUSE")
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setOsFamily("SUSE")
+        }
+end
+
+rule "Windows_OSFamily"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            valueMatchesAll(osDescription, "Windows")
+        )
+    then
+        String osFamily = "Windows Other";
+        if (valueMatchesAll(workloadInventoryReport.getOsDescription(), "Windows", "Server"))
+        {
+            osFamily = "Windows Server";
+        }
+
+        modify(workloadInventoryReport)
+        {
+            setOsFamily(osFamily)
+        }
+end
+
+rule "OracleLinux_OSFamily"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            valueMatchesAll(osDescription, "Oracle Linux")
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setOsFamily("Oracle Linux")
+        }
+end
+
+rule "Centos_OSFamily"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            valueMatchesAll(osDescription, "CentOS")
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setOsFamily("CentOS")
+        }
+end
+
+rule "Ubuntu_OSFamily"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            valueMatchesAll(osDescription, "Ubuntu")
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setOsFamily("Ubuntu")
+        }
+end
+
+rule "Debian_OSFamily"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            osDescription != null,
+            valueMatchesAll(osDescription, "Debian")
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setOsFamily("Debian")
+        }
+end

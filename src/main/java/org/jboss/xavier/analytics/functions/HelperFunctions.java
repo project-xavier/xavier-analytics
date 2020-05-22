@@ -5,9 +5,17 @@ import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInvento
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class HelperFunctions
 {
+    public static boolean valueMatchesAll(String value, String... match)
+    {
+        String descriptionLowerCase = value.toLowerCase();
+        return Stream.of(match).map(String::toLowerCase)
+                .allMatch(descriptionLowerCase::contains);
+    }
+
     public static int round(double value)
     {
         return (int) Math.round(value);

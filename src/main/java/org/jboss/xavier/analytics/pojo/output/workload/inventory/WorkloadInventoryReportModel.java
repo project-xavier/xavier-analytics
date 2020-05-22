@@ -34,6 +34,7 @@ public class WorkloadInventoryReportModel
     public static final String HOST_NAME_DEFAULT_VALUE = "No host defined";
     public static final String OS_NAME_DEFAULT_VALUE = "Not detected";
     public static final Boolean INSIGHTS_ENABLED_DEFAULT_VALUE = false;
+    public static final String OS_FAMILY_DEFAULT_VALUE = "Other";
 
     public static final String TARGET_OCP = "OCP";
 
@@ -69,6 +70,7 @@ public class WorkloadInventoryReportModel
     private String host_name;
     private Boolean ssaEnabled;
     private Boolean insightsEnabled;
+    private String osFamily;
 
     public WorkloadInventoryReportModel() {}
 
@@ -260,5 +262,13 @@ public class WorkloadInventoryReportModel
 
     public void setInsightsEnabled(Boolean insightsEnabled) {
         this.insightsEnabled = insightsEnabled;
+    }
+
+    public String getOsFamily() {
+        return osFamily;
+    }
+
+    public void setOsFamily(String osFamily) {
+        this.osFamily = osFamily;
     }
 }

@@ -78,3 +78,4 @@ rule "Fill 'osName' field with reasonable default"
            setOsName(workloadInventoryReport.getOsDescription())
        }
 end
+
