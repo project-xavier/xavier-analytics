@@ -22,7 +22,8 @@ rule "Target_OCP_Reevaluate"
         }
 end
 
-rule "Target_None"
+rule "Target_None_Reevaluate"
+    salience -1
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
             eval( recommendedTargetsIMS == null || recommendedTargetsIMS.isEmpty())

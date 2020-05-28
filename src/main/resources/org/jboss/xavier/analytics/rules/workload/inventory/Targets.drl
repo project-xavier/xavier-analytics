@@ -26,6 +26,19 @@ function boolean flagsSuitableForOCP(WorkloadInventoryReportModel report)
     return report.getFlagsIMS().stream().noneMatch(flag -> isFlagUnsuitableForOCP(flag));
 }
 
+rule "Target_None"
+    salience -1
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            eval( recommendedTargetsIMS == null || recommendedTargetsIMS.isEmpty())
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            addRecommendedTargetsIMS("None")
+        }
+end
+
 rule "Target_RHV"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(

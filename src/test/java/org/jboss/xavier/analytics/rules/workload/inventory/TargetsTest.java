@@ -15,7 +15,7 @@ public class TargetsTest extends BaseTest {
 
     public TargetsTest() {
         super("/org/jboss/xavier/analytics/rules/workload/inventory/Targets.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 6);
+                "org.jboss.xavier.analytics.rules.workload.inventory", 7);
     }
 
     @Test
@@ -115,12 +115,12 @@ public class TargetsTest extends BaseTest {
         workloadInventoryReportModel.setOsDescription("Ubuntu");
         workloadInventoryReportModel.setFlagsIMS(null);
 
-        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+        facts.put("workloadInventoryReportModel", workloadInventoryReportModel);
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_None");
 
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
@@ -128,7 +128,10 @@ public class TargetsTest extends BaseTest {
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -200,15 +203,18 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_None");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -224,15 +230,18 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_None");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -248,15 +257,18 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_None");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -272,15 +284,18 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_None");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -325,15 +340,18 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_None");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -349,15 +367,18 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_None");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -369,19 +390,22 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("Debian");
 
-        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+        facts.put("workloadInventoryReportModel", workloadInventoryReportModel);
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Target_None");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -484,9 +508,9 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
         Utils.verifyRulesFiredNames(this.agendaEventListener,
-                "AgendaFocusForTest"
+                "AgendaFocusForTest", "Target_None"
         );
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
@@ -494,7 +518,10 @@ public class TargetsTest extends BaseTest {
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -542,9 +569,9 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
         Utils.verifyRulesFiredNames(this.agendaEventListener,
-                "AgendaFocusForTest"
+                "AgendaFocusForTest", "Target_None"
         );
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
@@ -552,7 +579,10 @@ public class TargetsTest extends BaseTest {
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("None"));
     }
 
     @Test
@@ -715,13 +745,13 @@ public class TargetsTest extends BaseTest {
         workloadInventoryReportModel.setOsFamily("Ubuntu");
         workloadInventoryReportModel.addWorkload("Tomcat");
 
-        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+        facts.put("workloadInventoryReportModel", workloadInventoryReportModel);
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
         Utils.verifyRulesFiredNames(this.agendaEventListener,
-                "AgendaFocusForTest"
+                "AgendaFocusForTest", "Target_None"
         );
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
@@ -729,6 +759,8 @@ public class TargetsTest extends BaseTest {
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertFalse(report.getRecommendedTargetsIMS().contains("Red Hat JBoss EAP"));
     }
 }
