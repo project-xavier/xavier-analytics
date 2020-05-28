@@ -21,3 +21,15 @@ rule "Target_OCP_Reevaluate"
             getRecommendedTargetsIMS().remove(WorkloadInventoryReportModel.TARGET_OCP)
         }
 end
+
+rule "Target_None"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            eval( recommendedTargetsIMS == null || recommendedTargetsIMS.isEmpty())
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            addRecommendedTargetsIMS("None")
+        }
+end

@@ -83,14 +83,18 @@ rule "Target_OCP"
         }
 end
 
-rule "Target_None"
+rule "Target_OpenJDK"
     when
         workloadInventoryReport : WorkloadInventoryReportModel(
-            eval(( isUnsupportedOS(osDescription)) || isUndetectedOS(osDescription))
+            workloads != null,
+            osFamily != null,
+            eval(osFamily == "RHEL" || osFamily == "CentOS" || osFamily == "Windows Server" || osFamily == "Windows Other"),
+            workloads contains "Oracle JDK 8" || workloads contains "Oracle JDK 11",
+            workloads not contains "Oracle Weblogic"
         )
     then
         modify(workloadInventoryReport)
         {
-            addRecommendedTargetsIMS("None")
+            addRecommendedTargetsIMS("OpenJDK")
         }
 end
