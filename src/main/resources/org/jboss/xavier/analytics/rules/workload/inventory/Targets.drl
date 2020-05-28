@@ -98,3 +98,16 @@ rule "Target_OpenJDK"
             addRecommendedTargetsIMS("OpenJDK")
         }
 end
+
+rule "Target_RedHatJBossEAP"
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            workloads != null,
+            workloads contains "Oracle Weblogic" || workloads contains "IBM Websphere App Server"
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            addRecommendedTargetsIMS("Red Hat JBoss EAP")
+        }
+end

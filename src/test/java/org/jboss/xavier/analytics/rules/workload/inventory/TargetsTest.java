@@ -15,7 +15,7 @@ public class TargetsTest extends BaseTest {
 
     public TargetsTest() {
         super("/org/jboss/xavier/analytics/rules/workload/inventory/Targets.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 5);
+                "org.jboss.xavier.analytics.rules.workload.inventory", 6);
     }
 
     @Test
@@ -512,9 +512,10 @@ public class TargetsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
         Utils.verifyRulesFiredNames(this.agendaEventListener,
-                "AgendaFocusForTest"
+                "AgendaFocusForTest",
+                "Target_RedHatJBossEAP"
         );
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
@@ -522,7 +523,9 @@ public class TargetsTest extends BaseTest {
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
-        Assert.assertNull(report.getRecommendedTargetsIMS());
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
     }
 
     @Test
@@ -640,5 +643,92 @@ public class TargetsTest extends BaseTest {
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
         Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OpenJDK".toLowerCase())));
+    }
+
+    @Test
+    public void testGivenWeblogic_ThenJBossEAPTarget() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Targets");
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+        workloadInventoryReportModel.setOsFamily("Ubuntu");
+        workloadInventoryReportModel.addWorkload("Oracle Weblogic");
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                "AgendaFocusForTest",
+                "Target_RedHatJBossEAP"
+        );
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+    }
+
+    @Test
+    public void testGivenIBMWebsphere_ThenJBossEAPTarget() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Targets");
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+        workloadInventoryReportModel.setOsFamily("Ubuntu");
+        workloadInventoryReportModel.addWorkload("IBM Websphere App Server");
+
+        facts.put("workloadInventoryReportModel", workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                "AgendaFocusForTest",
+                "Target_RedHatJBossEAP"
+        );
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNotNull(report.getRecommendedTargetsIMS());
+        Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+    }
+
+    @Test
+    public void testGivenTomcat_ThenNoJBossEAPTarget() {
+        Map<String, Object> facts = new HashMap<>();
+        // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
+        facts.put("agendaGroup", "Targets");
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
+        workloadInventoryReportModel.setOsFamily("Ubuntu");
+        workloadInventoryReportModel.addWorkload("Tomcat");
+
+        facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
+
+        Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
+
+        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                "AgendaFocusForTest"
+        );
+
+        List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
+
+        // just one report has to be created
+        Assert.assertEquals(1, reports.size());
+        WorkloadInventoryReportModel report = reports.get(0);
+        Assert.assertNull(report.getRecommendedTargetsIMS());
     }
 }
