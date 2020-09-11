@@ -48,7 +48,7 @@ rule "Target_RHV"
     then
         modify(workloadInventoryReport)
         {
-            addRecommendedTargetsIMS("RHV")
+            addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_RHV)
         }
 end
 
@@ -62,7 +62,7 @@ rule "Target_OSP"
     then
         modify(workloadInventoryReport)
         {
-            addRecommendedTargetsIMS("OSP")
+            addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_OSP)
         }
 end
 
@@ -76,7 +76,7 @@ rule "Target_RHEL"
     then
         modify(workloadInventoryReport)
         {
-            addRecommendedTargetsIMS("RHEL")
+            addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_RHEL)
         }
 end
 

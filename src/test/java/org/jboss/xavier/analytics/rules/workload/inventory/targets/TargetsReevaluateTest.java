@@ -56,7 +56,7 @@ public class TargetsReevaluateTest extends BaseTest {
         workloadInventoryReportModel.setOsDescription("CentOS");
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
-        workloadInventoryReportModel.addRecommendedTargetsIMS("RHV");
+        workloadInventoryReportModel.addRecommendedTargetsIMS(WorkloadInventoryReportModel.TARGET_RHV);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -74,7 +74,7 @@ public class TargetsReevaluateTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
     }
 
     @Test

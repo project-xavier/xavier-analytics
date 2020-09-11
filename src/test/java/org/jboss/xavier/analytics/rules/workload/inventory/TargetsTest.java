@@ -42,8 +42,8 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(2, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OCP".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_OCP.toLowerCase())));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(2, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
     }
 
     @Test
@@ -100,9 +100,9 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(3, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OSP".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OCP".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_OSP.toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_OCP.toLowerCase())));
     }
 
     @Test
@@ -158,8 +158,8 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(2, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHEL".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHEL.toLowerCase())));
     }
 
     @Test
@@ -185,9 +185,9 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(3, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OSP".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHEL".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_OSP.toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHEL.toLowerCase())));
     }
 
     @Test
@@ -321,9 +321,9 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(2, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("OSP".toLowerCase())));
-        Assert.assertFalse(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHEL".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_OSP.toLowerCase())));
+        Assert.assertFalse(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHEL.toLowerCase())));
         Assert.assertFalse(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("None".toLowerCase())));
     }
 
@@ -433,7 +433,7 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
     }
 
     @Test
@@ -461,7 +461,7 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
     }
 
 
@@ -491,7 +491,7 @@ public class TargetsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Assert.assertNotNull(report.getRecommendedTargetsIMS());
         Assert.assertEquals(1, report.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("RHV".toLowerCase())));
+        Assert.assertTrue(report.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.TARGET_RHV.toLowerCase())));
     }
 
     @Test

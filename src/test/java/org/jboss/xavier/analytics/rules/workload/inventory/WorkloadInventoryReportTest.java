@@ -128,9 +128,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(4, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("OSP"));
-        Assert.assertTrue(targets.contains("OCP"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_OCP));
         Assert.assertTrue(targets.contains("OpenJDK"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
@@ -245,8 +245,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(3, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("OCP"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_OCP));
         Assert.assertTrue(targets.contains("OpenJDK"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
@@ -360,8 +360,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("OSP"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_OSP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -477,7 +477,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(1, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -585,9 +585,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(3, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("OSP"));
-        Assert.assertTrue(targets.contains("RHEL"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHEL));
         // Complexity
         //Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -695,8 +695,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("RHEL"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHEL));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -913,9 +913,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(3, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("OSP"));
-        Assert.assertTrue(targets.contains("OCP"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1024,7 +1024,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(1, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1133,7 +1133,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(1, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1242,7 +1242,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(1, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1572,7 +1572,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         // Targets
         Assert.assertEquals(1,workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_HARD, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1675,9 +1675,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -1780,9 +1780,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(4, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("Red Hat JBoss EAP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
@@ -1886,9 +1886,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(4, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("Red Hat JBoss EAP"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
@@ -1992,9 +1992,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2097,9 +2097,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2202,9 +2202,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2307,9 +2307,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2414,9 +2414,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2523,9 +2523,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2627,9 +2627,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2734,9 +2734,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2840,9 +2840,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -2947,9 +2947,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3451,8 +3451,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("OSP"));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(targets.contains(WorkloadInventoryReportModel.TARGET_OSP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3853,9 +3853,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -3958,9 +3958,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -4063,9 +4063,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -4168,9 +4168,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -4273,9 +4273,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -4378,9 +4378,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -4491,9 +4491,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("RHV"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OSP"));
-        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains("OCP"));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_RHV));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OSP));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().contains(WorkloadInventoryReportModel.TARGET_OCP));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_EASY, workloadInventoryReportModel.getComplexity());
         // Workloads
