@@ -15,15 +15,14 @@ import org.kie.internal.command.CommandFactory;
 import org.mockito.ArgumentCaptor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -83,11 +82,8 @@ public class Utils
         verify( agendaEventListener, times(numberOfRules) ).afterMatchFired(argumentCaptor.capture());
         List<AfterMatchFiredEvent> events = argumentCaptor.getAllValues();
 
-        IntStream.range(0, numberOfRules).forEach(i -> {
-            // check the rule name for the i-th rule to fire
-            AfterMatchFiredEvent first = events.get(i);
-            Assert.assertThat( first.getMatch().getRule().getName(), is(rulesNames[i]));
-        });
+        Assert.assertEquals(events.size(), rulesNames.length);
+        Assert.assertTrue(Arrays.asList(rulesNames).stream().anyMatch(a -> events.stream().anyMatch(e -> e.getMatch().getRule().getName().equalsIgnoreCase(a))));
     }
 
     public static void checkLoadedRulesNumber(StatelessKieSession kieSession, String kiePackageName, int expectedLoadedRules)

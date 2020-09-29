@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 59);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 64);
     }
 
     @Test
@@ -284,8 +284,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
-        Assert.assertTrue(targets.contains("RHV"));
-        Assert.assertTrue(targets.contains("OSP"));
+        Assert.assertTrue(targets.contains("Red Hat Virtualization"));
+        Assert.assertTrue(targets.contains("Red Hat OpenStack Platform"));
         // Complexity
         Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
         // Workloads
@@ -4940,6 +4940,83 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_RedHatJBossEAP",
                 // Complexity
                 "No_Flag_Convertible_OS"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+        Assert.assertEquals(1, queryResults.size());
+
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        Assert.assertEquals("CentOS", workloadInventoryReportModel.getOsFamily());
+        Assert.assertTrue(workloadInventoryReportModel.getWorkloads().stream().anyMatch(target -> target.toLowerCase().contains("IBM Websphere App Server".toLowerCase())));
+        Assert.assertTrue(workloadInventoryReportModel.getRecommendedTargetsIMS().stream().anyMatch(target -> target.toLowerCase().contains("Red Hat JBoss EAP".toLowerCase())));
+    }
+    
+    @Test
+    public void testVMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENET() throws ParseException {
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("provider");
+        vmWorkloadInventoryModel.setVmName("vmName");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setProduct("product");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setGuestOSFullName("CentOS Linux release 7.6.1810 (Core)");
+        vmWorkloadInventoryModel.setOsProductName("productName");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+
+        vmWorkloadInventoryModel.setHasVmDrsConfig(true);
+        vmWorkloadInventoryModel.setHasVmHaConfig(true);
+        vmWorkloadInventoryModel.setBalloonedMemory(10000);
+        vmWorkloadInventoryModel.setHasEncryptedDisk(true);
+        vmWorkloadInventoryModel.setHasOpaqueNetwork(true);
+
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("Dmgr_was.init");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+
+        // define the list of commands you want to be executed by Drools
+        Map<String, Object> facts = new HashMap<>();
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+        List<Command> commands = new ArrayList<>();
+        commands.addAll(Utils.newInsertCommands(facts));
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(17, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller",
+                // ReasonableDefaults
+                "Fill 'datacenter' field with reasonable default",
+                "Fill 'cluster' field with reasonable default",
+                "Fill 'host_name' field with reasonable default",
+                "Fill 'Insights' field with reasonable default",
+                // OSFamily
+                "Centos_OSFamily",
+                // Flags
+                // Workloads
+                "Workloads_Websphere",
+                // Target
+                "Target_RHV",
+                "Target_OSP",
+                "Target_RHEL",
+                "Target_RedHatJBossEAP",
+                // Complexity
+                "No_Flag_Convertible_OS",
+                "Flag_Opaque_Network",
+                "Flag_Encrypted_Disk",
+                "Flag_Ballooned_Memory",
+                "Flag_VM_HA_Config",
+                "Flag_VM_DRS_Config"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
