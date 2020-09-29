@@ -69,7 +69,7 @@ rule "Flag_Cpu_Memory_Hotplug_Cpu_Remove"
             addFlagIMS(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME)
         }
 end
-        
+
 rule "Flag_Cpu_Affinity"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
@@ -81,6 +81,19 @@ rule "Flag_Cpu_Affinity"
         modify(workloadInventoryReport)
         {
             addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME)
+        }
+end
+
+rule "Flag_PassthroughDevice"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            hasPassthroughDevice != null,
+            hasPassthroughDevice == true
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport) {
+            addFlagIMS(WorkloadInventoryReportModel.PASSTHROUGH_DEVICE_FLAG_NAME)
         }
 end
 

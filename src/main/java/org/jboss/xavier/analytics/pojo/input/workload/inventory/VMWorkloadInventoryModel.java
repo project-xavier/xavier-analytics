@@ -1,15 +1,12 @@
 package org.jboss.xavier.analytics.pojo.input.workload.inventory;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class VMWorkloadInventoryModel
-{
+public class VMWorkloadInventoryModel {
     //common/name
     private String provider;
     //common/ems_clusters/v_parent_datacenter
@@ -47,14 +44,22 @@ public class VMWorkloadInventoryModel
     private Boolean hasMemoryHotAdd;
     private Boolean hasCpuHotAdd;
     private Boolean hasCpuHotRemove;
+    private Boolean hasPassthroughDevice;
 
-    public VMWorkloadInventoryModel()
-    {
+    public VMWorkloadInventoryModel() {
         this.systemServicesNames = new ArrayList<>();
         this.files = new HashMap<>();
         this.vmDiskFilenames = new ArrayList<>();
         nicsCount = 0;
         diskSpace = new Long(0);
+    }
+
+    public Boolean getHasPassthroughDevice() {
+        return hasPassthroughDevice;
+    }
+
+    public void setHasPassthroughDevice(Boolean hasPassthroughDevice) {
+        this.hasPassthroughDevice = hasPassthroughDevice;
     }
 
     public String getProvider() {

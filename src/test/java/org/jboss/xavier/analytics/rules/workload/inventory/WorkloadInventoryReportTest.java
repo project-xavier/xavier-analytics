@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 58);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 59);
     }
 
     @Test
@@ -149,22 +149,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setNicsCount(5);
@@ -223,20 +208,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
@@ -265,47 +237,12 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setCpuAffinityNotNull(true);
 
-        List<String> systemServicesNames = new ArrayList<>();
-        systemServicesNames.add("unix_service");
-        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
-        Map<String, String> files = new HashMap<>();
-        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
-        files.put("/usr/java/latest/release", "JAVA_VERSION=\"13");
-        vmWorkloadInventoryModel.setFiles(files);
-
-        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
-
-        // define the list of commands you want to be executed by Drools
-        List<Command> commands = new ArrayList<>();
-        // first generate and add all of the facts created above
-        commands.addAll(Utils.newInsertCommands(facts));
-        // then generate the 'fireAllRules' command
-        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
-        // add the query to retrieve the report we want
-        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
-
-        // execute the commands in the KIE session and get the results
-        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+        Map<String, Object> results = basicCommandExecution(facts, vmWorkloadInventoryModel);
 
         // check that the number of rules fired is what you expect
         Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
@@ -338,25 +275,103 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
         Assert.assertEquals(1, flagsIMS.size());
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME));
+        // Targets
+        Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
+        Assert.assertEquals(2, targets.size());
+        Assert.assertTrue(targets.contains("RHV"));
+        Assert.assertTrue(targets.contains("OSP"));
+        // Complexity
+        Assert.assertEquals(WorkloadInventoryReportModel.COMPLEXITY_MEDIUM, workloadInventoryReportModel.getComplexity());
+        // Workloads
+        Set <String> workloads = workloadInventoryReportModel.getWorkloads();
+        Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
+        Assert.assertEquals(1, workloads.size());
+        Assert.assertTrue(workloads.contains("Oracle JDK 13"));
+        // OSFamily
+        Assert.assertEquals("RHEL", workloadInventoryReportModel.getOsFamily());
+    }
+
+    private Map<String, Object> basicCommandExecution(Map<String, Object> facts,
+            VMWorkloadInventoryModel vmWorkloadInventoryModel) {
+        List<String> systemServicesNames = new ArrayList<>();
+        systemServicesNames.add("unix_service");
+        vmWorkloadInventoryModel.setSystemServicesNames(systemServicesNames);
+        Map<String, String> files = new HashMap<>();
+        files.put("file.txt", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+        files.put("/usr/java/latest/release", "JAVA_VERSION=\"13");
+        vmWorkloadInventoryModel.setFiles(files);
+
+        facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
+
+        // define the list of commands you want to be executed by Drools
+        List<Command> commands = new ArrayList<>();
+        // first generate and add all of the facts created above
+        commands.addAll(Utils.newInsertCommands(facts));
+        // then generate the 'fireAllRules' command
+        commands.add(CommandFactory.newFireAllRules(NUMBER_OF_FIRED_RULE_KEY));
+        // add the query to retrieve the report we want
+        commands.add(CommandFactory.newQuery(QUERY_IDENTIFIER, "GetWorkloadInventoryReports"));
+
+        // execute the commands in the KIE session and get the results
+        Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
+        return results;
+    }
+ 
+    @Test
+    public void testPassthroughDeviceFlag() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
+
+        //Flags
+        vmWorkloadInventoryModel.setHasPassthroughDevice(true);
+
+        Map<String, Object> results = basicCommandExecution(facts, vmWorkloadInventoryModel);
+
+        // check that the number of rules fired is what you expect
+        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        // check the names of the rules fired are what you expect
+        Utils.verifyRulesFiredNames(this.agendaEventListener,
+                // BasicFields
+                "Copy basic fields and agenda controller", "Fill 'Insights' field with reasonable default",
+                // ReasonableDefaults
+                // OSFamily
+                "RHEL_OSFamily",
+                // Flags
+                "Flag_PassthroughDevice",
+                // Workloads
+                "SsaEnabled_System_Services_Present", "Workloads_Oracle_JDK_13_On_Linux",
+                // Target
+                "Target_RHV", "Target_OSP",
+                // Complexity
+                "One_Flag_Supported_OS"
+        );
+
+        // retrieve the QueryResults that was available in the working memory from the results
+        QueryResults queryResults= (QueryResults) results.get(QUERY_IDENTIFIER);
+
+        // Check that the number of object is the right one (in this case, there must be just one report)
+        Assert.assertEquals(1, queryResults.size());
+
+        // Check that the object is of the expected type and with the expected identifier (i.e. "report")
+        QueryResultsRow queryResultsRow = queryResults.iterator().next();
+        Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
+
+        // Check that the object has exactly the fields that the rules tested should add/change
+        WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
+        // Flags
+        Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
+        Assert.assertNotNull(flagsIMS);
+        Assert.assertEquals(1, flagsIMS.size());
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.PASSTHROUGH_DEVICE_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(2, targets.size());
@@ -373,11 +388,24 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals("RHEL", workloadInventoryReportModel.getOsFamily());
     }
 
-    @Test
-    public void testMoreThanOneFlagSupportedOS() throws ParseException {
-        // create a Map with the facts (i.e. Objects) you want to put in the working memory
-        Map<String, Object> facts = new HashMap<>();
+    private void assertRHELWorkloadInventoryReportModel(WorkloadInventoryReportModel workloadInventoryReportModel) throws ParseException {
+        // BasicFields
+        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
+        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
+        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
+        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
+        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
+        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
+        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
+        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
+        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
+        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
+        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
+        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
+        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+    }
 
+    private VMWorkloadInventoryModel RHEL_VMWorkloadInventoryModel() throws ParseException {
         //Basic Fields
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
         vmWorkloadInventoryModel.setProvider("IMS vCenter");
@@ -394,6 +422,15 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setVersion("6.5");
         vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
         vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        return vmWorkloadInventoryModel;
+    }
+
+    @Test
+    public void testMoreThanOneFlagSupportedOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setNicsCount(5);
@@ -454,20 +491,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
@@ -492,21 +516,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> facts = new HashMap<>();
 
         //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName(null);
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("Oracle Linux");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = ORACLE_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setNicsCount(2);
@@ -596,12 +606,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals("Oracle Linux", workloadInventoryReportModel.getOsFamily());
     }
 
-    @Test
-    public void testFlagsCentOS() throws ParseException {
-        // create a Map with the facts (i.e. Objects) you want to put in the working memory
-        Map<String, Object> facts = new HashMap<>();
-
-        //Basic Fields
+    private VMWorkloadInventoryModel ORACLE_VMWorkloadInventoryModel() throws ParseException {
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
         vmWorkloadInventoryModel.setProvider("IMS vCenter");
         vmWorkloadInventoryModel.setDatacenter("V2V-DC");
@@ -610,13 +615,23 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setDiskSpace(100000001L);
         vmWorkloadInventoryModel.setMemory(4096L);
         vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("CentOS Enterprise Linux");
+        vmWorkloadInventoryModel.setGuestOSFullName(null);
         // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("CentOS");
+        vmWorkloadInventoryModel.setOsProductName("Oracle Linux");
         vmWorkloadInventoryModel.setProduct("VMware vCenter");
         vmWorkloadInventoryModel.setVersion("6.5");
         vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
         vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        return vmWorkloadInventoryModel;
+    }
+
+    @Test
+    public void testFlagsCentOS() throws ParseException {
+        // create a Map with the facts (i.e. Objects) you want to put in the working memory
+        Map<String, Object> facts = new HashMap<>();
+
+        //Basic Fields
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = CENTOS_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setNicsCount(5);
@@ -705,24 +720,32 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals("CentOS", workloadInventoryReportModel.getOsFamily());
     }
 
+    private VMWorkloadInventoryModel CENTOS_VMWorkloadInventoryModel() throws ParseException {
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
+        vmWorkloadInventoryModel.setCluster("Cluster 1");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("CentOS Enterprise Linux");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("CentOS");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        return vmWorkloadInventoryModel;
+    }
+
     @Test
     public void testOneOrMoreFlagsUnsupported_OS() throws ParseException {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
         //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Debian Linux Server");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("debian");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = DEBIAN_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setHasRdmDisk(true);
@@ -814,27 +837,28 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertEquals("Debian", workloadInventoryReportModel.getOsFamily());
     }
 
+    private VMWorkloadInventoryModel DEBIAN_VMWorkloadInventoryModel() throws ParseException {
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        vmWorkloadInventoryModel.setGuestOSFullName("Debian Linux Server");
+        // keep it lower case to check that the rules evaluate it ignoring the case
+        vmWorkloadInventoryModel.setOsProductName("debian");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        return vmWorkloadInventoryModel;
+    }
+
     @Test
     public void testFlagHotplugFieldsFalseSupportedOS() throws ParseException {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setHasCpuHotAdd(false);
@@ -893,20 +917,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNull(flagsIMS);
@@ -929,22 +940,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setHasCpuHotAdd(true);
@@ -1002,20 +998,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
@@ -1038,22 +1021,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setHasMemoryHotAdd(true);
@@ -1111,20 +1079,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
@@ -1147,22 +1102,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setHasCpuHotRemove(true);
@@ -1220,20 +1160,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
@@ -1257,22 +1184,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> facts = new HashMap<>();
 
         //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        //set to empty string because basicfields.drl doesn't allow nulls through
-        vmWorkloadInventoryModel.setGuestOSFullName("");
-        //set to empty string because basicfields.drl doesn't allow nulls through
-        vmWorkloadInventoryModel.setOsProductName("");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = empty_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setNicsCount(2);
@@ -1359,6 +1271,26 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
         // OSFamily
         Assert.assertEquals("Other", workloadInventoryReportModel.getOsFamily());
+    }
+
+    private VMWorkloadInventoryModel empty_VMWorkloadInventoryModel() throws ParseException {
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
+        vmWorkloadInventoryModel.setProvider("IMS vCenter");
+        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
+        vmWorkloadInventoryModel.setCluster("Cluster 1");
+        vmWorkloadInventoryModel.setVmName("vm tests");
+        vmWorkloadInventoryModel.setDiskSpace(100000001L);
+        vmWorkloadInventoryModel.setMemory(4096L);
+        vmWorkloadInventoryModel.setCpuCores(4);
+        //set to empty string because basicfields.drl doesn't allow nulls through
+        vmWorkloadInventoryModel.setGuestOSFullName("");
+        //set to empty string because basicfields.drl doesn't allow nulls through
+        vmWorkloadInventoryModel.setOsProductName("");
+        vmWorkloadInventoryModel.setProduct("VMware vCenter");
+        vmWorkloadInventoryModel.setVersion("6.5");
+        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
+        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        return vmWorkloadInventoryModel;
     }
 
     @Test
@@ -1472,22 +1404,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
         vmWorkloadInventoryModel.setNicsCount(5);
@@ -1550,20 +1467,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
@@ -1589,22 +1493,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -1658,20 +1547,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -1694,22 +1570,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -1763,20 +1624,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(4, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -1800,22 +1648,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -1869,20 +1702,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(4, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -1906,22 +1726,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -1975,20 +1780,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -2011,22 +1803,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -2080,20 +1857,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -2116,22 +1880,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -2185,20 +1934,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -2221,22 +1957,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -2290,20 +2011,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -2326,22 +2034,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> systemServicesNames = new ArrayList<>();
         systemServicesNames.add("NOTwas");
@@ -2397,20 +2090,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -2541,22 +2221,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -2608,20 +2273,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         //
         Assert.assertEquals(WorkloadInventoryReportModel.INSIGHTS_ENABLED_DEFAULT_VALUE,workloadInventoryReportModel.getInsightsEnabled());
         // Flags
@@ -2646,22 +2298,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -2717,20 +2354,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -2753,22 +2377,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -2823,20 +2432,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -2858,22 +2454,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         vmDiskFilenames.add("/path/to/disk.vdmk");
@@ -2930,20 +2511,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -3767,22 +3335,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -3836,20 +3389,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -3872,22 +3412,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -3941,20 +3466,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -3977,22 +3489,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -4046,20 +3543,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -4082,22 +3566,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -4151,20 +3620,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -4187,22 +3643,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -4256,20 +3697,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -4292,22 +3720,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         List<String> vmDiskFilenames = new ArrayList<>();
         List<String> systemServicesNames = new ArrayList<>();
@@ -4361,20 +3774,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
@@ -4397,22 +3797,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // create a Map with the facts (i.e. Objects) you want to put in the working memory
         Map<String, Object> facts = new HashMap<>();
 
-        //Basic Fields
-        VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
-        vmWorkloadInventoryModel.setProvider("IMS vCenter");
-        vmWorkloadInventoryModel.setDatacenter("V2V-DC");
-        vmWorkloadInventoryModel.setCluster("Cluster 1");
-        vmWorkloadInventoryModel.setVmName("vm tests");
-        vmWorkloadInventoryModel.setDiskSpace(100000001L);
-        vmWorkloadInventoryModel.setMemory(4096L);
-        vmWorkloadInventoryModel.setCpuCores(4);
-        vmWorkloadInventoryModel.setGuestOSFullName("Red Hat Enterprise Linux Server release 7.6 (Maipo)");
-        // keep it lower case to check that the rules evaluate it ignoring the case
-        vmWorkloadInventoryModel.setOsProductName("rhel");
-        vmWorkloadInventoryModel.setProduct("VMware vCenter");
-        vmWorkloadInventoryModel.setVersion("6.5");
-        vmWorkloadInventoryModel.setHost_name("esx13.v2v.bos.redhat.com");
-        vmWorkloadInventoryModel.setScanRunDate(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"));
+        VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         vmWorkloadInventoryModel.setHasCpuHotRemove(false);
         vmWorkloadInventoryModel.setHasCpuHotAdd(false);
@@ -4474,20 +3859,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         // Check that the object has exactly the fields that the rules tested should add/change
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        // BasicFields
-        Assert.assertEquals("IMS vCenter", workloadInventoryReportModel.getProvider());
-        Assert.assertEquals("V2V-DC", workloadInventoryReportModel.getDatacenter());
-        Assert.assertEquals("Cluster 1", workloadInventoryReportModel.getCluster());
-        Assert.assertEquals("vm tests", workloadInventoryReportModel.getVmName());
-        Assert.assertEquals(100000001L, workloadInventoryReportModel.getDiskSpace(), 0);
-        Assert.assertEquals(4096, workloadInventoryReportModel.getMemory().intValue());
-        Assert.assertEquals(4, workloadInventoryReportModel.getCpuCores().intValue());
-        Assert.assertEquals("Red Hat Enterprise Linux Server release 7.6 (Maipo)", workloadInventoryReportModel.getOsDescription());
-        Assert.assertEquals("rhel", workloadInventoryReportModel.getOsName());
-        Assert.assertEquals("VMware vCenter", workloadInventoryReportModel.getProduct());
-        Assert.assertEquals("6.5", workloadInventoryReportModel.getVersion());
-        Assert.assertEquals("esx13.v2v.bos.redhat.com", workloadInventoryReportModel.getHost_name());
-        Assert.assertEquals(new SimpleDateFormat("yyyy-M-dd'T'hh:mm:ss.S").parse("2019-09-18T14:52:45.871Z"), workloadInventoryReportModel.getCreationDate());
+        assertRHELWorkloadInventoryReportModel(workloadInventoryReportModel);
         // Flags
         // Targets
         Assert.assertEquals(3, workloadInventoryReportModel.getRecommendedTargetsIMS().size());
