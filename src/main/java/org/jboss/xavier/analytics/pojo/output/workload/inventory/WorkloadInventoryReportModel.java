@@ -22,6 +22,8 @@ public class WorkloadInventoryReportModel
     public static final String SHARED_DISK_FLAG_NAME = "Shared Disk";
     public static final String CPU_MEMORY_HOTPLUG_FLAG_NAME = "CPU/Memory hotplug";
     public static final String CPU_AFFINITY_FLAG_NAME = "CPU Affinity";
+    public static final String VM_HOST_AFFINITY_CONFIGURED_FLAG_NAME = "VM/Host Affinity Configured";
+    public static final String NUMA_NODE_AFFINITY_FLAG_NAME = "Numa Node Affinity";
     public static final String VM_DRS_CONFIG_FLAG_NAME = "VMWare DRS";
     public static final String VM_HA_CONFIG_FLAG_NAME = "VM HA";
     public static final String BALLOONED_MEMORY_FLAG_NAME = "Ballooned memory";

@@ -32,7 +32,9 @@ public class VMWorkloadInventoryModel {
     private String product;
     private String version;
     private String host_name;
-    private boolean cpuAffinityNotNull;
+    private Boolean cpuAffinity;
+    private String numaNodeAffinity;
+    private Boolean hasVmAffinityConfig;
 
     private Date scanRunDate;
 
@@ -298,11 +300,27 @@ public class VMWorkloadInventoryModel {
     }
 
 
-    public boolean isCpuAffinityNotNull() {
-        return cpuAffinityNotNull;
+    public Boolean getCpuAffinity() {
+        return cpuAffinity;
     }
 
-    public void setCpuAffinityNotNull(boolean cpuAffinityNotNull) {
-        this.cpuAffinityNotNull = cpuAffinityNotNull;
+    public void setCpuAffinity(Boolean cpuAffinity) {
+        this.cpuAffinity = cpuAffinity;
+    }
+
+    public String getNumaNodeAffinity() {
+        return numaNodeAffinity;
+    }
+
+    public void setNumaNodeAffinity(String numaNodeAffinity) {
+        this.numaNodeAffinity = numaNodeAffinity;
+    }
+
+    public Boolean getHasVmAffinityConfig() {
+        return hasVmAffinityConfig;
+    }
+
+    public void setHasVmAffinityConfig(Boolean hasVmAffinityConfig) {
+        this.hasVmAffinityConfig = hasVmAffinityConfig;
     }
 }
