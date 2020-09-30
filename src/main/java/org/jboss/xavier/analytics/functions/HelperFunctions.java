@@ -99,6 +99,7 @@ public class HelperFunctions
         SHARED_DISK(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME,true, true),
         CPU_MEMORY_HOTPLUG(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME, true, true),
         CPU_AFFINITY(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME, false, true),
+        UEFI_BOOT(WorkloadInventoryReportModel.UEFI_BOOT_FLAG_NAME, false, true),
         VM_AFFINITY_CONFIG(WorkloadInventoryReportModel.VM_HOST_AFFINITY_CONFIGURED_FLAG_NAME, false, true),
         NUMA_NODE_AFFINITY(WorkloadInventoryReportModel.NUMA_NODE_AFFINITY_FLAG_NAME, false, true),
         VM_DRS_CONFIG(WorkloadInventoryReportModel.VM_DRS_CONFIG_FLAG_NAME, true, true),

@@ -32,6 +32,7 @@ public class VMWorkloadInventoryModel {
     private String product;
     private String version;
     private String host_name;
+    private String firmware;
     private Boolean cpuAffinity;
     private String numaNodeAffinity;
     private Boolean hasVmAffinityConfig;
@@ -322,5 +323,13 @@ public class VMWorkloadInventoryModel {
 
     public void setHasVmAffinityConfig(Boolean hasVmAffinityConfig) {
         this.hasVmAffinityConfig = hasVmAffinityConfig;
+    }
+
+    public String getFirmware() {
+        return firmware;
+    }
+
+    public void setFirmware(String firmware) {
+        this.firmware = firmware;
     }
 }

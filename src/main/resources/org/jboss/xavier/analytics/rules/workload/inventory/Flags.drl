@@ -83,6 +83,20 @@ rule "Flag_Cpu_Affinity"
         }
 end
 
+rule "Flag_UEFI_Boot"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            firmware != null,
+            firmware.equalsIgnoreCase("EFI")
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.UEFI_BOOT_FLAG_NAME)
+        }
+end
+
 
 rule "Flag_VM_Host_Affinity_Configured"
     when
