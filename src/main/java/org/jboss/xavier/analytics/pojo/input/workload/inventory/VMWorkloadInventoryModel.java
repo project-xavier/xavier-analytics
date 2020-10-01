@@ -47,6 +47,8 @@ public class VMWorkloadInventoryModel {
     private Boolean hasMemoryHotAdd;
     private Boolean hasCpuHotAdd;
     private Boolean hasCpuHotRemove;
+
+    private Boolean hasUSBcontrollers;
     private Boolean hasVmDrsConfig;
     private Boolean hasVmHaConfig;
     private Integer balloonedMemory;
@@ -62,6 +64,14 @@ public class VMWorkloadInventoryModel {
         diskSpace = new Long(0);
     }
 
+
+    public Boolean getHasUSBcontrollers() {
+        return hasUSBcontrollers;
+    }
+
+    public void setHasUSBcontrollers(Boolean hasUSBcontrollers) {
+        this.hasUSBcontrollers = hasUSBcontrollers;
+    }
 
     public Boolean getHasOpaqueNetwork() {
         return hasOpaqueNetwork;

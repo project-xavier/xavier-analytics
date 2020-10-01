@@ -83,6 +83,22 @@ rule "Flag_Cpu_Affinity"
         }
 end
 
+
+rule "Flag_USB_Device"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            hasUSBcontrollers != null,
+            hasUSBcontrollers == true
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.USB_CONTROLLERS_FLAG_NAME)
+        }
+end
+
+
 rule "Flag_UEFI_Boot"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
@@ -207,5 +223,6 @@ rule "Flag_PassthroughDevice"
             addFlagIMS(WorkloadInventoryReportModel.PASSTHROUGH_DEVICE_FLAG_NAME)
         }
 end
+
 
 
