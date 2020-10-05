@@ -33,7 +33,7 @@ public class VMWorkloadInventoryModel {
     private String version;
     private String host_name;
     private String firmware;
-    private Boolean cpuAffinity;
+    private String cpuAffinity;
     private String numaNodeAffinity;
     private Boolean hasVmAffinityConfig;
 
@@ -311,11 +311,11 @@ public class VMWorkloadInventoryModel {
     }
 
 
-    public Boolean getCpuAffinity() {
+    public String getCpuAffinity() {
         return cpuAffinity;
     }
 
-    public void setCpuAffinity(Boolean cpuAffinity) {
+    public void setCpuAffinity(String cpuAffinity) {
         this.cpuAffinity = cpuAffinity;
     }
 

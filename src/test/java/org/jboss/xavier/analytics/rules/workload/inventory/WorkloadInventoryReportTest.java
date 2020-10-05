@@ -240,7 +240,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         VMWorkloadInventoryModel vmWorkloadInventoryModel = RHEL_VMWorkloadInventoryModel();
 
         //Flags
-        vmWorkloadInventoryModel.setCpuAffinity(true);
+        vmWorkloadInventoryModel.setCpuAffinity("0,2");
 
         Map<String, Object> results = basicCommandExecution(facts, vmWorkloadInventoryModel);
 
