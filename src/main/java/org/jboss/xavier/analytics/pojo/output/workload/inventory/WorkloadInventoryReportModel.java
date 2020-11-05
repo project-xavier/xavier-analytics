@@ -20,18 +20,18 @@ public class WorkloadInventoryReportModel
 
     public static final String RDM_DISK_FLAG_NAME = "RDM";
     public static final String SHARED_DISK_FLAG_NAME = "Shared Disk";
-    public static final String CPU_MEMORY_HOTPLUG_FLAG_NAME = "CPU/Memory hotplug";
-    public static final String CPU_AFFINITY_FLAG_NAME = "CPU Affinity";
-    public static final String USB_CONTROLLERS_FLAG_NAME = "USB device";
-    public static final String UEFI_BOOT_FLAG_NAME = "UEFI Boot";
-    public static final String VM_HOST_AFFINITY_CONFIGURED_FLAG_NAME = "VM/Host Affinity Configured";
-    public static final String NUMA_NODE_AFFINITY_FLAG_NAME = "Numa Node Affinity";
+    public static final String CPU_MEMORY_HOTPLUG_FLAG_NAME = "CPU/memory hotplug";
+    public static final String CPU_AFFINITY_FLAG_NAME = "CPU affinity";
+    public static final String USB_CONTROLLERS_FLAG_NAME = "USB controller";
+    public static final String UEFI_BOOT_FLAG_NAME = "UEFI secure boot";
+    public static final String VM_HOST_AFFINITY_CONFIGURED_FLAG_NAME = "VM-Host affinity";
+    public static final String NUMA_NODE_AFFINITY_FLAG_NAME = "Numa node affinity";
     public static final String VM_DRS_CONFIG_FLAG_NAME = "VMWare DRS";
-    public static final String VM_HA_CONFIG_FLAG_NAME = "VM HA";
-    public static final String BALLOONED_MEMORY_FLAG_NAME = "Ballooned memory";
-    public static final String ENCRYPTED_DISK_FLAG_NAME = "Encrypted Disk";
-    public static final String OPAQUE_NETWORK_FLAG_NAME = "Opaque Network";
-    public static final String PASSTHROUGH_DEVICE_FLAG_NAME = "Passthrough Device";
+    public static final String VM_HA_CONFIG_FLAG_NAME = "HA";
+    public static final String BALLOONED_MEMORY_FLAG_NAME = "Memory ballooning";
+    public static final String ENCRYPTED_DISK_FLAG_NAME = "Encrypted disk";
+    public static final String OPAQUE_NETWORK_FLAG_NAME = "Opaque network";
+    public static final String PASSTHROUGH_DEVICE_FLAG_NAME = "Passthrough device";
 
     public static final String COMPLEXITY_EASY = "Easy";
     public static final String COMPLEXITY_MEDIUM = "Medium";
