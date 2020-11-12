@@ -9,6 +9,7 @@ agenda-group "MAIN"
 rule "AgendaFocusForReevaluate"
     when
     then
+        kcontext.getKieRuntime().getAgenda().getAgendaGroup("Category").setFocus();
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("Complexity").setFocus();
         kcontext.getKieRuntime().getAgenda().getAgendaGroup("TargetsReevaluate").setFocus();
 end

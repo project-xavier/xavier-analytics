@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 68);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 72);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(13, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -93,7 +93,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP", "Target_OpenJDK",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -178,7 +180,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -193,7 +195,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OCP", "Target_OpenJDK",
                 // Complexity
-                "One_Flag_Supported_OS"
+                "One_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -245,7 +249,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = basicCommandExecution(facts, vmWorkloadInventoryModel);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -260,7 +264,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP",
                 // Complexity
-                "One_Flag_Supported_OS"
+                "One_Flag_Supported_OS",
+                // Category
+                "Category_Warning"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -336,7 +342,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = basicCommandExecution(facts, vmWorkloadInventoryModel);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -351,7 +357,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP",
                 // Complexity
-                "One_Flag_Supported_OS"
+                "One_Flag_Supported_OS",
+                // Category
+                "Category_Critical"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -464,7 +472,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -479,7 +487,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV",
                 // Complexity
-                "More_Than_One_Flag_Supported_OS"
+                "More_Than_One_Flag_Supported_OS",
+                // Category
+                "Category_Critical"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -551,7 +561,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -566,7 +576,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_RHEL",
                 // Complexity
-                "No_Flag_Convertible_OS"
+                "No_Flag_Convertible_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -666,7 +678,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -681,7 +693,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_RHEL",
                 // Complexity
-                "One_Or_More_Flags_Convertible_OS"
+                "One_Or_More_Flags_Convertible_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -755,6 +769,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
         //Flags
         vmWorkloadInventoryModel.setHasRdmDisk(true);
+        vmWorkloadInventoryModel.setHasVmDrsConfig(true);
 
         List<String> systemServicesNames = new ArrayList<>();
         systemServicesNames.add("unix_service");
@@ -778,7 +793,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -789,13 +804,15 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // OSFamily
                 "Debian_OSFamily",
                 // Flags
-                "Flag_Rdm_Disk",
+                "Flag_Rdm_Disk", "Flag_VM_DRS_Config",
                 // Workloads
                 "SsaEnabled_System_Services_Present",
                 // Target
                 "Target_None",
                 // Complexity
-                "One_Or_More_Flags_Not_Supported_OS"
+                "One_Or_More_Flags_Not_Supported_OS",
+                // Category
+                "Category_Information"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -828,7 +845,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
-        Assert.assertEquals(1, flagsIMS.size());
+        Assert.assertEquals(2, flagsIMS.size());
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
@@ -841,6 +858,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertTrue(workloadInventoryReportModel.getSsaEnabled());
         // OSFamily
         Assert.assertEquals("Debian", workloadInventoryReportModel.getOsFamily());
+        Assert.assertEquals("Information", workloadInventoryReportModel.getVmCategory());
     }
 
     private VMWorkloadInventoryModel DEBIAN_VMWorkloadInventoryModel() throws ParseException {
@@ -893,7 +911,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -908,7 +926,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -973,7 +993,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -989,7 +1009,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV",
                 // Complexity
-                "One_Flag_Supported_OS"
+                "One_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1054,7 +1076,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1070,7 +1092,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV",
                 // Complexity
-                "One_Flag_Supported_OS"
+                "One_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1135,7 +1159,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1151,7 +1175,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV",
                 // Complexity
-                "One_Flag_Supported_OS"
+                "One_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1219,7 +1245,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1234,7 +1260,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "Not_Detected_OS"
+                "Not_Detected_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1347,7 +1375,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1362,7 +1390,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "Not_Detected_OS"
+                "Not_Detected_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1442,7 +1472,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1458,7 +1488,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV",
                 // Complexity
-                "More_Than_One_Flag_Supported_OS"
+                "More_Than_One_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1523,7 +1555,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1538,7 +1570,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1600,7 +1634,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1615,7 +1649,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP", "Target_RedHatJBossEAP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1678,7 +1714,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1693,7 +1729,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP", "Target_RedHatJBossEAP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1756,7 +1794,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1771,7 +1809,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1833,7 +1873,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1848,7 +1888,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1910,7 +1952,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -1925,7 +1967,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -1987,7 +2031,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2002,7 +2046,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2066,7 +2112,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2081,7 +2127,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2160,7 +2208,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(13, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2176,7 +2224,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2251,7 +2301,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2264,7 +2314,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2330,7 +2382,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2345,7 +2397,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2408,7 +2462,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2423,7 +2477,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2487,7 +2543,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(8, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2502,7 +2558,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2574,7 +2632,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2590,7 +2648,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2673,7 +2733,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2689,7 +2749,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2773,7 +2835,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2789,7 +2851,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2873,7 +2937,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2889,7 +2953,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -2973,7 +3039,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -2989,7 +3055,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3074,7 +3142,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3090,7 +3158,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3174,7 +3244,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3190,7 +3260,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3275,7 +3347,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3291,7 +3363,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3365,7 +3439,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3380,7 +3454,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3442,7 +3518,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3457,7 +3533,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3519,7 +3597,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3534,7 +3612,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3596,7 +3676,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3611,7 +3691,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3673,7 +3755,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3688,7 +3770,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3750,7 +3834,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3765,7 +3849,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3835,7 +3921,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3850,7 +3936,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_RHV", "Target_OSP", "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3910,7 +3998,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3930,7 +4018,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OSP",
                 "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -3970,7 +4060,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -3989,7 +4079,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_RHV",
                 "Target_OSP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4029,7 +4121,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4049,7 +4141,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OSP",
                 "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4089,7 +4183,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4109,7 +4203,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OSP",
                 "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4149,7 +4245,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4169,7 +4265,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OSP",
                 "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4209,7 +4307,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4227,7 +4325,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4267,7 +4367,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4287,7 +4387,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OSP",
                 "Target_RHEL",
                 // Complexity
-                "No_Flag_Convertible_OS"
+                "No_Flag_Convertible_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4327,7 +4429,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4347,7 +4449,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OSP",
                 "Target_RHEL",
                 // Complexity
-                "No_Flag_Convertible_OS"
+                "No_Flag_Convertible_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4387,7 +4491,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4405,7 +4509,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4445,7 +4551,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(9, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4463,7 +4569,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4507,7 +4615,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(13, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(14, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4529,7 +4637,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OCP",
                 "Target_OpenJDK",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4575,7 +4685,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(13, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4596,7 +4706,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OSP",
                 "Target_OCP",
                 // Complexity
-                "No_Flag_Supported_OS"
+                "No_Flag_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4642,7 +4754,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(10, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(11, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4661,7 +4773,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // Target
                 "Target_None",
                 // Complexity
-                "No_Flags_Not_Supported_OS"
+                "No_Flags_Not_Supported_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4716,7 +4830,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(14, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(15, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4739,7 +4853,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_RHEL",
                 "Target_RedHatJBossEAP",
                 // Complexity
-                "No_Flag_Convertible_OS"
+                "No_Flag_Convertible_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4787,7 +4903,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(13, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(14, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4809,7 +4925,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_RHEL",
                 "Target_RedHatJBossEAP",
                 // Complexity
-                "No_Flag_Convertible_OS"
+                "No_Flag_Convertible_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4856,7 +4974,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(13, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4877,7 +4995,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_OSP",
                 "Target_RHEL",
                 // Complexity
-                "No_Flag_Convertible_OS"
+                "No_Flag_Convertible_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4923,7 +5043,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(13, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(14, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -4945,7 +5065,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_RHEL",
                 "Target_RedHatJBossEAP",
                 // Complexity
-                "No_Flag_Convertible_OS"
+                "No_Flag_Convertible_OS",
+                // Category
+                "Category_Suitable"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -4993,7 +5115,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(14, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(15, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -5016,7 +5138,9 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Target_RHEL",
                 "Target_RedHatJBossEAP",
                 // Complexity
-                "One_Or_More_Flags_Convertible_OS"
+                "One_Or_More_Flags_Convertible_OS",
+                // Category
+                "Category_Warning"
                 );
 
         // retrieve the QueryResults that was available in the working memory from the results
@@ -5066,7 +5190,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(17, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(18, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -5083,16 +5207,18 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Workloads_Websphere",
                 // Target
                 "Target_RHV",
-                "Target_OSP",
                 "Target_RHEL",
                 "Target_RedHatJBossEAP",
+                "SsaEnabled_System_Services_Present",
                 // Complexity
-                "No_Flag_Convertible_OS",
+                "One_Or_More_Flags_Convertible_OS",
                 "Flag_Opaque_Network",
                 "Flag_Encrypted_Disk",
                 "Flag_Ballooned_Memory",
                 "Flag_VM_HA_Config",
-                "Flag_VM_DRS_Config"
+                "Flag_VM_DRS_Config",
+                // Category
+                "Category_Critical"
         );
 
         // retrieve the QueryResults that was available in the working memory from the results

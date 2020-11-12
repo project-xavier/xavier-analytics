@@ -5,6 +5,7 @@ import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInvento
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class HelperFunctions
@@ -95,29 +96,32 @@ public class HelperFunctions
     }
 
     public enum FlagUnsuitabilityForTargets{
-        RDM_DISK(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME, true, false),
-        SHARED_DISK(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME,true, true),
-        CPU_MEMORY_HOTPLUG(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME, true, true),
-        CPU_AFFINITY(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME, false, true),
-        UEFI_BOOT(WorkloadInventoryReportModel.UEFI_BOOT_FLAG_NAME, false, true),
-        VM_AFFINITY_CONFIG(WorkloadInventoryReportModel.VM_HOST_AFFINITY_CONFIGURED_FLAG_NAME, false, true),
-        NUMA_NODE_AFFINITY(WorkloadInventoryReportModel.NUMA_NODE_AFFINITY_FLAG_NAME, false, true),
-        VM_DRS_CONFIG(WorkloadInventoryReportModel.VM_DRS_CONFIG_FLAG_NAME, true, true),
-        VM_HA_CONFIG(WorkloadInventoryReportModel.VM_HA_CONFIG_FLAG_NAME, true, true),
-        BALLOONED_MEMORY(WorkloadInventoryReportModel.BALLOONED_MEMORY_FLAG_NAME, true, true),
-        ENCRYPTED_DISK(WorkloadInventoryReportModel.ENCRYPTED_DISK_FLAG_NAME, true, true),
-        OPAQUE_NETWORK(WorkloadInventoryReportModel.OPAQUE_NETWORK_FLAG_NAME, true, true),
-        HAS_PASSTHROUGH_DEVICE(WorkloadInventoryReportModel.PASSTHROUGH_DEVICE_FLAG_NAME, false, true);
+        RDM_DISK(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME, true, false, null),
+        SHARED_DISK(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME,true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
+        CPU_MEMORY_HOTPLUG(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME, true, true, null),
+        CPU_AFFINITY(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING),
+        UEFI_BOOT(WorkloadInventoryReportModel.UEFI_BOOT_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
+        VM_AFFINITY_CONFIG(WorkloadInventoryReportModel.VM_HOST_AFFINITY_CONFIGURED_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING),
+        NUMA_NODE_AFFINITY(WorkloadInventoryReportModel.NUMA_NODE_AFFINITY_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING),
+        VM_DRS_CONFIG(WorkloadInventoryReportModel.VM_DRS_CONFIG_FLAG_NAME, true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_INFORMATION),
+        VM_HA_CONFIG(WorkloadInventoryReportModel.VM_HA_CONFIG_FLAG_NAME, true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING),
+        BALLOONED_MEMORY(WorkloadInventoryReportModel.BALLOONED_MEMORY_FLAG_NAME, true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING),
+        ENCRYPTED_DISK(WorkloadInventoryReportModel.ENCRYPTED_DISK_FLAG_NAME, true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
+        OPAQUE_NETWORK(WorkloadInventoryReportModel.OPAQUE_NETWORK_FLAG_NAME, true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
+        HAS_PASSTHROUGH_DEVICE(WorkloadInventoryReportModel.PASSTHROUGH_DEVICE_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
+        HAS_USB_CONTROLLERS(WorkloadInventoryReportModel.USB_CONTROLLERS_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING);
 
         private final String name;
         private final boolean isUnsuitableForOSP;
         private final boolean isUnsuitableforOCP;
+        private final String categoryLevel;
 
-        FlagUnsuitabilityForTargets(String name, boolean isUnsuitableForOSP, boolean isUnsuitableForOCP)
+        FlagUnsuitabilityForTargets(String name, boolean isUnsuitableForOSP, boolean isUnsuitableForOCP, String categoryLevel)
         {
             this.name = name;
             this.isUnsuitableForOSP = isUnsuitableForOSP;
             this.isUnsuitableforOCP = isUnsuitableForOCP;
+            this.categoryLevel = categoryLevel;
         }
 
         boolean isUnsuitableForOSP()
@@ -134,6 +138,8 @@ public class HelperFunctions
         {
             return this.name;
         }
+
+        public String getCategoryLevel() { return this.categoryLevel; }
     }
 
     public static boolean isFlagUnsuitableForOSP(String flagToCheck)
@@ -144,5 +150,15 @@ public class HelperFunctions
     public static boolean isFlagUnsuitableForOCP(String flagToCheck)
     {
         return Arrays.stream(FlagUnsuitabilityForTargets.values()).anyMatch(value -> flagToCheck.toLowerCase().contains(value.getName().toLowerCase()) && value.isUnsuitableForOCP());
+    }
+
+    public static boolean doesFlagsCollectionContainCategory(Set<String> flags, String categoryToCheckFor) {
+        if (flags.stream().anyMatch(flag -> Arrays.stream(FlagUnsuitabilityForTargets.values()).anyMatch
+                (value -> flag.toLowerCase().contains(value.getName().toLowerCase()) && categoryToCheckFor.equals(value.getCategoryLevel()))))
+        {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
