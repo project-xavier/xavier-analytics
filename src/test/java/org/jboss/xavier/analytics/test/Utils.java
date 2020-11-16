@@ -83,7 +83,7 @@ public class Utils
         List<AfterMatchFiredEvent> events = argumentCaptor.getAllValues();
 
         Assert.assertEquals(events.size(), rulesNames.length);
-        Assert.assertTrue(Arrays.asList(rulesNames).stream().anyMatch(a -> events.stream().anyMatch(e -> e.getMatch().getRule().getName().equalsIgnoreCase(a))));
+        Assert.assertTrue(Arrays.asList(rulesNames).stream().allMatch(a -> events.stream().anyMatch(e -> e.getMatch().getRule().getName().equalsIgnoreCase(a))));
     }
 
     public static void checkLoadedRulesNumber(StatelessKieSession kieSession, String kiePackageName, int expectedLoadedRules)

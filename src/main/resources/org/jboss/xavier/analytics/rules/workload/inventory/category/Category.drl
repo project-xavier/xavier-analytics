@@ -1,0 +1,77 @@
+package org.jboss.xavier.analytics.rules.workload.inventory.category;
+
+import org.jboss.xavier.analytics.pojo.output.workload.inventory.WorkloadInventoryReportModel
+
+import function org.jboss.xavier.analytics.functions.HelperFunctions.doesFlagsCollectionContainCategory;
+
+dialect "java"
+agenda-group "Category"
+lock-on-active true
+auto-focus false
+
+function boolean isCategoryPresent(WorkloadInventoryReportModel report, String categoryToCheckFor)
+{
+    return doesFlagsCollectionContainCategory(report.getFlagsIMS(), categoryToCheckFor);
+}
+
+
+
+rule "Category_Critical"
+    salience 2
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS != null,
+            isCategoryPresent(this, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setVmCategory(WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL)
+        }
+end
+
+
+rule "Category_Warning"
+salience 1
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS != null,
+            vmCategory == null,
+            isCategoryPresent(this, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setVmCategory(WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING)
+        }
+end
+
+rule "Category_Information"
+    salience 0
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            flagsIMS != null,
+            vmCategory == null,
+            isCategoryPresent(this, WorkloadInventoryReportModel.FLAG_CATEGORY_INFORMATION)
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+
+            setVmCategory(WorkloadInventoryReportModel.FLAG_CATEGORY_INFORMATION)
+        }
+end
+
+
+rule "Category_Suitable"
+    salience -1
+    when
+        workloadInventoryReport : WorkloadInventoryReportModel(
+            vmCategory == null
+        )
+    then
+        modify(workloadInventoryReport)
+        {
+            setVmCategory(WorkloadInventoryReportModel.FLAG_CATEGORY_SUITABLE)
+        }
+end
