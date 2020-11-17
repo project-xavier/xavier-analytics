@@ -5151,7 +5151,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Assert.assertThat(queryResultsRow.get("report"), instanceOf(WorkloadInventoryReportModel.class));
 
         WorkloadInventoryReportModel workloadInventoryReportModel = (WorkloadInventoryReportModel) queryResultsRow.get("report");
-        Assert.assertTrue(workloadInventoryReportModel.getFlagsIMS().stream().anyMatch(target -> target.toLowerCase().contains("USB device".toLowerCase())));
+        Assert.assertTrue(workloadInventoryReportModel.getFlagsIMS().stream().anyMatch(target -> target.toLowerCase().contains(WorkloadInventoryReportModel.USB_CONTROLLERS_FLAG_NAME.toLowerCase())));
   }
 
     
