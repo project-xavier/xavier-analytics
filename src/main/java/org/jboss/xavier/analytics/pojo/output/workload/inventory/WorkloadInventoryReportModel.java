@@ -25,8 +25,8 @@ public class WorkloadInventoryReportModel
     public static final String USB_CONTROLLERS_FLAG_NAME = "USB controller";
     public static final String UEFI_BOOT_FLAG_NAME = "UEFI secure boot";
     public static final String VM_HOST_AFFINITY_CONFIGURED_FLAG_NAME = "VM-Host affinity";
-    public static final String NUMA_NODE_AFFINITY_FLAG_NAME = "Numa node affinity";
-    public static final String VM_DRS_CONFIG_FLAG_NAME = "VMWare DRS";
+    public static final String NUMA_NODE_AFFINITY_FLAG_NAME = "NUMA node affinity";
+    public static final String VM_DRS_CONFIG_FLAG_NAME = "VMware DRS";
     public static final String VM_HA_CONFIG_FLAG_NAME = "HA";
     public static final String BALLOONED_MEMORY_FLAG_NAME = "Memory ballooning";
     public static final String ENCRYPTED_DISK_FLAG_NAME = "Encrypted disk";
