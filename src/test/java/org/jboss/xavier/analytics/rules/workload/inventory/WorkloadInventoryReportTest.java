@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 72);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 73);
     }
 
     @Test
@@ -5156,7 +5156,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     
     @Test
-    public void testVMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENET() throws ParseException {
+    public void testVMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENET_SRIOV() throws ParseException {
         //Basic Fields
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
         vmWorkloadInventoryModel.setProvider("provider");
@@ -5175,6 +5175,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setBalloonedMemory(10000);
         vmWorkloadInventoryModel.setHasEncryptedDisk(true);
         vmWorkloadInventoryModel.setHasOpaqueNetwork(true);
+        vmWorkloadInventoryModel.setHasSriovNic(true);
 
         List<String> systemServicesNames = new ArrayList<>();
         systemServicesNames.add("Dmgr_was.init");
@@ -5190,7 +5191,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(18, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(19, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -5217,6 +5218,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 "Flag_Ballooned_Memory",
                 "Flag_VM_HA_Config",
                 "Flag_VM_DRS_Config",
+                "Flag_SR-IOV",
                 // Category
                 "Category_Critical"
         );

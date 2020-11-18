@@ -55,6 +55,7 @@ public class VMWorkloadInventoryModel {
     private Boolean hasEncryptedDisk;
     private Boolean hasOpaqueNetwork;
     private Boolean hasPassthroughDevice;
+    private Boolean hasSriovNic;
 
     public VMWorkloadInventoryModel() {
         this.systemServicesNames = new ArrayList<>();
@@ -341,5 +342,13 @@ public class VMWorkloadInventoryModel {
 
     public void setFirmware(String firmware) {
         this.firmware = firmware;
+    }
+
+    public Boolean getHasSriovNic() {
+        return hasSriovNic;
+    }
+
+    public void setHasSriovNic(Boolean hasSriovNic) {
+        this.hasSriovNic = hasSriovNic;
     }
 }

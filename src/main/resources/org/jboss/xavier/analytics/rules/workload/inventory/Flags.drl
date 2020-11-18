@@ -224,5 +224,19 @@ rule "Flag_PassthroughDevice"
         }
 end
 
+rule "Flag_SR-IOV"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            hasSriovNic != null,
+            hasSriovNic == true
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.SR_IOV_NIC_FLAG_NAME)
+        }
+end
+
 
 

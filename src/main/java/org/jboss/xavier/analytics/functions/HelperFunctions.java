@@ -109,7 +109,8 @@ public class HelperFunctions
         ENCRYPTED_DISK(WorkloadInventoryReportModel.ENCRYPTED_DISK_FLAG_NAME, true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
         OPAQUE_NETWORK(WorkloadInventoryReportModel.OPAQUE_NETWORK_FLAG_NAME, true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
         HAS_PASSTHROUGH_DEVICE(WorkloadInventoryReportModel.PASSTHROUGH_DEVICE_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
-        HAS_USB_CONTROLLERS(WorkloadInventoryReportModel.USB_CONTROLLERS_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING);
+        HAS_USB_CONTROLLERS(WorkloadInventoryReportModel.USB_CONTROLLERS_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING),
+        SR_IOV_NIC(WorkloadInventoryReportModel.SR_IOV_NIC_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL);
 
         private final String name;
         private final boolean isUnsuitableForOSP;

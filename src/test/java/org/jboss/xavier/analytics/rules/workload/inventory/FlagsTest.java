@@ -17,7 +17,7 @@ public class FlagsTest extends BaseTest {
 
     public FlagsTest() {
         super("/org/jboss/xavier/analytics/rules/workload/inventory/Flags.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 15);
+                "org.jboss.xavier.analytics.rules.workload.inventory", 16);
     }
 
     @Test
@@ -534,7 +534,7 @@ public class FlagsTest extends BaseTest {
     }
 
     @Test
-    public void test_VMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENETWORK_true() {
+    public void test_VMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENETWORK_SRIOV_true() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "Flags");
@@ -545,14 +545,15 @@ public class FlagsTest extends BaseTest {
         vmWorkloadInventoryModel.setBalloonedMemory(1000);
         vmWorkloadInventoryModel.setHasEncryptedDisk(true);
         vmWorkloadInventoryModel.setHasOpaqueNetwork(true);
+        vmWorkloadInventoryModel.setHasSriovNic(true);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
-        Assert.assertEquals(6, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Flag_Opaque_Network", "Flag_Encrypted_Disk", "Flag_Ballooned_Memory", "Flag_VM_HA_Config", "Flag_VM_DRS_Config");
+        Assert.assertEquals(7, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Flag_Opaque_Network", "Flag_Encrypted_Disk", "Flag_Ballooned_Memory", "Flag_VM_HA_Config", "Flag_VM_DRS_Config", "Flag_SR-IOV");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
         // just one report has to be created
@@ -560,16 +561,17 @@ public class FlagsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Set<String> flagsIMS = report.getFlagsIMS();
 
-        Assert.assertEquals(5, flagsIMS.size());
+        Assert.assertEquals(6, flagsIMS.size());
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.VM_DRS_CONFIG_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.VM_HA_CONFIG_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.BALLOONED_MEMORY_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.ENCRYPTED_DISK_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.OPAQUE_NETWORK_FLAG_NAME));
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.SR_IOV_NIC_FLAG_NAME));
     }    
     
     @Test
-    public void test_VMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENETWORK_false() {
+    public void test_VMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENETWORK_SRIOV_false() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "Flags");
@@ -580,6 +582,7 @@ public class FlagsTest extends BaseTest {
         vmWorkloadInventoryModel.setBalloonedMemory(0);
         vmWorkloadInventoryModel.setHasEncryptedDisk(false);
         vmWorkloadInventoryModel.setHasOpaqueNetwork(false);
+        vmWorkloadInventoryModel.setHasSriovNic(false);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
@@ -709,7 +712,7 @@ public class FlagsTest extends BaseTest {
     }   
     
     @Test
-    public void test_VMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENETWORK_null() {
+    public void test_VMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENETWORK_SRIOV_null() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "Flags");
@@ -720,6 +723,7 @@ public class FlagsTest extends BaseTest {
         vmWorkloadInventoryModel.setBalloonedMemory(null);
         vmWorkloadInventoryModel.setHasEncryptedDisk(null);
         vmWorkloadInventoryModel.setHasOpaqueNetwork(null);
+        vmWorkloadInventoryModel.setHasSriovNic(null);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
