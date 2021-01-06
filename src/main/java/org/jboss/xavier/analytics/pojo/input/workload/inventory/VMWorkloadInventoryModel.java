@@ -56,6 +56,7 @@ public class VMWorkloadInventoryModel {
     private Boolean hasOpaqueNetwork;
     private Boolean hasPassthroughDevice;
     private Boolean hasSriovNic;
+    private Boolean hasSharedVmdk;
 
     public VMWorkloadInventoryModel() {
         this.systemServicesNames = new ArrayList<>();
@@ -350,5 +351,13 @@ public class VMWorkloadInventoryModel {
 
     public void setHasSriovNic(Boolean hasSriovNic) {
         this.hasSriovNic = hasSriovNic;
+    }
+
+    public Boolean getHasSharedVmdk() {
+        return hasSharedVmdk;
+    }
+
+    public void setHasSharedVmdk(Boolean hasSharedVmdk) {
+        this.hasSharedVmdk = hasSharedVmdk;
     }
 }

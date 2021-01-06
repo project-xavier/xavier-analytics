@@ -239,4 +239,19 @@ rule "Flag_SR-IOV"
 end
 
 
+rule "Flag_Shared_VMDK"
+    when
+        vmWorkloadInventoryModel : VMWorkloadInventoryModel(
+            hasSharedVmdk != null,
+            hasSharedVmdk == true
+        )
+        workloadInventoryReport : WorkloadInventoryReportModel()
+    then
+        modify(workloadInventoryReport)
+        {
+            addFlagIMS(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME)
+        }
+end
+
+
 

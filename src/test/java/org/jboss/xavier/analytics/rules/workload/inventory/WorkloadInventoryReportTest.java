@@ -25,7 +25,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
 
     public WorkloadInventoryReportTest()
     {
-        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 73);
+        super("WorkloadInventoryKSession0", "org.jboss.xavier.analytics.rules.workload.inventory.*", 74);
     }
 
     @Test
@@ -447,6 +447,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         vmWorkloadInventoryModel.setFirmware("EFI");
         vmWorkloadInventoryModel.setHasVmAffinityConfig(true);
         vmWorkloadInventoryModel.setNumaNodeAffinity("set");
+        vmWorkloadInventoryModel.setHasSharedVmdk(true);
         List<String> vmDiskFilenames = new ArrayList<>();
         vmDiskFilenames.add("/path/to/disk.vdmk");
         vmWorkloadInventoryModel.setVmDiskFilenames(vmDiskFilenames);
@@ -472,7 +473,7 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         Map<String, Object> results = Utils.executeCommandsAndGetResults(kieSession, commands);
 
         // check that the number of rules fired is what you expect
-        Assert.assertEquals(12, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Assert.assertEquals(13, results.get(NUMBER_OF_FIRED_RULE_KEY));
         // check the names of the rules fired are what you expect
         Utils.verifyRulesFiredNames(this.agendaEventListener,
                 // BasicFields
@@ -481,7 +482,8 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
                 // OSFamily
                 "RHEL_OSFamily",
                 // Flags
-                "Flag_Rdm_Disk", "Flag_Cpu_Memory_Hotplug_Memory_Add", "Flag_VM_Host_Affinity_Configured", "Flag_Numa_Node_Affinity", "Flag_UEFI_Boot",
+                "Flag_Rdm_Disk", "Flag_Cpu_Memory_Hotplug_Memory_Add", "Flag_VM_Host_Affinity_Configured",
+                "Flag_Numa_Node_Affinity", "Flag_UEFI_Boot", "Flag_Shared_VMDK",
                 // Workloads
                 "SsaEnabled_System_Services_Present",
                 // Target
@@ -508,12 +510,13 @@ public class WorkloadInventoryReportTest extends BaseIntegrationTest {
         // Flags
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
-        Assert.assertEquals(5, flagsIMS.size());
+        Assert.assertEquals(6, flagsIMS.size());
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.VM_HOST_AFFINITY_CONFIGURED_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.NUMA_NODE_AFFINITY_FLAG_NAME));
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.UEFI_BOOT_FLAG_NAME));
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME));
         // Targets
         Set<String> targets = workloadInventoryReportModel.getRecommendedTargetsIMS();
         Assert.assertEquals(1, targets.size());

@@ -17,17 +17,18 @@ public class FlagsTest extends BaseTest {
 
     public FlagsTest() {
         super("/org/jboss/xavier/analytics/rules/workload/inventory/Flags.drl", ResourceType.DRL,
-                "org.jboss.xavier.analytics.rules.workload.inventory", 16);
+                "org.jboss.xavier.analytics.rules.workload.inventory", 17);
     }
 
     @Test
-    public void test_NicsAndRdmDiskFlags() {
+    public void test_NicsSharedVmdkAndRdmDiskFlags() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "Flags");
 
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
         vmWorkloadInventoryModel.setNicsCount(5);
+        vmWorkloadInventoryModel.setHasSharedVmdk(true);
         vmWorkloadInventoryModel.setHasRdmDisk(true);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
@@ -37,8 +38,8 @@ public class FlagsTest extends BaseTest {
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
 
-        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Flag_Rdm_Disk");
+        Assert.assertEquals(3, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Flag_Rdm_Disk", "Flag_Shared_VMDK");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
 
@@ -47,8 +48,9 @@ public class FlagsTest extends BaseTest {
         WorkloadInventoryReportModel report = reports.get(0);
         Set<String> flagsIMS = workloadInventoryReportModel.getFlagsIMS();
         Assert.assertNotNull(flagsIMS);
-        Assert.assertEquals(1, flagsIMS.size());
+        Assert.assertEquals(2, flagsIMS.size());
         Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME));
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME));
 
     }
 
@@ -138,7 +140,7 @@ public class FlagsTest extends BaseTest {
     }
 
     @Test
-    public void test_RdmDiskFalse()
+    public void test_RdmDiskSharedVmdkFalse()
     {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
@@ -146,6 +148,7 @@ public class FlagsTest extends BaseTest {
 
         VMWorkloadInventoryModel vmWorkloadInventoryModel = new VMWorkloadInventoryModel();
         vmWorkloadInventoryModel.setHasRdmDisk(false);
+        vmWorkloadInventoryModel.setHasSharedVmdk(false);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
@@ -712,7 +715,7 @@ public class FlagsTest extends BaseTest {
     }   
     
     @Test
-    public void test_VMDRS_VMHA_BALLOONEDMEM_ENCRYPTEDDISK_OPAQUENETWORK_SRIOV_null() {
+    public void test_CNV_Fields_null() {
         Map<String, Object> facts = new HashMap<>();
         // always add a String fact with the name of the agenda group defined in the DRL file (e.g. "SourceCosts")
         facts.put("agendaGroup", "Flags");
@@ -724,6 +727,7 @@ public class FlagsTest extends BaseTest {
         vmWorkloadInventoryModel.setHasEncryptedDisk(null);
         vmWorkloadInventoryModel.setHasOpaqueNetwork(null);
         vmWorkloadInventoryModel.setHasSriovNic(null);
+        vmWorkloadInventoryModel.setHasSharedVmdk(null);
         facts.put("vmWorkloadInventoryModel", vmWorkloadInventoryModel);
 
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
