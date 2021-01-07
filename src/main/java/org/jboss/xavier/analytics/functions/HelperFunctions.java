@@ -97,7 +97,6 @@ public class HelperFunctions
 
     public enum FlagUnsuitabilityForTargets{
         RDM_DISK(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME, true, false, null),
-        SHARED_DISK(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME,true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
         CPU_MEMORY_HOTPLUG(WorkloadInventoryReportModel.CPU_MEMORY_HOTPLUG_FLAG_NAME, true, true, null),
         CPU_AFFINITY(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING),
         UEFI_BOOT(WorkloadInventoryReportModel.UEFI_BOOT_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
@@ -111,7 +110,8 @@ public class HelperFunctions
         HAS_PASSTHROUGH_DEVICE(WorkloadInventoryReportModel.PASSTHROUGH_DEVICE_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
         HAS_USB_CONTROLLERS(WorkloadInventoryReportModel.USB_CONTROLLERS_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_WARNING),
         SR_IOV_NIC(WorkloadInventoryReportModel.SR_IOV_NIC_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL),
-        SHARED_VMDK(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME, false, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL);
+        SHARED_VMDK(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME, true, true, WorkloadInventoryReportModel.FLAG_CATEGORY_CRITICAL);
+
 
         private final String name;
         private final boolean isUnsuitableForOSP;

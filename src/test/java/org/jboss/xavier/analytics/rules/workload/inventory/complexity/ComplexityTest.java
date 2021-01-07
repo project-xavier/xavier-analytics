@@ -107,7 +107,7 @@ public class ComplexityTest extends BaseTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("Microsoft Windows");
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME);
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -186,7 +186,7 @@ public class ComplexityTest extends BaseTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("DEBIAN");
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -265,7 +265,7 @@ public class ComplexityTest extends BaseTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription(WorkloadInventoryReportModel.OS_NAME_DEFAULT_VALUE);
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.RDM_DISK_FLAG_NAME);
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
@@ -344,7 +344,7 @@ public class ComplexityTest extends BaseTest {
         WorkloadInventoryReportModel workloadInventoryReportModel = new WorkloadInventoryReportModel();
         workloadInventoryReportModel.setOsDescription("CentOS");
         workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.CPU_AFFINITY_FLAG_NAME);
-        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_DISK_FLAG_NAME);
+        workloadInventoryReportModel.addFlagIMS(WorkloadInventoryReportModel.SHARED_VMDK_FLAG_NAME);
 
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 

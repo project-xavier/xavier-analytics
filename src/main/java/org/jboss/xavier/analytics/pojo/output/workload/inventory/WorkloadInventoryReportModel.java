@@ -19,7 +19,6 @@ public class WorkloadInventoryReportModel
     static final long serialVersionUID = 1L;
 
     public static final String RDM_DISK_FLAG_NAME = "RDM";
-    public static final String SHARED_DISK_FLAG_NAME = "Shared Disk";
     public static final String CPU_MEMORY_HOTPLUG_FLAG_NAME = "CPU/memory hotplug";
     public static final String CPU_AFFINITY_FLAG_NAME = "CPU affinity";
     public static final String USB_CONTROLLERS_FLAG_NAME = "USB controller";
