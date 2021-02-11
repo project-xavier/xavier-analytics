@@ -675,15 +675,17 @@ public class FlagsTest extends BaseTest {
         facts.put("workloadInventoryReportModel",workloadInventoryReportModel);
 
         Map<String, Object> results = createAndExecuteCommandsAndGetResults(facts);
-        Assert.assertEquals(1, results.get(NUMBER_OF_FIRED_RULE_KEY));
-        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest");
+        Assert.assertEquals(2, results.get(NUMBER_OF_FIRED_RULE_KEY));
+        Utils.verifyRulesFiredNames(this.agendaEventListener, "AgendaFocusForTest", "Flag_UEFI_Boot");
 
         List<WorkloadInventoryReportModel> reports = Utils.extractModels(GET_OBJECTS_KEY, results, WorkloadInventoryReportModel.class);
         // just one report has to be created
         Assert.assertEquals(1, reports.size());
         WorkloadInventoryReportModel report = reports.get(0);
         Set<String> flagsIMS = report.getFlagsIMS();
-        Assert.assertNull(flagsIMS);
+        Assert.assertEquals(1, flagsIMS.size());
+        Assert.assertTrue(flagsIMS.contains(WorkloadInventoryReportModel.UEFI_BOOT_FLAG_NAME));
+
 
     }
 

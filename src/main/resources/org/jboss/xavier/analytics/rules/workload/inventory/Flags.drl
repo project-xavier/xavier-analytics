@@ -103,7 +103,7 @@ rule "Flag_UEFI_Boot"
     when
         vmWorkloadInventoryModel : VMWorkloadInventoryModel(
             firmware != null,
-            firmware.equalsIgnoreCase("EFI")
+            firmware.equalsIgnoreCase("EFI") || firmware.equalsIgnoreCase("BIOS")
         )
         workloadInventoryReport : WorkloadInventoryReportModel()
     then
